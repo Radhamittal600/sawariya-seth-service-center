@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Customer Command Center | Sawariya Seth</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+ --bg:#050608;
+ --card:#0d1015;
+ --card2:#11151c;
+ --line:rgba(255,255,255,.08);
+ --gold:#ffb52e;
+ --orange:#ff6817;
+ --muted:#78808d;
+}
+
+body{
+ min-height:100vh;
+ color:#fff;
+ background:
+ radial-gradient(circle at 10% 0%,rgba(255,110,20,.13),transparent 30%),
+ radial-gradient(circle at 95% 20%,rgba(255,185,40,.08),transparent 25%),
+ var(--bg);
+ font-family:Arial,sans-serif;
+}
+
+button,textarea{font-family:inherit}
+
+.app{
+ width:100%;
+ max-width:1180px;
+ margin:auto;
+ padding:18px 18px 100px;
+}
+
+/* TOPBAR */
+
+.topbar{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:13px 15px;
+ border:1px solid var(--line);
+ border-radius:24px;
+ background:rgba(13,16,21,.88);
+ backdrop-filter:blur(18px);
+ position:sticky;
+ top:12px;
+ z-index:20;
+}
+
+.brand{
+ display:flex;
+ align-items:center;
+ gap:11px;
+}
+
+.logo{
+ width:45px;
+ height:45px;
+ border-radius:15px;
+ display:grid;
+ place-items:center;
+ background:linear-gradient(145deg,#ff6412,#ffc24d);
+ box-shadow:0 0 30px rgba(255,105,15,.25);
+ font-size:22px;
+}
+
+.brand b{font-size:14px}
+.brand small{
+ display:block;
+ color:#69717d;
+ font-size:8px;
+ letter-spacing:2px;
+ margin-top:3px;
+}
+
+.topActions{
+ display:flex;
+ align-items:center;
+ gap:8px;
+}
+
+.iconBtn,.avatar{
+ width:40px;
+ height:40px;
+ border-radius:13px;
+ display:grid;
+ place-items:center;
+}
+
+.iconBtn{
+ border:1px solid var(--line);
+ background:#090b0f;
+ color:white;
+ cursor:pointer;
+}
+
+.avatar{
+ background:#1b2028;
+ color:var(--gold);
+ font-weight:900;
+}
+
+/* HERO */
+
+.hero{
+ margin-top:18px;
+ padding:27px;
+ border-radius:30px;
+ border:1px solid var(--line);
+ overflow:hidden;
+ position:relative;
+ background:
+ linear-gradient(115deg,rgba(255,95,10,.16),transparent 45%),
+ linear-gradient(145deg,#12161d,#090b0f);
+}
+
+.hero:after{
+ content:"";
+ position:absolute;
+ width:210px;
+ height:210px;
+ border-radius:50%;
+ right:-75px;
+ top:-90px;
+ border:1px solid rgba(255,178,45,.12);
+ box-shadow:
+ 0 0 0 25px rgba(255,178,45,.025),
+ 0 0 0 55px rgba(255,178,45,.018);
+}
+
+.heroTag{
+ display:inline-flex;
+ padding:7px 11px;
+ border-radius:20px;
+ color:var(--gold);
+ background:rgba(255,177,43,.08);
+ border:1px solid rgba(255,177,43,.14);
+ font-size:9px;
+ font-weight:bold;
+ letter-spacing:1px;
+}
+
+.hero h1{
+ max-width:650px;
+ font-size:clamp(28px,5vw,48px);
+ line-height:1.03;
+ margin-top:14px;
+}
+
+.hero h1 span{color:var(--gold)}
+
+.hero p{
+ max-width:580px;
+ color:#7d8590;
+ font-size:12px;
+ line-height:1.7;
+ margin-top:11px;
+}
+
+.heroBottom{
+ display:flex;
+ gap:10px;
+ margin-top:20px;
+}
+
+.primary,.secondary{
+ border-radius:13px;
+ padding:13px 17px;
+ cursor:pointer;
+}
+
+.primary{
+ border:0;
+ color:white;
+ font-weight:900;
+ background:linear-gradient(135deg,var(--orange),#ffb72f);
+}
+
+.secondary{
+ border:1px solid var(--line);
+ color:#bbb;
+ background:#0a0d11;
+}
+
+/* STATS */
+
+.quick{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:11px;
+ margin-top:12px;
+}
+
+.qcard{
+ padding:17px;
+ border-radius:20px;
+ background:var(--card);
+ border:1px solid var(--line);
+}
+
+.qtop{
+ display:flex;
+ justify-content:space-between;
+}
+
+.qicon{font-size:20px}
+
+.qcard small{
+ color:#68717d;
+ font-size:9px;
+}
+
+.qcard strong{
+ display:block;
+ font-size:24px;
+ margin-top:10px;
+}
+
+/* SECTION */
+
+.section{margin-top:27px}
+
+.sectionHead{
+ display:flex;
+ align-items:end;
+ justify-content:space-between;
+ margin-bottom:12px;
+}
+
+.sectionHead h2{font-size:19px}
+.sectionHead p{
+ color:#626a76;
+ font-size:9px;
+ margin-top:4px;
+}
+
+/* SERVICES */
+
+.services{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:11px;
+}
+
+.service{
+ min-height:145px;
+ padding:18px;
+ border-radius:21px;
+ background:linear-gradient(145deg,#10141b,#0b0e13);
+ border:1px solid var(--line);
+ cursor:pointer;
+ position:relative;
+ overflow:hidden;
+ transition:.2s;
+}
+
+.service:hover{
+ transform:translateY(-4px);
+ border-color:rgba(255,170,40,.45);
+}
+
+.service:after{
+ content:"↗";
+ position:absolute;
+ right:15px;
+ bottom:14px;
+ color:#454c56;
+}
+
+.serviceIcon{
+ width:42px;
+ height:42px;
+ border-radius:14px;
+ display:grid;
+ place-items:center;
+ background:rgba(255,160,30,.08);
+ font-size:21px;
+}
+
+.service h3{
+ font-size:13px;
+ margin-top:14px;
+}
+
+.service p{
+ color:#626b77;
+ font-size:9px;
+ margin-top:5px;
+}
+
+/* BOOKING */
+
+.bookingPanel{
+ display:none;
+ padding:22px;
+ margin-top:12px;
+ border-radius:23px;
+ background:#0e1218;
+ border:1px solid rgba(255,174,43,.16);
+}
+
+.selectedService{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ margin-bottom:17px;
+}
+
+.selectedIcon{
+ width:46px;
+ height:46px;
+ display:grid;
+ place-items:center;
+ border-radius:15px;
+ background:rgba(255,166,35,.1);
+ font-size:22px;
+}
+
+.selectedService small{
+ display:block;
+ color:#626b77;
+ font-size:9px;
+ margin-bottom:3px;
+}
+
+.selectedService strong{font-size:15px}
+
+textarea{
+ width:100%;
+ min-height:100px;
+ resize:vertical;
+ padding:14px;
+ border-radius:14px;
+ background:#07090c;
+ border:1px solid var(--line);
+ color:white;
+ outline:none;
+}
+
+textarea:focus{border-color:#ff8d20}
+
+.confirm{
+ width:100%;
+ margin-top:10px;
+ padding:14px;
+ border:0;
+ border-radius:14px;
+ background:linear-gradient(135deg,#ff6717,#ffb72f);
+ color:white;
+ font-weight:900;
+ cursor:pointer;
+}
+
+.message{
+ display:none;
+ margin-top:10px;
+ padding:11px;
+ border-radius:11px;
+ text-align:center;
+ font-size:10px;
+}
+
+/* BOOKINGS */
+
+.bookings{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:11px;
+}
+
+.booking{
+ padding:18px;
+ border-radius:20px;
+ background:var(--card);
+ border:1px solid var(--line);
+}
+
+.bookingTop{
+ display:flex;
+ justify-content:space-between;
+ gap:10px;
+}
+
+.booking h3{font-size:13px}
+
+.status{
+ padding:5px 9px;
+ border-radius:20px;
+ background:rgba(255,175,45,.08);
+ color:var(--gold);
+ font-size:8px;
+ font-weight:bold;
+}
+
+.bookingInfo{
+ margin-top:13px;
+ color:#68717c;
+ font-size:10px;
+ line-height:1.7;
+}
+
+.track{
+ width:100%;
+ margin-top:12px;
+ padding:10px;
+ border-radius:11px;
+ border:1px solid rgba(255,173,40,.22);
+ background:#0a0d11;
+ color:#ffb43b;
+ font-size:10px;
+ font-weight:bold;
+ cursor:pointer;
+}
+
+/* BOTTOM */
+
+.bottomGrid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
+}
+
+.panel{
+ padding:20px;
+ border-radius:21px;
+ background:var(--card);
+ border:1px solid var(--line);
+}
+
+.profileLine{
+ display:flex;
+ justify-content:space-between;
+ padding:12px 0;
+ border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.profileLine:last-child{border-bottom:0}
+
+.profileLine span{
+ color:#626b77;
+ font-size:10px;
+}
+
+.profileLine strong{font-size:10px}
+
+.supportBox{
+ min-height:170px;
+ display:flex;
+ flex-direction:column;
+ justify-content:space-between;
+}
+
+.supportBox p{
+ color:#737b86;
+ font-size:11px;
+ line-height:1.7;
+ margin-top:10px;
+}
+
+.supportBtn{
+ width:100%;
+ padding:12px;
+ border-radius:12px;
+ border:1px solid var(--line);
+ background:#090c10;
+ color:#ffb43b;
+ cursor:pointer;
+ font-weight:bold;
+}
+
+.empty{
+ padding:25px;
+ text-align:center;
+ color:#68717d;
+ border:1px dashed rgba(255,255,255,.1);
+ border-radius:18px;
+ font-size:11px;
+}
+
+.mobileNav{display:none}
+
+/* MOBILE */
+
+@media(max-width:850px){
+
+ .services{grid-template-columns:repeat(2,1fr)}
+ .quick{grid-template-columns:repeat(2,1fr)}
+
+}
+
+@media(max-width:600px){
+
+ .app{padding:11px 11px 90px}
+
+ .topbar{top:7px}
+
+ .brand b{font-size:12px}
+
+ .hero{
+  padding:22px;
+  border-radius:25px;
+ }
+
+ .hero h1{font-size:30px}
+
+ .heroBottom{
+  flex-direction:column;
+ }
+
+ .primary,.secondary{width:100%}
+
+ .service{
+  min-height:135px;
+  padding:15px;
+ }
+
+ .bookings,.bottomGrid{
+  grid-template-columns:1fr;
+ }
+
+ .mobileNav{
+  display:flex;
+  position:fixed;
+  left:10px;
+  right:10px;
+  bottom:10px;
+  z-index:50;
+  padding:8px;
+  border-radius:20px;
+  background:rgba(14,17,22,.94);
+  border:1px solid var(--line);
+  backdrop-filter:blur(20px);
+  justify-content:space-around;
+ }
+
+ .navItem{
+  border:0;
+  background:transparent;
+  color:#68717d;
+  font-size:9px;
+  padding:8px 13px;
+  border-radius:12px;
+  cursor:pointer;
+ }
+
+ .navItem.active{
+  color:#ffb43b;
+  background:rgba(255,175,40,.08);
+ }
+
+}
+
+@media(max-width:380px){
+
+ .services{gap:7px}
+ .service h3{font-size:11px}
+ .service p{font-size:8px}
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <div class="logo">⚡</div>
+
+        <div>
+            <b>SAWARIYA SETH</b>
+            <small>SERVICE CENTER</small>
+        </div>
+
+    </div>
+
+    <div class="topActions">
+
+        <button class="iconBtn" onclick="loadBookings()">↻</button>
+
+        <div class="avatar">
+            {{ user["name"][0]|upper }}
+        </div>
+
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <div class="heroTag">
+        CUSTOMER COMMAND CENTER
+    </div>
+
+    <h1>
+        Hello,
+        <span>{{ user["name"] }}</span> 👋
+    </h1>
+
+    <p>
+        घर की repair और service अब आसान।
+        अपनी service चुनें, booking करें और
+        technician की progress track करें।
+    </p>
+
+    <div class="heroBottom">
+
+        <button class="primary"
+                onclick="scrollToServices()">
+            ⚡ BOOK A SERVICE
+        </button>
+
+        <button class="secondary"
+                onclick="scrollToBookings()">
+            VIEW MY BOOKINGS
+        </button>
+
+    </div>
+
+</section>
+
+
+<section class="quick">
+
+    <div class="qcard">
+        <div class="qtop">
+            <span class="qicon">📋</span>
+            <small>ALL</small>
+        </div>
+        <strong id="totalBookings">0</strong>
+        <small>Total Bookings</small>
+    </div>
+
+    <div class="qcard">
+        <div class="qtop">
+            <span class="qicon">⚡</span>
+            <small>LIVE</small>
+        </div>
+        <strong id="activeBookings">0</strong>
+        <small>Active Services</small>
+    </div>
+
+    <div class="qcard">
+        <div class="qtop">
+            <span class="qicon">👨‍🔧</span>
+            <small>TEAM</small>
+        </div>
+        <strong id="technicianCount">—</strong>
+        <small>Technician</small>
+    </div>
+
+    <div class="qcard">
+        <div class="qtop">
+            <span class="qicon">✓</span>
+            <small>STATUS</small>
+        </div>
+        <strong style="color:#67e39b">ACTIVE</strong>
+        <small>Account</small>
+    </div>
+
+</section>
+
+
+<section class="section" id="services">
+
+    <div class="sectionHead">
+
+        <div>
+            <h2>⚡ What do you need?</h2>
+            <p>एक service चुनें और booking शुरू करें</p>
+        </div>
+
+    </div>
+
+
+    <div class="services">
+
+        <div class="service"
+             onclick="chooseService(1,'RO Repairing','💧')">
+            <div class="serviceIcon">💧</div>
+            <h3>RO Repairing</h3>
+            <p>Filter • Membrane • Repair</p>
+        </div>
+
+        <div class="service"
+             onclick="chooseService(2,'AC Repairing','❄️')">
+            <div class="serviceIcon">❄️</div>
+            <h3>AC Repairing</h3>
+            <p>Cooling • Gas • Service</p>
+        </div>
+
+        <div class="service"
+             onclick="chooseService(3,'Fridge Repairing','🧊')">
+            <div class="serviceIcon">🧊</div>
+            <h3>Fridge Repairing</h3>
+            <p>Cooling • Compressor</p>
+        </div>
+
+        <div class="service"
+             onclick="chooseService(4,'Washing Machine Repairing','🌀')">
+            <div class="serviceIcon">🌀</div>
+            <h3>Washing Machine</h3>
+            <p>Repair • Installation</p>
+        </div>
+
+        <div class="service"
+             onclick="chooseService(5,'Cooler Repairing','🌬️')">
+            <div class="serviceIcon">🌬️</div>
+            <h3>Cooler Repairing</h3>
+            <p>Motor • Pump • Cooling</p>
+        </div>
+
+        <div class="service"
+             onclick="chooseService(6,'Electrician','⚡')">
+            <div class="serviceIcon">⚡</div>
+            <h3>Electrician</h3>
+            <p>Home • Wiring • Repair</p>
+        </div>
+
+        <div class="service"
+             onclick="chooseService(7,'Plumber','🔧')">
+            <div class="serviceIcon">🔧</div>
+            <h3>Plumber</h3>
+            <p>Pipe • Tap • Water</p>
+        </div>
+
+        <div class="service"
+             onclick="alert('More services जल्द आएंगी 🚀')">
+            <div class="serviceIcon">＋</div>
+            <h3>More Services</h3>
+            <p>Coming soon</p>
+        </div>
+
+    </div>
+
+
+    <div id="bookingPanel" class="bookingPanel">
+
+        <div class="selectedService">
+
+            <div class="selectedIcon" id="selectedIcon">⚡</div>
+
+            <div>
+                <small>SELECTED SERVICE</small>
+                <strong id="selectedName">Service</strong>
+            </div>
+
+        </div>
+
+        <textarea
+            id="serviceAddress"
+            placeholder="Service location / पूरा address लिखें..."
+        ></textarea>
+
+        <button class="confirm"
+                onclick="createBooking()">
+            CONFIRM SERVICE BOOKING →
+        </button>
+
+        <div id="message" class="message"></div>
+
+    </div>
+
+</section>
+
+
+<section class="section" id="bookings">
+
+    <div class="sectionHead">
+
+        <div>
+            <h2>📦 Your Service History</h2>
+            <p>आपकी recent bookings</p>
+        </div>
+
+    </div>
+
+    <div id="bookingsList" class="bookings">
+
+        <div class="empty">
+            Loading your bookings...
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="section">
+
+    <div class="bottomGrid">
+
+        <div class="panel">
+
+            <div class="sectionHead">
+                <h2>👤 Profile</h2>
+            </div>
+
+            <div class="profileLine">
+                <span>Name</span>
+                <strong>{{ user["name"] }}</strong>
+            </div>
+
+            <div class="profileLine">
+                <span>Mobile</span>
+                <strong>{{ user["phone"] }}</strong>
+            </div>
+
+            <div class="profileLine">
+                <span>Account</span>
+                <strong style="color:#67e39b">
+                    Verified
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="panel supportBox">
+
+            <div>
+
+                <h2>🛟 Need Help?</h2>
+
+                <p>
+                    Service से जुड़ी कोई समस्या है?
+                    Support team आपकी मदद करेगी।
+                </p>
+
+            </div>
+
+            <button class="supportBtn"
+                    onclick="alert('Support system जल्द activate होगा.')">
+                CONTACT SUPPORT →
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+</div>
+
+
+<nav class="mobileNav">
+
+    <button class="navItem active"
+            onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        🏠<br>Home
+    </button>
+
+    <button class="navItem"
+            onclick="scrollToServices()">
+        ⚡<br>Services
+    </button>
+
+    <button class="navItem"
+            onclick="scrollToBookings()">
+        📦<br>Bookings
+    </button>
+
+    <button class="navItem"
+            onclick="logout()">
+        🚪<br>Logout
+    </button>
+
+</nav>
+
+
+<script>
+
+let selectedServiceId=null;
+
+
+function chooseService(id,name,icon){
+
+    selectedServiceId=id;
+
+    document.getElementById("selectedName")
+        .textContent=name;
+
+    document.getElementById("selectedIcon")
+        .textContent=icon;
+
+    const panel=
+        document.getElementById("bookingPanel");
+
+    panel.style.display="block";
+
+    panel.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+    });
+
+}
+
+
+async function createBooking(){
+
+    const address=
+        document
+        .getElementById("serviceAddress")
+        .value
+        .trim();
+
+    const message=
+        document.getElementById("message");
+
+
+    if(!selectedServiceId){
+
+        message.textContent=
+            "पहले service select करें।";
+
+        message.style.display="block";
+
+        return;
+    }
+
+
+    if(!address){
+
+        message.textContent=
+            "Service address भरना जरूरी है।";
+
+        message.style.display="block";
+
+        return;
+    }
+
+
+    try{
+
+        const response=
+            await fetch("/bookings",{
+
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/json"
+                },
+
+                body:JSON.stringify({
+                    service_id:selectedServiceId,
+                    address:address
+                })
+
+            });
+
+
+        const result=
+            await response.json();
+
+
+        if(!response.ok){
+
+            message.textContent=
+                result.error ||
+                "Booking failed";
+
+            message.style.display="block";
+
+            return;
+        }
+
+
+        message.style.display="block";
+        message.style.color="#67e39b";
+        message.style.background=
+            "rgba(60,220,140,.08)";
+
+        message.textContent=
+            "✓ Booking successfully created";
+
+
+        document
+        .getElementById("serviceAddress")
+        .value="";
+
+
+        loadBookings();
+
+    }
+
+    catch(error){
+
+        message.textContent=
+            "Server connection नहीं हो पाया।";
+
+        message.style.display="block";
+
+    }
+
+}
+
+
+async function loadBookings(){
+
+    try{
+
+        const response=
+            await fetch("/bookings/my");
+
+        const result=
+            await response.json();
+
+        if(!response.ok) return;
+
+        const bookings=
+            result.bookings || [];
+
+
+        document.getElementById("totalBookings")
+            .textContent=bookings.length;
+
+
+        const active=
+            bookings.filter(b=>
+                [
+                    "pending",
+                    "assigned",
+                    "accepted",
+                    "in_progress"
+                ].includes(b.status)
+            );
+
+
+        document.getElementById("activeBookings")
+            .textContent=active.length;
+
+
+        const tech=
+            bookings.filter(b=>
+                b.technician_name
+            );
+
+
+        document.getElementById("technicianCount")
+            .textContent=
+            tech.length ? "✓" : "—";
+
+
+        const list=
+            document.getElementById("bookingsList");
+
+
+        if(!bookings.length){
+
+            list.innerHTML=`
+                <div class="empty">
+                    📦 अभी कोई booking नहीं है।<br><br>
+                    ऊपर से अपनी पहली service book करें।
+                </div>
+            `;
+
+            return;
+        }
+
+
+        list.innerHTML=
+            bookings.map(b=>{
+
+                let tracking="";
+
+
+                if(
+                    b.status==="accepted" ||
+                    b.status==="in_progress"
+                ){
+
+                    tracking=`
+                        <button
+                            class="track"
+                            onclick="trackBooking(${b.id})">
+                            📍 TRACK TECHNICIAN
+                        </button>
+                    `;
+
+                }
+
+
+                return `
+
+                <div class="booking">
+
+                    <div class="bookingTop">
+
+                        <h3>
+                            ${b.service_name}
+                        </h3>
+
+                        <span class="status">
+                            ${b.status}
+                        </span>
+
+                    </div>
+
+                    <div class="bookingInfo">
+
+                        📍 ${b.address}<br>
+
+                        👨‍🔧 ${
+                            b.technician_name ||
+                            "Technician अभी assign नहीं हुआ"
+                        }
+
+                    </div>
+
+                    ${tracking}
+
+                </div>
+
+                `;
+
+            }).join("");
+
+    }
+
+    catch(error){
+
+        console.log(error);
+
+    }
+
+}
+
+
+function trackBooking(id){
+
+    window.location.href=
+        "/bookings/"+id+"/track";
+
+}
+
+
+function scrollToServices(){
+
+    document
+    .getElementById("services")
+    .scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+function scrollToBookings(){
+
+    document
+    .getElementById("bookings")
+    .scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+async function logout(){
+
+    try{
+
+        await fetch(
+            "/auth/logout",
+            {method:"POST"}
+        );
+
+    }
+
+    finally{
+
+        window.location.href="/login";
+
+    }
+
+}
+
+
+loadBookings();
+
+</script>
+
+
+<script>
+async function callTechnician(technicianId, bookingId) {
+
+    if (!technicianId) {
+        alert("इस booking में technician अभी assign नहीं है।");
+        return;
+    }
+
+    try {
+
+        const response = await fetch("/video/request", {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                technician_id: Number(technicianId),
+                booking_id: Number(bookingId)
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.error || "Video call शुरू नहीं हो सकी।");
+            return;
+        }
+
+        alert("📞 Video call request technician को भेज दी गई।");
+
+        if (data.call_id) {
+            window.location.href =
+                "/video-room/" +
+                data.call_id +
+                "?role=caller";
+        }
+
+    } catch (error) {
+
+        alert("Network error: " + error.message);
+    }
+}
+</script>
+
+
+<script>
+/* ===== SAWARIYA VIDEO CALL BUTTON HELPER ===== */
+
+function customerVideoCallButton(booking) {
+
+    const technicianId =
+        booking.technician_id ||
+        booking.technicianId ||
+        booking.technician;
+
+    const bookingId =
+        booking.id ||
+        booking.booking_id;
+
+    if (!technicianId || !bookingId) {
+        return `
+            <button
+                class="actionBtn"
+                disabled
+                style="opacity:.45;cursor:not-allowed;">
+                📹 Technician Assigned होने पर Call
+            </button>
+        `;
+    }
+
+    return `
+        <button
+            class="actionBtn"
+            onclick="callTechnician(${Number(technicianId)},${Number(bookingId)})">
+            📹 Call Technician
+        </button>
+    `;
+}
+
+
+/* Owner/Customer call request status */
+
+async function checkVideoCallStatus(callId) {
+
+    try {
+
+        const response = await fetch(
+            "/video/" + callId + "/signal/answer",
+            {
+                credentials:"same-origin"
+            }
+        );
+
+        const data = await response.json();
+
+        return !!data.answer;
+
+    } catch(error) {
+
+        console.error(
+            "Video status error:",
+            error
+        );
+
+        return false;
+    }
+}
+</script>
+
+
+<script>
+/* ===== AUTO VIDEO CALL BUTTON INJECTOR ===== */
+
+function injectCustomerVideoButtons() {
+
+    const container =
+        document.getElementById("bookingsList");
+
+    if (!container) return;
+
+    const cards =
+        container.querySelectorAll(".booking");
+
+    cards.forEach(card => {
+
+        if (card.querySelector(".video-call-btn")) {
+            return;
+        }
+
+        const text =
+            card.innerText || "";
+
+        /*
+         * Existing booking HTML में booking ID/technician ID
+         * अलग-अलग नाम से हो सकता है।
+         * पहले data attributes खोजेंगे।
+         */
+
+        const bookingId =
+            card.dataset.bookingId ||
+            card.dataset.id;
+
+        const technicianId =
+            card.dataset.technicianId ||
+            card.dataset.technician;
+
+        /*
+         * अगर existing HTML में button/function मौजूद है,
+         * duplicate नहीं बनाएँगे।
+         */
+
+        if (
+            card.innerHTML.includes("callTechnician(") ||
+            card.innerHTML.includes("Call Technician")
+        ) {
+            return;
+        }
+
+        /*
+         * Technician assign नहीं है तो button नहीं दिखाएँ।
+         */
+
+        if (!technicianId || !bookingId) {
+            return;
+        }
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "actionBtn video-call-btn";
+
+        button.style.cssText = `
+            width:100%;
+            margin-top:10px;
+            padding:13px;
+            border:0;
+            border-radius:13px;
+            background:linear-gradient(135deg,#7c3aed,#ec4899);
+            color:white;
+            font-weight:800;
+            cursor:pointer;
+        `;
+
+        button.innerHTML =
+            "📹 Call Technician";
+
+        button.onclick = function() {
+
+            callTechnician(
+                Number(technicianId),
+                Number(bookingId)
+            );
+
+        };
+
+        card.appendChild(button);
+    });
+}
+
+
+/*
+ * Booking list बदलने के बाद button automatically
+ * दोबारा check होगा।
+ */
+
+const bookingObserver =
+    new MutationObserver(function() {
+
+        injectCustomerVideoButtons();
+
+    });
+
+
+const bookingContainer =
+    document.getElementById("bookingsList");
+
+
+if (bookingContainer) {
+
+    bookingObserver.observe(
+        bookingContainer,
+        {
+            childList:true,
+            subtree:true
+        }
+    );
+
+}
+
+
+setInterval(
+    injectCustomerVideoButtons,
+    1500
+);
+
+</script>
+
+
+<script>
+/* ===== SAWARIYA VIDEO CALL - CUSTOMER ===== */
+
+async function callTechnician(technicianId, bookingId) {
+    if (!technicianId || !bookingId) {
+        alert("Technician अभी assign नहीं हुआ है।");
+        return;
+    }
+
+    try {
+        const r = await fetch("/video/request", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                technician_id: Number(technicianId),
+                booking_id: Number(bookingId)
+            })
+        });
+
+        const data = await r.json();
+
+        if (!r.ok) {
+            alert(data.error || "Video call शुरू नहीं हो सकी।");
+            return;
+        }
+
+        if (data.call_id) {
+            window.location.href = "/video-room/" + data.call_id;
+        }
+    } catch (e) {
+        console.error(e);
+        alert("Video call connection error.");
+    }
+}
+
+/* Booking cards में Video Call button */
+function addVideoCallButtonsToCustomerBookings() {
+    document.querySelectorAll("#bookingsList [data-booking-id]").forEach(card => {
+
+        if (card.querySelector(".sawariya-video-btn")) return;
+
+        const bookingId = card.dataset.bookingId;
+        const technicianId = card.dataset.technicianId;
+
+        if (!bookingId || !technicianId) return;
+
+        const btn = document.createElement("button");
+
+        btn.className = "sawariya-video-btn";
+        btn.innerHTML = "📹 Video Call Technician";
+
+        btn.style.cssText = `
+            margin-top:10px;
+            width:100%;
+            padding:12px;
+            border:0;
+            border-radius:12px;
+            background:linear-gradient(135deg,#00d4ff,#7c3aed);
+            color:white;
+            font-weight:700;
+            cursor:pointer;
+            box-shadow:0 4px 15px rgba(0,212,255,.25);
+        `;
+
+        btn.onclick = () => {
+            callTechnician(technicianId, bookingId);
+        };
+
+        card.appendChild(btn);
+    });
+}
+
+setInterval(addVideoCallButtonsToCustomerBookings, 1000);
+</script>
+
+
+<script>
+/* ===== SAWARIYA BOOKING VIDEO BRIDGE ===== */
+
+function prepareCustomerBookingCards() {
+    const list = document.getElementById("bookingsList");
+    if (!list) return;
+
+    const cards = list.children;
+
+    Array.from(cards).forEach(card => {
+        if (card.dataset.videoPrepared === "1") return;
+
+        /*
+         * Existing booking renderer से IDs निकालने की कोशिश।
+         * अगर renderer पहले से data-* देता है तो सीधे उपयोग होगा।
+         */
+        let bookingId =
+            card.dataset.bookingId ||
+            card.getAttribute("data-booking-id");
+
+        let technicianId =
+            card.dataset.technicianId ||
+            card.getAttribute("data-technician-id");
+
+        if (bookingId && technicianId) {
+            card.dataset.videoPrepared = "1";
+            return;
+        }
+
+        /*
+         * Card में मौजूद hidden/input/button data से IDs खोजें।
+         */
+        const source = card.innerHTML;
+
+        const b =
+            source.match(/booking[_-]?id["'\s:=]+["']?(\d+)/i);
+
+        const t =
+            source.match(/technician[_-]?id["'\s:=]+["']?(\d+)/i);
+
+        if (b) {
+            card.dataset.bookingId = b[1];
+        }
+
+        if (t) {
+            card.dataset.technicianId = t[1];
+        }
+
+        if (card.dataset.bookingId && card.dataset.technicianId) {
+            card.dataset.videoPrepared = "1";
+        }
+    });
+}
+
+const bookingVideoObserver = new MutationObserver(() => {
+    prepareCustomerBookingCards();
+    if (typeof addVideoCallButtonsToCustomerBookings === "function") {
+        addVideoCallButtonsToCustomerBookings();
+    }
+});
+
+const bookingList = document.getElementById("bookingsList");
+
+if (bookingList) {
+    bookingVideoObserver.observe(bookingList, {
+        childList: true,
+        subtree: true
+    });
+}
+
+setInterval(prepareCustomerBookingCards, 1500);
+</script>
+
+</body>
+</html>

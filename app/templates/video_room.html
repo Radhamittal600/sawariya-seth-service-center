@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Video Call | Sawariya Seth</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    background:#050816;
+    color:#fff;
+    font-family:Arial,sans-serif;
+    min-height:100vh;
+}
+
+.header{
+    padding:15px;
+    text-align:center;
+    background:rgba(10,15,35,.95);
+    border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.header h2{
+    margin:0 0 5px;
+}
+
+.status{
+    font-size:13px;
+    opacity:.8;
+}
+
+.video-area{
+    position:relative;
+    width:100%;
+    height:calc(100vh - 150px);
+    background:#000;
+    overflow:hidden;
+}
+
+#remoteVideo{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    background:#101010;
+}
+
+#localVideo{
+    position:absolute;
+    right:15px;
+    top:15px;
+    width:30%;
+    max-width:190px;
+    aspect-ratio:3/4;
+    object-fit:cover;
+    border-radius:15px;
+    border:2px solid #fff;
+    background:#151515;
+    z-index:5;
+}
+
+.controls{
+    position:fixed;
+    bottom:18px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:10px;
+    padding:10px;
+    border-radius:18px;
+    background:rgba(15,20,40,.9);
+    backdrop-filter:blur(12px);
+    z-index:20;
+}
+
+button{
+    border:0;
+    border-radius:50%;
+    width:54px;
+    height:54px;
+    font-size:20px;
+    cursor:pointer;
+    color:#fff;
+    background:#26304d;
+}
+
+button:hover{
+    transform:scale(1.05);
+}
+
+.end{
+    background:#dc2626;
+}
+
+.disabled{
+    background:#7f1d1d;
+}
+
+#message{
+    position:fixed;
+    top:70px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(0,0,0,.8);
+    padding:10px 15px;
+    border-radius:10px;
+    z-index:30;
+    font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h2>📹 Sawariya Video Call</h2>
+    <div class="status" id="status">Connecting...</div>
+</div>
+
+<div id="message">Starting video...</div>
+
+<div class="video-area">
+
+    <video id="remoteVideo"
+           autoplay
+           playsinline></video>
+
+    <video id="localVideo"
+           autoplay
+           muted
+           playsinline></video>
+
+</div>
+
+<div class="controls">
+
+    <button id="micBtn"
+            onclick="toggleMic()">
+        🎙️
+    </button>
+
+    <button id="cameraBtn"
+            onclick="toggleCamera()">
+        📷
+    </button>
+
+    <button onclick="switchCamera()">
+        🔄
+    </button>
+
+    <button class="end"
+            onclick="endCall()">
+        📞
+    </button>
+
+</div>
+
+<script>
+
+const callId = {{ call_id }};
+const role = "{{ role }}";
+
+let pc = null;
+let localStream = null;
+
+let micEnabled = true;
+let cameraEnabled = true;
+
+let lastOffer = null;
+let lastAnswer = null;
+let lastCallerCandidates = [];
+let lastTechnicianCandidates = [];
+
+const localVideo =
+    document.getElementById("localVideo");
+
+const remoteVideo =
+    document.getElementById("remoteVideo");
+
+const statusBox =
+    document.getElementById("status");
+
+const messageBox =
+    document.getElementById("message");
+
+
+function status(text){
+    statusBox.innerText = text;
+}
+
+
+function message(text){
+    messageBox.innerText = text;
+
+    setTimeout(() => {
+        messageBox.innerText = "";
+    },3000);
+}
+
+
+/* ===============================
+   GET CAMERA + MICROPHONE
+================================ */
+
+async function startCamera(){
+
+    try{
+
+        localStream =
+            await navigator.mediaDevices.getUserMedia({
+                video:true,
+                audio:true
+            });
+
+        localVideo.srcObject = localStream;
+
+        micEnabled = true;
+        cameraEnabled = true;
+
+        status("Camera + Microphone connected");
+
+        message("Video ready");
+
+    }catch(error){
+
+        console.error(error);
+
+        status("Camera/Microphone unavailable");
+
+        message(
+            "Camera और Microphone permission allow करें"
+        );
+
+        throw error;
+    }
+}
+
+
+/* ===============================
+   WEBRTC
+================================ */
+
+function createPeer(){
+
+    pc = new RTCPeerConnection({
+
+        iceServers:[
+            {
+                urls:"stun:stun.l.google.com:19302"
+            },
+            {
+                urls:"stun:stun1.l.google.com:19302"
+            }
+        ]
+
+    });
+
+    localStream.getTracks().forEach(track => {
+
+        pc.addTrack(
+            track,
+            localStream
+        );
+
+    });
+
+
+    pc.ontrack = event => {
+
+        if(event.streams && event.streams[0]){
+
+            remoteVideo.srcObject =
+                event.streams[0];
+
+            status("Live video connected");
+        }
+
+    };
+
+
+    pc.onicecandidate = event => {
+
+        if(!event.candidate) return;
+
+        sendCandidate(
+            event.candidate
+        );
+    };
+
+
+    pc.onconnectionstatechange = () => {
+
+        const state =
+            pc.connectionState;
+
+        console.log(
+            "WebRTC state:",
+            state
+        );
+
+        if(state === "connected"){
+
+            status("🟢 Connected");
+
+        }else if(
+            state === "connecting"
+        ){
+
+            status("🟡 Connecting...");
+
+        }else if(
+            state === "disconnected"
+        ){
+
+            status("🟠 Disconnected");
+
+        }else if(
+            state === "failed"
+        ){
+
+            status("🔴 Connection failed");
+        }
+
+    };
+}
+
+
+/* ===============================
+   SIGNALING
+================================ */
+
+async function getSignal(){
+
+    const r =
+        await fetch(
+            "/video/signal/" + callId
+        );
+
+    if(!r.ok) return null;
+
+    return await r.json();
+}
+
+
+async function sendSignal(payload){
+
+    await fetch(
+        "/video/signal/" + callId,
+        {
+            method:"POST",
+            headers:{
+                "Content-Type":
+                    "application/json"
+            },
+            body:JSON.stringify(payload)
+        }
+    );
+}
+
+
+async function sendCandidate(candidate){
+
+    const payload = {};
+
+    if(role === "technician"){
+
+        payload.technician_candidate =
+            candidate;
+
+    }else{
+
+        payload.caller_candidate =
+            candidate;
+    }
+
+    await sendSignal(payload);
+}
+
+
+/* ===============================
+   CALLER
+================================ */
+
+async function startCaller(){
+
+    createPeer();
+
+    const offer =
+        await pc.createOffer();
+
+    await pc.setLocalDescription(
+        offer
+    );
+
+    await sendSignal({
+        offer:{
+            type:offer.type,
+            sdp:offer.sdp
+        }
+    });
+
+    status("Waiting for technician...");
+
+    let answerApplied = false;
+
+    const interval =
+        setInterval(async () => {
+
+            if(!pc) return;
+
+            const data =
+                await getSignal();
+
+            if(!data) return;
+
+            if(
+                data.answer &&
+                !answerApplied
+            ){
+
+                answerApplied = true;
+
+                await pc.setRemoteDescription(
+                    new RTCSessionDescription(
+                        data.answer
+                    )
+                );
+
+                status("Connected");
+            }
+
+            if(
+                Array.isArray(
+                    data.technician_candidates
+                )
+            ){
+
+                for(
+                    const candidate
+                    of data.technician_candidates
+                ){
+
+                    try{
+
+                        await pc.addIceCandidate(
+                            new RTCIceCandidate(
+                                candidate
+                            )
+                        );
+
+                    }catch(e){}
+                }
+            }
+
+        },1500);
+}
+
+
+/* ===============================
+   TECHNICIAN
+================================ */
+
+async function startTechnician(){
+
+    createPeer();
+
+    let offerApplied = false;
+
+    const interval =
+        setInterval(async () => {
+
+            if(!pc) return;
+
+            const data =
+                await getSignal();
+
+            if(!data) return;
+
+            if(
+                data.offer &&
+                !offerApplied
+            ){
+
+                offerApplied = true;
+
+                await pc.setRemoteDescription(
+                    new RTCSessionDescription(
+                        data.offer
+                    )
+                );
+
+                const answer =
+                    await pc.createAnswer();
+
+                await pc.setLocalDescription(
+                    answer
+                );
+
+                await sendSignal({
+                    answer:{
+                        type:answer.type,
+                        sdp:answer.sdp
+                    }
+                });
+
+                status("Connected");
+            }
+
+            if(
+                Array.isArray(
+                    data.caller_candidates
+                )
+            ){
+
+                for(
+                    const candidate
+                    of data.caller_candidates
+                ){
+
+                    try{
+
+                        await pc.addIceCandidate(
+                            new RTCIceCandidate(
+                                candidate
+                            )
+                        );
+
+                    }catch(e){}
+                }
+            }
+
+        },1500);
+}
+
+
+/* ===============================
+   CONTROLS
+================================ */
+
+function toggleMic(){
+
+    if(!localStream) return;
+
+    const tracks =
+        localStream.getAudioTracks();
+
+    if(!tracks.length) return;
+
+    micEnabled =
+        !micEnabled;
+
+    tracks.forEach(
+        track =>
+            track.enabled =
+                micEnabled
+    );
+
+    document.getElementById(
+        "micBtn"
+    ).innerText =
+        micEnabled
+        ? "🎙️"
+        : "🔇";
+}
+
+
+function toggleCamera(){
+
+    if(!localStream) return;
+
+    const tracks =
+        localStream.getVideoTracks();
+
+    if(!tracks.length) return;
+
+    cameraEnabled =
+        !cameraEnabled;
+
+    tracks.forEach(
+        track =>
+            track.enabled =
+                cameraEnabled
+    );
+
+    document.getElementById(
+        "cameraBtn"
+    ).innerText =
+        cameraEnabled
+        ? "📷"
+        : "🚫";
+}
+
+
+async function switchCamera(){
+
+    if(!localStream) return;
+
+    const videoTrack =
+        localStream.getVideoTracks()[0];
+
+    if(!videoTrack) return;
+
+    const facing =
+        videoTrack.getSettings().facingMode;
+
+    const newFacing =
+        facing === "user"
+        ? "environment"
+        : "user";
+
+    try{
+
+        const newStream =
+            await navigator.mediaDevices.getUserMedia({
+                video:{
+                    facingMode:{
+                        ideal:newFacing
+                    }
+                },
+                audio:true
+            });
+
+        const newVideo =
+            newStream.getVideoTracks()[0];
+
+        const sender =
+            pc.getSenders().find(
+                s =>
+                    s.track &&
+                    s.track.kind === "video"
+            );
+
+        if(sender){
+
+            await sender.replaceTrack(
+                newVideo
+            );
+        }
+
+        localStream
+            .getVideoTracks()
+            .forEach(
+                t => t.stop()
+            );
+
+        localStream =
+            newStream;
+
+        localVideo.srcObject =
+            localStream;
+
+    }catch(e){
+
+        console.error(e);
+
+        message(
+            "Camera switch नहीं हो सका"
+        );
+    }
+}
+
+
+/* ===============================
+   END CALL
+================================ */
+
+async function endCall(){
+
+    try{
+
+        await fetch(
+            "/video/end/" + callId,
+            {
+                method:"POST"
+            }
+        );
+
+    }catch(e){
+        console.error(e);
+    }
+
+    if(pc){
+
+        pc.close();
+        pc = null;
+    }
+
+    if(localStream){
+
+        localStream
+            .getTracks()
+            .forEach(
+                track =>
+                    track.stop()
+            );
+    }
+
+    status("Call ended");
+
+    setTimeout(() => {
+
+        if(role === "technician"){
+
+            window.location.href =
+                "/video-call";
+
+        }else{
+
+            window.history.back();
+        }
+
+    },800);
+}
+
+
+/* ===============================
+   START
+================================ */
+
+async function init(){
+
+    try{
+
+        await startCamera();
+
+        if(role === "technician"){
+
+            await startTechnician();
+
+        }else{
+
+            await startCaller();
+
+        }
+
+    }catch(e){
+
+        console.error(e);
+
+        status("Unable to start video call");
+    }
+}
+
+init();
+
+</script>
+
+</body>
+</html>

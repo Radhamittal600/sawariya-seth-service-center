@@ -1,0 +1,3 @@
+PASS=64
+WARN=1
+FAIL=10

@@ -1,0 +1,358 @@
+from flask import Blueprint, jsonify, request
+from app.auth import role_required, get_current_user
+from app.database.db import get_db
+
+owner_actions_bp = Blueprint(
+    "owner_actions",
+    __name__,
+    url_prefix="/owner/actions"
+)
+
+
+def audit(conn, user_id, action, details):
+    conn.execute("""
+        INSERT INTO audit_logs (user_id, action, details)
+        VALUES (?, ?, ?)
+    """, (user_id, action, details))
+
+
+@owner_actions_bp.post("/user/<int:user_id>/<action>")
+@role_required("owner")
+def user_action(user_id, action):
+    if action not in ("approve", "reject", "block", "unblock"):
+        return jsonify({"error": "Invalid action"}), 400
+
+    owner = get_current_user()
+    conn = get_db()
+
+    user = conn.execute(
+        "SELECT id, role FROM users WHERE id=?",
+        (user_id,)
+    ).fetchone()
+
+    if not user:
+        conn.close()
+        return jsonify({"error": "User not found"}), 404
+
+    if user["role"] == "owner":
+        conn.close()
+        return jsonify({"error": "Owner account protected"}), 403
+
+    status_map = {
+        "approve": "approved",
+        "reject": "rejected",
+        "block": "blocked",
+        "unblock": "approved"
+    }
+
+    new_status = status_map[action]
+
+    conn.execute(
+        "UPDATE users SET status=? WHERE id=?",
+        (new_status, user_id)
+    )
+
+    audit(
+        conn,
+        owner["id"],
+        f"user.{action}",
+        f"user_id={user_id}"
+    )
+
+    # Notify seller about approval/rejection
+    notification_title = (
+        "✅ Product Approved"
+        if action == "approve"
+        else "❌ Product Rejected"
+    )
+
+    notification_message = (
+        f"Your product '{product['name']}' has been approved by the owner."
+        if action == "approve"
+        else f"Your product '{product['name']}' has been rejected by the owner."
+    )
+
+    conn.execute("""
+        INSERT INTO notifications
+        (user_id, title, message, notification_type)
+        VALUES (?, ?, ?, ?)
+    """, (
+        product["seller_id"],
+        notification_title,
+        notification_message,
+        "seller_product_status"
+    ))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "message": f"User {action} successful",
+        "user_id": user_id,
+        "status": new_status
+    })
+
+
+@owner_actions_bp.post("/product/<int:product_id>/<action>")
+@role_required("owner")
+def product_action(product_id, action):
+    if action not in ("approve", "reject"):
+        return jsonify({"error": "Invalid action"}), 400
+
+    owner = get_current_user()
+    conn = get_db()
+
+    product = conn.execute("""
+        SELECT
+            sp.id,
+            sp.name,
+            sp.seller_id,
+            sp.price,
+            sp.stock,
+            sp.photo_url,
+            u.name AS seller_name
+        FROM seller_products sp
+        LEFT JOIN users u ON u.id = sp.seller_id
+        WHERE sp.id=?
+    """, (product_id,)).fetchone()
+
+    if not product:
+        conn.close()
+        return jsonify({"error": "Product not found"}), 404
+
+    status = "approved" if action == "approve" else "rejected"
+    active = 1 if action == "approve" else 0
+
+    conn.execute("""
+        UPDATE seller_products
+        SET approval_status=?, active=?
+        WHERE id=?
+    """, (status, active, product_id))
+
+    # Notify seller
+    if action == "approve":
+        title = "✅ PRODUCT APPROVED"
+        message = (
+            f"Your product '{product['name']}' has been approved by Owner "
+            f"and is now LIVE in the marketplace."
+        )
+    else:
+        title = "❌ PRODUCT REJECTED"
+        message = (
+            f"Your product '{product['name']}' was rejected by Owner. "
+            f"Please review the product and submit it again."
+        )
+
+    conn.execute("""
+        INSERT INTO notifications
+        (user_id, title, message, notification_type)
+        VALUES (?, ?, ?, ?)
+    """, (
+        product["seller_id"],
+        title,
+        message,
+        "seller_product_decision"
+    ))
+
+    audit(
+        conn,
+        owner["id"],
+        f"product.{action}",
+        f"product_id={product_id};seller_id={product['seller_id']};status={status}"
+    )
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "message": f"Product {action} successful",
+        "product_id": product_id,
+        "seller_id": product["seller_id"],
+        "status": status,
+        "active": active
+    })
+
+
+@owner_actions_bp.post("/kyc/<int:kyc_id>/<action>")
+@role_required("owner")
+def kyc_action(kyc_id, action):
+    if action not in ("verify", "reject"):
+        return jsonify({"error": "Invalid action"}), 400
+
+    owner = get_current_user()
+    conn = get_db()
+
+    document = conn.execute(
+        "SELECT id FROM kyc_documents WHERE id=?",
+        (kyc_id,)
+    ).fetchone()
+
+    if not document:
+        conn.close()
+        return jsonify({"error": "KYC document not found"}), 404
+
+    status = "verified" if action == "verify" else "rejected"
+
+    conn.execute("""
+        UPDATE kyc_documents
+        SET status=?,
+            verified_by=?,
+            verified_at=CURRENT_TIMESTAMP
+        WHERE id=?
+    """, (status, owner["id"], kyc_id))
+
+    audit(
+        conn,
+        owner["id"],
+        f"kyc.{action}",
+        f"kyc_id={kyc_id}"
+    )
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "message": f"KYC {action} successful",
+        "kyc_id": kyc_id,
+        "status": status
+    })
+
+
+@owner_actions_bp.post("/complaint/<int:complaint_id>/<action>")
+@role_required("owner")
+def complaint_action(complaint_id, action):
+    if action not in ("resolve", "close"):
+        return jsonify({"error": "Invalid action"}), 400
+
+    owner = get_current_user()
+    conn = get_db()
+
+    complaint = conn.execute(
+        "SELECT id FROM complaints WHERE id=?",
+        (complaint_id,)
+    ).fetchone()
+
+    if not complaint:
+        conn.close()
+        return jsonify({"error": "Complaint not found"}), 404
+
+    status = "resolved" if action == "resolve" else "closed"
+
+    conn.execute("""
+        UPDATE complaints
+        SET status=?,
+            updated_at=CURRENT_TIMESTAMP
+        WHERE id=?
+    """, (status, complaint_id))
+
+    audit(
+        conn,
+        owner["id"],
+        f"complaint.{action}",
+        f"complaint_id={complaint_id}"
+    )
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "message": f"Complaint {action} successful",
+        "complaint_id": complaint_id,
+        "status": status
+    })
+
+
+@owner_actions_bp.post("/review/<int:review_id>/<action>")
+@role_required("owner")
+def review_action(review_id, action):
+    if action not in ("approve", "hide"):
+        return jsonify({"error": "Invalid action"}), 400
+
+    owner = get_current_user()
+    conn = get_db()
+
+    review = conn.execute(
+        "SELECT id FROM reviews WHERE id=?",
+        (review_id,)
+    ).fetchone()
+
+    if not review:
+        conn.close()
+        return jsonify({"error": "Review not found"}), 404
+
+    status = "approved" if action == "approve" else "hidden"
+
+    conn.execute("""
+        UPDATE reviews
+        SET status=?
+        WHERE id=?
+    """, (status, review_id))
+
+    audit(
+        conn,
+        owner["id"],
+        f"review.{action}",
+        f"review_id={review_id}"
+    )
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "message": f"Review {action} successful",
+        "review_id": review_id,
+        "status": status
+    })
+
+
+@owner_actions_bp.post("/order/<int:order_id>/status")
+@role_required("owner")
+def order_status(order_id):
+    data = request.get_json(silent=True) or {}
+    status = str(data.get("status", "")).strip().lower()
+
+    allowed = {
+        "pending",
+        "confirmed",
+        "processing",
+        "shipped",
+        "delivered",
+        "cancelled"
+    }
+
+    if status not in allowed:
+        return jsonify({"error": "Invalid order status"}), 400
+
+    owner = get_current_user()
+    conn = get_db()
+
+    order = conn.execute(
+        "SELECT id FROM orders WHERE id=?",
+        (order_id,)
+    ).fetchone()
+
+    if not order:
+        conn.close()
+        return jsonify({"error": "Order not found"}), 404
+
+    conn.execute("""
+        UPDATE orders
+        SET order_status=?
+        WHERE id=?
+    """, (status, order_id))
+
+    audit(
+        conn,
+        owner["id"],
+        "order.status_update",
+        f"order_id={order_id},status={status}"
+    )
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "message": "Order status updated",
+        "order_id": order_id,
+        "status": status
+    })

@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+*.db
+*.db-*
+*.log
+.env
+owner-cookies.txt
+customer-cookies.txt
+technician-cookies.txt
+seller-cookies.txt
+server.log

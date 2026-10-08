@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Video Calls - Sawariya Seth</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#080b1a,#111936,#160b25);
+    color:#fff;
+    min-height:100vh;
+}
+.container{
+    width:min(900px,94%);
+    margin:25px auto;
+}
+.header{
+    padding:22px;
+    border-radius:20px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.12);
+    backdrop-filter:blur(15px);
+    margin-bottom:20px;
+}
+.header h1{margin:0 0 8px}
+.status{
+    display:inline-block;
+    padding:7px 12px;
+    border-radius:20px;
+    background:#16a34a;
+    font-size:13px;
+}
+.card{
+    padding:20px;
+    border-radius:18px;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.1);
+    margin-bottom:15px;
+}
+.permission{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+}
+button{
+    border:0;
+    border-radius:12px;
+    padding:12px 18px;
+    color:white;
+    font-weight:700;
+    cursor:pointer;
+}
+.enable{
+    background:linear-gradient(135deg,#00c6ff,#7c3aed);
+}
+.accept{
+    background:#16a34a;
+}
+.reject{
+    background:#dc2626;
+}
+.end{
+    background:#7f1d1d;
+}
+.call{
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:15px;
+    padding:16px;
+    margin-top:12px;
+    background:rgba(0,0,0,.2);
+}
+.empty{
+    opacity:.7;
+    text-align:center;
+    padding:25px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+    <h1>📹 Technician Video Center</h1>
+    <p>Manage your camera, microphone and incoming calls.</p>
+    <span class="status" id="onlineStatus">ONLINE</span>
+</div>
+
+<div class="card">
+    <h2>🔐 Camera & Microphone Permission</h2>
+    <p>
+        Camera और microphone आपकी अनुमति के बिना इस्तेमाल नहीं होंगे।
+        Incoming call को पहले Accept करना जरूरी है।
+    </p>
+
+    <div class="permission">
+        <button class="enable" onclick="enableCamera()">
+            📷 Enable Camera
+        </button>
+
+        <button class="enable" onclick="enableMicrophone()">
+            🎙️ Enable Microphone
+        </button>
+
+        <button class="reject" onclick="disablePermissions()">
+            🔒 Disable
+        </button>
+    </div>
+
+    <p id="permissionStatus">Checking permission...</p>
+</div>
+
+<div class="card">
+    <h2>📞 Incoming Calls</h2>
+    <div id="incomingCalls">
+        <div class="empty">No incoming calls</div>
+    </div>
+</div>
+
+</div>
+
+<script>
+
+let cameraEnabled = false;
+let micEnabled = false;
+
+async function loadPermissions(){
+
+    try{
+
+        const r = await fetch("/video/permissions");
+        const data = await r.json();
+
+        if(!r.ok){
+            document.getElementById("permissionStatus").innerText =
+                data.error || "Permission unavailable";
+            return;
+        }
+
+        cameraEnabled = !!data.camera_enabled;
+        micEnabled = !!data.mic_enabled;
+
+        updatePermissionText();
+
+    }catch(e){
+        console.error(e);
+    }
+}
+
+function updatePermissionText(){
+
+    document.getElementById("permissionStatus").innerText =
+        "Camera: " + (cameraEnabled ? "✅ Enabled" : "❌ Disabled") +
+        " | Microphone: " + (micEnabled ? "✅ Enabled" : "❌ Disabled");
+}
+
+async function enableCamera(){
+
+    try{
+
+        const stream =
+            await navigator.mediaDevices.getUserMedia({
+                video:true,
+                audio:false
+            });
+
+        stream.getTracks().forEach(t => t.stop());
+
+        const r = await fetch("/video/permissions",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                camera_enabled:true
+            })
+        });
+
+        const data = await r.json();
+
+        if(!r.ok){
+            alert(data.error || "Camera permission save failed");
+            return;
+        }
+
+        cameraEnabled = true;
+        updatePermissionText();
+
+        alert("Camera permission enabled.");
+
+    }catch(e){
+
+        console.error(e);
+        alert(
+            "Camera permission browser में allow करें।"
+        );
+    }
+}
+
+async function enableMicrophone(){
+
+    try{
+
+        const stream =
+            await navigator.mediaDevices.getUserMedia({
+                video:false,
+                audio:true
+            });
+
+        stream.getTracks().forEach(t => t.stop());
+
+        const r = await fetch("/video/permissions",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                mic_enabled:true
+            })
+        });
+
+        const data = await r.json();
+
+        if(!r.ok){
+            alert(data.error || "Microphone permission save failed");
+            return;
+        }
+
+        micEnabled = true;
+        updatePermissionText();
+
+        alert("Microphone permission enabled.");
+
+    }catch(e){
+
+        console.error(e);
+        alert(
+            "Microphone permission browser में allow करें।"
+        );
+    }
+}
+
+async function disablePermissions(){
+
+    try{
+
+        const r = await fetch("/video/permissions",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                camera_enabled:false,
+                mic_enabled:false
+            })
+        });
+
+        const data = await r.json();
+
+        if(!r.ok){
+            alert(data.error || "Unable to disable");
+            return;
+        }
+
+        cameraEnabled = false;
+        micEnabled = false;
+
+        updatePermissionText();
+
+        alert("Camera और microphone disabled.");
+
+    }catch(e){
+        console.error(e);
+    }
+}
+
+async function loadIncomingCalls(){
+
+    try{
+
+        const r = await fetch("/video/incoming");
+        const data = await r.json();
+
+        if(!r.ok){
+            return;
+        }
+
+        const box =
+            document.getElementById("incomingCalls");
+
+        const calls = data.calls || data || [];
+
+        if(!Array.isArray(calls) || calls.length === 0){
+
+            box.innerHTML =
+                '<div class="empty">No incoming calls</div>';
+
+            return;
+        }
+
+        box.innerHTML = "";
+
+        calls.forEach(call => {
+
+            const div =
+                document.createElement("div");
+
+            div.className = "call";
+
+            div.innerHTML = `
+                <h3>📞 Incoming Video Call</h3>
+                <p>Booking ID: ${call.booking_id ?? "-"}</p>
+                <p>Caller ID: ${call.caller_id ?? "-"}</p>
+
+                <button class="accept"
+                    onclick="acceptCall(${call.id})">
+                    ✅ Accept
+                </button>
+
+                <button class="reject"
+                    onclick="rejectCall(${call.id})">
+                    ❌ Reject
+                </button>
+            `;
+
+            box.appendChild(div);
+        });
+
+    }catch(e){
+        console.error(e);
+    }
+}
+
+async function acceptCall(id){
+
+    if(!cameraEnabled){
+
+        alert(
+            "पहले Camera Enable करें।"
+        );
+
+        return;
+    }
+
+    try{
+
+        const r = await fetch(
+            "/video/accept/" + id,
+            {
+                method:"POST"
+            }
+        );
+
+        const data = await r.json();
+
+        if(!r.ok){
+            alert(data.error || "Call accept नहीं हुई");
+            return;
+        }
+
+        window.location.href =
+            "/video-room/" + id + "?role=technician";
+
+    }catch(e){
+
+        console.error(e);
+        alert("Call accept error");
+    }
+}
+
+async function rejectCall(id){
+
+    try{
+
+        const r = await fetch(
+            "/video/reject/" + id,
+            {
+                method:"POST"
+            }
+        );
+
+        const data = await r.json();
+
+        if(!r.ok){
+            alert(data.error || "Call reject नहीं हुई");
+            return;
+        }
+
+        loadIncomingCalls();
+
+    }catch(e){
+        console.error(e);
+    }
+}
+
+loadPermissions();
+loadIncomingCalls();
+
+/* New incoming calls check */
+setInterval(loadIncomingCalls,3000);
+
+</script>
+
+</body>
+</html>

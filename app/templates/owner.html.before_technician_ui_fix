@@ -1,0 +1,3790 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sawariya Seth • Super Owner</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial;background:#070816;color:#fff}
+:root{--gold:#ffd54a;--pink:#ff4fd8;--cyan:#31e7ff;--purple:#9b6cff;--green:#42f59b;--red:#ff5874;--card:#11152a}
+body:before{content:"";position:fixed;inset:0;z-index:-1;background:
+radial-gradient(circle at 10% 10%,#ff3cac35,transparent 25%),
+radial-gradient(circle at 90% 15%,#31e7ff30,transparent 25%),
+radial-gradient(circle at 50% 100%,#7b2cff30,transparent 30%)}
+.top{padding:16px;border-bottom:1px solid #ffffff18;background:#090b18dd;backdrop-filter:blur(18px);position:sticky;top:0;z-index:5}
+.topin{max-width:1400px;margin:auto;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:21px;font-weight:900}.logo span{color:var(--gold)}
+.online{color:var(--green);font-size:12px}
+.layout{max-width:1400px;margin:auto;padding:20px;display:grid;grid-template-columns:240px 1fr;gap:18px}
+.side,.hero,.card,.panel{background:#11152acc;border:1px solid #ffffff12;box-shadow:0 15px 50px #0005;backdrop-filter:blur(16px)}
+.side{border-radius:22px;padding:14px;height:max-content;position:sticky;top:85px}
+.side button{display:block;width:100%;padding:13px;margin:6px 0;border:0;border-radius:12px;background:transparent;color:#b9bfd3;text-align:left;font-weight:700}
+.side button:hover,.side button.active{background:linear-gradient(90deg,#ff3cac30,#784cff30);color:white;border:1px solid #ffffff15}
+.hero{border-radius:28px;padding:26px;background:linear-gradient(135deg,#ff3cac18,#784cff18,#31e7ff10)}
+.tag{color:var(--cyan);font-size:11px;letter-spacing:3px;font-weight:bold}
+.hero h1{font-size:clamp(28px,5vw,50px);margin:8px 0}.hero h1 span{color:var(--gold)}
+.hero p{color:#9da4bb}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.card{border-radius:19px;padding:18px}
+.card:hover{transform:translateY(-3px);transition:.2s}
+.icon{font-size:25px}.num{font-size:28px;font-weight:900;margin-top:10px}.label{font-size:12px;color:#8e96ad}
+.gold{color:var(--gold)}.cyan{color:var(--cyan)}.pink{color:var(--pink)}.green{color:var(--green)}
+.section{margin-top:20px}.section h2{margin:0 0 12px}
+.modules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.module{cursor:pointer;min-height:125px}
+.module h3{margin:10px 0 5px}.module p{font-size:12px;color:#8e96ad;line-height:1.5}
+.panel{display:none;border-radius:22px;padding:20px;margin-top:18px}.panel.show{display:block}
+.money{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.money .card{background:linear-gradient(135deg,#1a1630,#11152a)}
+.big{font-size:30px;font-weight:900;color:var(--green)}
+.bar{height:9px;border-radius:20px;background:#252a40;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;width:72%;background:linear-gradient(90deg,var(--pink),var(--purple),var(--cyan))}
+button.action{padding:11px 14px;border:0;border-radius:10px;background:linear-gradient(90deg,var(--gold),#ff9f43);font-weight:900;margin:4px;cursor:pointer}
+.data{margin-top:12px;border:1px solid #ffffff12;border-radius:14px;padding:14px;overflow:auto}
+.row{padding:11px 0;border-bottom:1px solid #ffffff0d}.row:last-child{border:0}.small{color:#8e96ad;font-size:12px}
+.badge{display:inline-block;padding:5px 9px;border-radius:20px;background:#31e7ff16;color:var(--cyan);font-size:10px}
+@media(max-width:950px){.layout{grid-template-columns:1fr}.side{position:static;display:flex;overflow:auto}.side button{min-width:max-content}.stats,.money{grid-template-columns:repeat(2,1fr)}.modules{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.layout{padding:11px}.stats,.money,.modules{grid-template-columns:1fr}.hero{padding:20px}}
+
+.nav-title{
+    margin:18px 8px 7px;
+    padding:7px 10px;
+    color:#00e5ff;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:1.4px;
+    border-bottom:1px solid rgba(0,229,255,.12);
+}
+
+.nav button{
+    width:100%;
+    text-align:left;
+    margin:4px 0;
+    padding:12px 13px;
+    border:1px solid transparent;
+    border-radius:13px;
+    background:rgba(255,255,255,.025);
+    color:#dce5ff;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.nav button:hover{
+    background:linear-gradient(
+        90deg,
+        rgba(255,20,147,.16),
+        rgba(0,229,255,.12)
+    );
+    border-color:rgba(0,229,255,.25);
+    transform:translateX(2px);
+}
+
+.nav button.active{
+    background:linear-gradient(
+        90deg,
+        rgba(255,20,147,.28),
+        rgba(124,60,255,.25),
+        rgba(0,229,255,.16)
+    );
+    border-color:rgba(0,229,255,.4);
+    color:#ffffff;
+    box-shadow:0 5px 20px rgba(0,229,255,.08);
+}
+
+
+.active-panel {
+    display: block !important;
+    animation: ownerPanelIn .22s ease;
+}
+
+@keyframes ownerPanelIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.user-stats {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin:20px 0;
+}
+
+.stat-card {
+    background:linear-gradient(
+        145deg,
+        rgba(24,31,68,.96),
+        rgba(10,14,35,.96)
+    );
+    border:1px solid rgba(0,229,255,.18);
+    border-radius:18px;
+    padding:18px;
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+.stat-card span {
+    display:block;
+    color:#9ca9ca;
+    font-size:12px;
+}
+
+.stat-card strong {
+    display:block;
+    margin-top:8px;
+    color:#00e5ff;
+    font-size:28px;
+}
+
+.user-toolbar {
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr;
+    gap:12px;
+    margin:20px 0;
+}
+
+.user-toolbar input,
+.user-toolbar select {
+    box-sizing:border-box;
+    width:100%;
+    padding:13px;
+    border-radius:13px;
+    border:1px solid rgba(255,255,255,.12);
+    background:#080d24;
+    color:white;
+    outline:none;
+}
+
+.users-table-wrap {
+    overflow-x:auto;
+    border-radius:18px;
+    border:1px solid rgba(0,229,255,.15);
+}
+
+.users-table {
+    width:100%;
+    min-width:850px;
+    border-collapse:collapse;
+    background:rgba(7,11,30,.8);
+}
+
+.users-table th {
+    padding:14px;
+    text-align:left;
+    color:#00e5ff;
+    font-size:12px;
+    background:rgba(0,229,255,.05);
+}
+
+.users-table td {
+    padding:14px;
+    border-top:1px solid rgba(255,255,255,.06);
+    color:#dce5ff;
+    font-size:13px;
+}
+
+.user-name {
+    font-weight:800;
+    color:white;
+}
+
+.user-sub {
+    color:#7885a7;
+    font-size:11px;
+    margin-top:3px;
+}
+
+.role-badge,
+.status-badge {
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:800;
+}
+
+.role-customer {
+    background:rgba(0,229,255,.1);
+    color:#00e5ff;
+}
+
+.role-technician {
+    background:rgba(124,60,255,.14);
+    color:#b98cff;
+}
+
+.role-seller {
+    background:rgba(255,193,7,.12);
+    color:#ffd45c;
+}
+
+.status-approved {
+    background:rgba(0,255,170,.1);
+    color:#00ffb0;
+}
+
+.status-pending {
+    background:rgba(255,193,7,.1);
+    color:#ffd45c;
+}
+
+.status-blocked {
+    background:rgba(255,40,90,.1);
+    color:#ff5c7c;
+}
+
+.status-rejected {
+    background:rgba(255,40,90,.1);
+    color:#ff5c7c;
+}
+
+.user-action {
+    border:0;
+    border-radius:9px;
+    padding:7px 10px;
+    margin:2px;
+    cursor:pointer;
+    font-weight:700;
+    color:white;
+    background:rgba(0,229,255,.1);
+}
+
+.user-action:hover {
+    background:rgba(0,229,255,.2);
+}
+
+.block-action {
+    color:#ff6685;
+    background:rgba(255,40,90,.08);
+}
+
+.loading-cell,
+.empty-cell {
+    text-align:center;
+    padding:35px !important;
+    color:#7d89a9 !important;
+}
+
+.um-success {
+    padding:11px;
+    margin:10px 0;
+    border-radius:11px;
+    background:rgba(0,255,170,.08);
+    color:#00ffb0;
+}
+
+.um-error {
+    padding:11px;
+    margin:10px 0;
+    border-radius:11px;
+    background:rgba(255,40,90,.08);
+    color:#ff6685;
+}
+
+@media(max-width:800px) {
+    .user-stats {
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .user-toolbar {
+        grid-template-columns:1fr;
+    }
+}
+
+
+.master-owner-dashboard {
+    margin-bottom: 28px;
+}
+
+.master-hero {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    padding:26px;
+    margin-bottom:20px;
+    border-radius:24px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,20,147,.16),
+            rgba(124,60,255,.16),
+            rgba(0,229,255,.10)
+        );
+    border:1px solid rgba(0,229,255,.25);
+    box-shadow:0 15px 45px rgba(0,0,0,.25);
+}
+
+.master-hero h1 {
+    margin:5px 0;
+    font-size:28px;
+}
+
+.master-hero p {
+    margin:0;
+    color:#9da9ca;
+}
+
+.system-status {
+    padding:10px 15px;
+    border-radius:30px;
+    background:rgba(0,255,170,.08);
+    color:#00ffb0;
+    font-size:12px;
+    font-weight:900;
+}
+
+.system-status span {
+    text-shadow:0 0 12px #00ffb0;
+}
+
+.master-grid {
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:15px;
+}
+
+.master-card {
+    min-height:145px;
+    padding:20px;
+    border-radius:20px;
+    background:linear-gradient(
+        145deg,
+        rgba(20,27,60,.98),
+        rgba(8,12,31,.98)
+    );
+    border:1px solid rgba(255,255,255,.08);
+    cursor:pointer;
+    transition:.22s;
+    position:relative;
+    overflow:hidden;
+}
+
+.master-card::after {
+    content:"";
+    position:absolute;
+    width:100px;
+    height:100px;
+    right:-35px;
+    bottom:-45px;
+    border-radius:50%;
+    opacity:.15;
+    filter:blur(18px);
+}
+
+.master-card:hover {
+    transform:translateY(-4px);
+    border-color:rgba(0,229,255,.4);
+    box-shadow:0 15px 35px rgba(0,0,0,.3);
+}
+
+.master-icon {
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.master-card h3 {
+    margin:0 0 6px;
+    color:#fff;
+}
+
+.master-card p {
+    margin:0 0 15px;
+    color:#8d99ba;
+    font-size:12px;
+}
+
+.master-card b {
+    font-size:11px;
+    color:#00e5ff;
+}
+
+.master-card.pink { border-top:2px solid #ff1493; }
+.master-card.cyan { border-top:2px solid #00e5ff; }
+.master-card.purple { border-top:2px solid #9b5cff; }
+.master-card.gold { border-top:2px solid #ffd45c; }
+.master-card.green { border-top:2px solid #00ffb0; }
+.master-card.red { border-top:2px solid #ff5577; }
+
+@media(max-width:950px) {
+    .master-grid {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+
+@media(max-width:600px) {
+    .master-hero {
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .master-grid {
+        grid-template-columns:1fr;
+    }
+}
+
+
+.owner-live-box {
+    margin-top:20px;
+    padding:20px;
+    border-radius:20px;
+    background:linear-gradient(
+        145deg,
+        rgba(18,25,55,.96),
+        rgba(7,11,29,.96)
+    );
+    border:1px solid rgba(0,229,255,.16);
+    box-shadow:0 12px 35px rgba(0,0,0,.2);
+}
+
+.owner-live-title {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+    font-weight:900;
+    color:#fff;
+}
+
+.live-small {
+    color:#00ffb0;
+    font-size:10px;
+    letter-spacing:1px;
+}
+
+.owner-live-box .users-table-wrap {
+    max-height:500px;
+    overflow:auto;
+}
+
+</style>
+</head>
+<body>
+
+<header class="top">
+<div class="topin">
+<div class="logo">⚡ SAWARIYA SETH <span>SUPER OWNER</span></div>
+<div class="online">● LIVE SYSTEM</div>
+</div>
+</header>
+
+<div class="layout">
+
+<aside class="side">
+<div class="nav-title">👑 OWNER CONTROL</div>
+
+<button class="active" onclick="panel('home',this)">
+    🏠 Command Center
+</button>
+
+<button onclick="panel('users',this)">
+    👥 User Management
+</button>
+
+<button onclick="panel('technicians',this)">
+    🛠️ Technician Management
+</button>
+
+<button onclick="panel('sellers',this)">
+    🏪 Seller Management
+</button>
+
+<button onclick="panel('bookings',this)">
+    📅 Booking Control
+</button>
+
+<div class="nav-title">💰 BUSINESS</div>
+
+<button onclick="panel('paymentLive',this);loadPaymentCenter()">
+    💳 Payment Center
+</button>
+
+<button onclick="panel('commissions',this)">
+    💰 Commissions
+</button>
+
+<button onclick="panel('refunds',this)">
+    🔄 Refund Center
+</button>
+
+<button onclick="panel('orders',this)">
+    📦 Orders
+</button>
+
+<button onclick="panel('marketplace',this)">
+    🛍️ Marketplace
+</button>
+
+<div class="nav-title">🛡️ TRUST & SAFETY</div>
+
+<button onclick="panel('kyc',this)">
+    🪪 KYC Center
+</button>
+
+<button onclick="panel('complaints',this)">
+    🚨 Complaints
+</button>
+
+<button onclick="panel('reviews',this)">
+    ⭐ Reviews
+</button>
+
+<button onclick="panel('support',this)">
+    🎫 Support Tickets
+</button>
+
+<div class="nav-title">📢 COMMUNICATION</div>
+
+<button onclick="panel('notifications',this)">
+    🔔 Notifications
+</button>
+
+<div class="nav-title">🔐 SECURITY</div>
+
+<button onclick="panel('security',this)">
+    🔐 Security Center
+</button>
+
+<button onclick="panel('audit',this)">
+    🧾 Audit Logs
+</button>
+
+<div class="nav-title">⚙️ CONTROL</div>
+
+<button onclick="panel('settings',this)">
+    ⚙️ App Control
+</button>
+
+<button onclick="panel('permissions',this)">
+    🛡️ Permissions
+</button>
+
+<button onclick="panel('analytics',this);loadAnalytics()">
+    📊 Analytics
+</button>
+<button onclick="panel('approval',this)">✅ Approvals</button>
+<button onclick="panel('operation',this)">🧑‍🔧 Operations</button>
+<button onclick="panel('market',this)">🏪 Marketplace</button>
+<button onclick="panel('trust',this)">🛡️ Trust & Safety</button>
+<button onclick="panel('security',this)">🔐 Security</button>
+<button onclick="panel('settings',this)">⚙️ App Control</button>
+</aside>
+
+<main>
+
+<section class="hero">
+<div class="tag">ROOT CONTROL • MYTHIC CORE • LEVEL ∞</div>
+<h1>Welcome, <span>{{ user["name"] }}</span> 👑</h1>
+<p>Complete control center for Sawariya Seth Service Center.</p>
+</section>
+
+<div class="stats">
+<div class="card"><div class="icon">👥</div><div class="num gold" id="customers">—</div><div class="label">CUSTOMERS</div></div>
+<div class="card"><div class="icon">🧑‍🔧</div><div class="num cyan" id="technicians">—</div><div class="label">TECHNICIANS</div></div>
+<div class="card"><div class="icon">🏪</div><div class="num pink" id="sellers">—</div><div class="label">SELLERS</div></div>
+<div class="card"><div class="icon">📋</div><div class="num green" id="bookings">—</div><div class="label">BOOKINGS</div></div>
+</div>
+
+<section id="home" class="panel show">
+
+<div class="master-owner-dashboard">
+
+    <div class="master-hero">
+        <div>
+            <div class="eyebrow">SAWARIYA SETH SERVICE CENTER</div>
+            <h1>👑 OWNER COMMAND HUB</h1>
+            <p>पूरे platform का central control system</p>
+        </div>
+
+        <div class="system-status" id="masterLiveStatus">● CONNECTING</div><div class="system-status">
+            <span>●</span> SYSTEM ONLINE
+        </div>
+    </div>
+
+    <div class="master-grid">
+
+        <div class="master-card pink" onclick="panel('users',this)">
+            <div class="master-icon">👥</div>
+            <h3>User Management</h3>
+            <p>Customers, technicians और sellers</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card cyan" onclick="panel('technicians',this)">
+            <div class="master-icon">🛠️</div>
+            <h3>Technicians</h3>
+            <p>Jobs, assignment और performance</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card purple" onclick="panel('sellers',this)">
+            <div class="master-icon">🏪</div>
+            <h3>Sellers</h3>
+            <p>Seller approval और products</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card gold" onclick="panel('bookings',this)">
+            <div class="master-icon">📅</div>
+            <h3>Bookings</h3>
+            <p>Services और technician assignment</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card cyan" onclick="panel('paymentLive',this);loadPaymentCenter()">
+            <div class="master-icon">💳</div>
+            <h3>Payments</h3>
+            <p>Revenue और transactions</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card green" onclick="panel('commissions',this)">
+            <div class="master-icon">💰</div>
+            <h3>Commissions</h3>
+            <p>Platform earning control</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card red" onclick="panel('refunds',this)">
+            <div class="master-icon">🔄</div>
+            <h3>Refunds</h3>
+            <p>Refund requests और status</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card purple" onclick="panel('orders',this)">
+            <div class="master-icon">📦</div>
+            <h3>Orders</h3>
+            <p>Marketplace orders</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card pink" onclick="panel('marketplace',this)">
+            <div class="master-icon">🛍️</div>
+            <h3>Marketplace</h3>
+            <p>Products और inventory</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card gold" onclick="panel('kyc',this)">
+            <div class="master-icon">🪪</div>
+            <h3>KYC Center</h3>
+            <p>Verification और documents</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card red" onclick="panel('complaints',this)">
+            <div class="master-icon">🚨</div>
+            <h3>Complaints</h3>
+            <p>User complaints और cases</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card gold" onclick="panel('reviews',this)">
+            <div class="master-icon">⭐</div>
+            <h3>Reviews</h3>
+            <p>Ratings और moderation</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card cyan" onclick="panel('support',this)">
+            <div class="master-icon">🎫</div>
+            <h3>Support</h3>
+            <p>Customer support tickets</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card pink" onclick="panel('notifications',this)">
+            <div class="master-icon">🔔</div>
+            <h3>Notifications</h3>
+            <p>Announcements और alerts</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card red" onclick="panel('security',this)">
+            <div class="master-icon">🔐</div>
+            <h3>Security</h3>
+            <p>Security events और protection</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card purple" onclick="panel('audit',this)">
+            <div class="master-icon">🧾</div>
+            <h3>Audit Logs</h3>
+            <p>Owner activity history</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card cyan" onclick="panel('settings',this)">
+            <div class="master-icon">⚙️</div>
+            <h3>App Control</h3>
+            <p>Platform settings</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card purple" onclick="panel('permissions',this)">
+            <div class="master-icon">🛡️</div>
+            <h3>Permissions</h3>
+            <p>Feature access control</p>
+            <b>OPEN →</b>
+        </div>
+
+        <div class="master-card green" onclick="panel('analytics',this);loadAnalytics()">
+            <div class="master-icon">📊</div>
+            <h3>Analytics</h3>
+            <p>Business intelligence</p>
+            <b>OPEN →</b>
+        </div>
+
+    </div>
+</div>
+
+<h2>🌌 Command Center</h2>
+<div class="modules">
+<div class="card module" onclick="panel('money')"><div class="icon">💳</div><h3>Payment Intelligence</h3><p>Revenue, successful payments, pending payments, refunds and commission.</p></div>
+<div class="card module" onclick="panel('approval')"><div class="icon">🪪</div><h3>Approval Universe</h3><p>Technician, seller, KYC and product approval workflow.</p></div>
+<div class="card module" onclick="panel('operation')"><div class="icon">⚡</div><h3>Service Operations</h3><p>Bookings, technician assignment, jobs and live service control.</p></div>
+<div class="card module" onclick="panel('market')"><div class="icon">🛒</div><h3>Marketplace</h3><p>Products, sellers, orders, stock and marketplace control.</p></div>
+<div class="card module" onclick="panel('trust')"><div class="icon">🛡️</div><h3>Trust Center</h3><p>Complaints, reviews, support and customer protection.</p></div>
+<div class="card module" onclick="panel('security')"><div class="icon">🔐</div><h3>Security Core</h3><p>Security events, audit logs and owner permissions.</p></div>
+</div>
+</section>
+
+<section id="money" class="panel">
+<h2>💳 Payment Intelligence Center</h2>
+<div class="money">
+<div class="card"><div class="label">TOTAL REVENUE</div><div class="big">₹0</div></div>
+<div class="card"><div class="label">SUCCESSFUL</div><div class="big">₹0</div></div>
+<div class="card"><div class="label">COMMISSION</div><div class="big">₹0</div></div>
+<div class="card"><div class="label">REFUNDS</div><div class="big">₹0</div></div>
+</div>
+<div class="card" style="margin-top:12px">
+<h3>Revenue Health</h3>
+<div class="bar"><i></i></div>
+<p class="small">Payment gateway integration will connect here later. No fake successful payments are shown.</p>
+</div>
+</section>
+
+
+
+<section id="analytics" class="panel">
+
+<h2>📊 Mythic Analytics</h2>
+
+<div class="money">
+
+<div class="card">
+<div class="label">REVENUE</div>
+<div class="big" id="aRevenue">₹0</div>
+</div>
+
+<div class="card">
+<div class="label">TOTAL BOOKINGS</div>
+<div class="big" id="aBookings">0</div>
+</div>
+
+<div class="card">
+<div class="label">COMPLETED</div>
+<div class="big" id="aCompleted">0</div>
+</div>
+
+<div class="card">
+<div class="label">ACTIVE</div>
+<div class="big" id="aActive">0</div>
+</div>
+
+</div>
+
+<div class="modules" style="margin-top:15px">
+
+<div class="card">
+<div class="icon">👥</div>
+<h3>Customers</h3>
+<div class="big" id="aCustomers">0</div>
+</div>
+
+<div class="card">
+<div class="icon">🧑‍🔧</div>
+<h3>Technicians</h3>
+<div class="big" id="aTechnicians">0</div>
+</div>
+
+<div class="card">
+<div class="icon">🏪</div>
+<h3>Sellers</h3>
+<div class="big" id="aSellers">0</div>
+</div>
+
+<div class="card">
+<div class="icon">⭐</div>
+<h3>Average Rating</h3>
+<div class="big" id="aRating">0</div>
+</div>
+
+</div>
+
+<div class="card" style="margin-top:15px">
+<h3>📈 Business Health</h3>
+
+<div class="bar">
+<i id="healthBar" style="width:0%"></i>
+</div>
+
+<p class="small" id="healthText">
+Calculating business health...
+</p>
+
+</div>
+
+<div class="data" id="serviceAnalytics">
+<span class="small">Loading service analytics...</span>
+</div>
+
+</section>
+<section id="paymentLive" class="panel">
+<h2>💳 Payment Intelligence Center</h2>
+
+<div class="money">
+<div class="card">
+<div class="label">TOTAL REVENUE</div>
+<div class="big" id="payRevenue">₹0</div>
+</div>
+
+<div class="card">
+<div class="label">COMMISSION</div>
+<div class="big" id="payCommission">₹0</div>
+</div>
+
+<div class="card">
+<div class="label">PENDING</div>
+<div class="big" id="payPending">₹0</div>
+</div>
+
+<div class="card">
+<div class="label">REFUNDS</div>
+<div class="big" id="payRefunds">₹0</div>
+</div>
+</div>
+
+<div style="margin-top:15px">
+<button class="action" onclick="loadPaymentCenter()">🔄 Refresh Payments</button>
+</div>
+
+<div class="data" id="paymentData">
+<span class="small">Payment data loading...</span>
+</div>
+</section>
+
+<section id="approval" class="panel">
+<h2>✅ Approval Command Center</h2>
+<p class="small">
+Technician और Seller accounts को Owner यहाँ से approve या reject कर सकता है।
+</p>
+
+<div style="margin:15px 0">
+<button class="action" onclick="loadApproval()">🔄 Refresh Approvals</button>
+</div>
+
+<div id="approvalData" class="data">
+<span class="small">Loading approval queue...</span>
+</div>
+</section>
+
+<section id="operation" class="panel">
+<h2>🧑‍🔧 Service Operations</h2>
+<button class="action" onclick="bookings()">All Bookings</button>
+<button class="action" onclick="technicians()">Technician Network</button>
+<div id="operationData" class="data"><span class="small">Choose an operation.</span></div>
+</section>
+
+<section id="market" class="panel">
+<h2>🏪 Marketplace Control</h2>
+<div class="modules">
+<div class="card"><div class="icon">🏪</div><h3>Seller Hub</h3><p>Seller approval and performance.</p></div>
+<div class="card"><div class="icon">📦</div><h3>Product Hub</h3><p>Product approval, pricing and inventory.</p></div>
+<div class="card"><div class="icon">🛒</div><h3>Order Hub</h3><p>Orders, payment status and delivery.</p></div>
+</div>
+</section>
+
+<section id="trust" class="panel">
+<h2>🛡️ Trust & Safety</h2>
+<div class="modules">
+<div class="card"><div class="icon">🎫</div><h3>Complaints</h3><p>Manage and resolve customer complaints.</p></div>
+<div class="card"><div class="icon">⭐</div><h3>Reviews</h3><p>Review moderation and ratings.</p></div>
+<div class="card"><div class="icon">💬</div><h3>Support</h3><p>Support ticket command center.</p></div>
+</div>
+</section>
+
+<section id="security" class="panel">
+<h2>🔐 Security Core</h2>
+<div class="modules">
+<div class="card"><div class="icon">🚨</div><h3>Threat Monitor</h3><p>Security events and suspicious activity.</p></div>
+<div class="card"><div class="icon">📜</div><h3>Audit Logs</h3><p>Owner action history.</p></div>
+<div class="card"><div class="icon">🔑</div><h3>Permissions</h3><p>Administrative access control.</p></div>
+</div>
+</section>
+
+<section id="settings" class="panel">
+
+<h2>⚙️ App Control Center</h2>
+
+<p class="small">
+Owner-only platform configuration.
+</p>
+
+<div class="modules">
+
+<div class="card">
+<div class="icon">💰</div>
+<h3>Commission</h3>
+
+<input id="commissionInput"
+type="number"
+min="0"
+max="100"
+step="0.1"
+placeholder="10"
+style="width:100%;padding:11px;border-radius:10px;border:1px solid #ffffff18;background:#090c18;color:white;margin-top:10px">
+
+<button class="action"
+onclick="saveCommission()">
+Save Commission
+</button>
+</div>
+
+
+<div class="card">
+<div class="icon">🔔</div>
+<h3>Notifications</h3>
+
+<button class="action"
+onclick="toggleSetting('notifications_enabled')">
+Toggle Notifications
+</button>
+
+<div id="notificationsStatus"
+class="small">
+Loading...
+</div>
+</div>
+
+
+<div class="card">
+<div class="icon">🛒</div>
+<h3>Marketplace</h3>
+
+<button class="action"
+onclick="toggleSetting('seller_marketplace_enabled')">
+Toggle Marketplace
+</button>
+
+<div id="marketplaceStatus"
+class="small">
+Loading...
+</div>
+</div>
+
+
+<div class="card">
+<div class="icon">📋</div>
+<h3>Bookings</h3>
+
+<button class="action"
+onclick="toggleSetting('booking_enabled')">
+Toggle Bookings
+</button>
+
+<div id="bookingStatus"
+class="small">
+Loading...
+</div>
+</div>
+
+
+<div class="card">
+<div class="icon">⭐</div>
+<h3>Reviews</h3>
+
+<button class="action"
+onclick="toggleSetting('reviews_enabled')">
+Toggle Reviews
+</button>
+
+<div id="reviewsStatus"
+class="small">
+Loading...
+</div>
+</div>
+
+
+<div class="card">
+<div class="icon">🛠️</div>
+<h3>Maintenance</h3>
+
+<button class="action"
+style="background:linear-gradient(90deg,#ff5874,#ff315f)"
+onclick="toggleMaintenance()">
+Toggle Maintenance
+</button>
+
+<div id="maintenanceStatus"
+class="small">
+Loading...
+</div>
+</div>
+
+
+<div class="card">
+<div class="icon">💱</div>
+<h3>Currency</h3>
+
+<select id="currencyInput"
+style="width:100%;padding:11px;border-radius:10px;border:1px solid #ffffff18;background:#090c18;color:white;margin-top:10px">
+
+<option value="INR">INR ₹</option>
+<option value="USD">USD $</option>
+<option value="EUR">EUR €</option>
+
+</select>
+
+<button class="action"
+onclick="saveCurrency()">
+Save Currency
+</button>
+</div>
+
+
+<div class="card">
+<div class="icon">🏷️</div>
+<h3>Platform Name</h3>
+
+<input id="platformNameInput"
+placeholder="Platform name"
+style="width:100%;padding:11px;border-radius:10px;border:1px solid #ffffff18;background:#090c18;color:white;margin-top:10px">
+
+<button class="action"
+onclick="savePlatformName()">
+Save Name
+</button>
+</div>
+
+</div>
+
+<div class="data" id="settingsData">
+<span class="small">
+Loading platform settings...
+</span>
+</div>
+
+</section>
+
+</main>
+</div>
+
+
+
+<section class="panel" id="users">
+
+    <div class="section-title">
+        <div>
+            <div class="eyebrow">OWNER CONTROL • USERS</div>
+            <h2>👥 User Management</h2>
+            <p>सभी Customer, Technician और Seller accounts को control करें।</p>
+        </div>
+        <button class="action" onclick="loadOwnerUsers()">🔄 Refresh</button>
+    </div>
+
+    <div class="stats-grid user-stats">
+
+        <div class="stat-card">
+            <span>👥 Total Users</span>
+            <strong id="umTotal">0</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>👤 Customers</span>
+            <strong id="umCustomers">0</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>🛠️ Technicians</span>
+            <strong id="umTechnicians">0</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>🏪 Sellers</span>
+            <strong id="umSellers">0</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>⏳ Pending</span>
+            <strong id="umPending">0</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>🚫 Blocked</span>
+            <strong id="umBlocked">0</strong>
+        </div>
+
+    </div>
+
+    <div class="user-toolbar">
+
+        <input
+            id="umSearch"
+            type="text"
+            placeholder="🔎 Name, phone या business search..."
+            oninput="loadOwnerUsers()"
+        >
+
+        <select id="umRole" onchange="loadOwnerUsers()">
+            <option value="">All Roles</option>
+            <option value="customer">👤 Customer</option>
+            <option value="technician">🛠️ Technician</option>
+            <option value="seller">🏪 Seller</option>
+        </select>
+
+        <select id="umStatus" onchange="loadOwnerUsers()">
+            <option value="">All Status</option>
+            <option value="approved">✅ Approved</option>
+            <option value="pending">⏳ Pending</option>
+            <option value="blocked">🚫 Blocked</option>
+            <option value="rejected">❌ Rejected</option>
+        </select>
+
+    </div>
+
+    <div id="ownerUsersMessage"></div>
+
+    <div class="users-table-wrap">
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>City</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="ownerUsersTable">
+                <tr>
+                    <td colspan="7" class="loading-cell">
+                        Loading users...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>
+
+
+<section class="panel" id="technicians">
+ <div class="section-title">
+  <div>
+   <div class="eyebrow">NETWORK CONTROL</div>
+   <h2>🧑‍🔧 Technician Management</h2>
+   <p>Technician network, status and jobs.</p>
+  </div>
+  <button class="action" onclick="ownerLive('technicians')">🔄 Refresh</button>
+ </div>
+ <div class="data" id="technicianLiveData">Loading technicians...</div>
+</section>
+
+<section class="panel" id="sellers">
+ <div class="section-title">
+  <div>
+   <div class="eyebrow">MARKETPLACE CONTROL</div>
+   <h2>🏪 Seller Management</h2>
+   <p>Sellers, businesses and marketplace activity.</p>
+  </div>
+  <button class="action" onclick="ownerLive('sellers')">🔄 Refresh</button>
+ </div>
+ <div class="data" id="sellerLiveData">Loading sellers...</div>
+</section>
+
+<section class="panel" id="bookings">
+ <div class="section-title">
+  <div>
+   <div class="eyebrow">SERVICE OPERATIONS</div>
+   <h2>📅 Booking Control</h2>
+   <p>Bookings and technician assignments.</p>
+  </div>
+  <button class="action" onclick="ownerLive('bookings')">🔄 Refresh</button>
+ </div>
+ <div class="data" id="bookingLiveData">Loading bookings...</div>
+</section>
+
+<section class="panel" id="commissions">
+ <div class="section-title">
+  <div>
+   <div class="eyebrow">FINANCE</div>
+   <h2>💰 Commission Center</h2>
+   <p>Platform commission and payment information.</p>
+  </div>
+  <button class="action" onclick="ownerLive('payments')">🔄 Refresh</button>
+ </div>
+ <div class="data" id="commissionLiveData">Loading commissions...</div>
+</section>
+
+<section class="panel" id="refunds">
+ <div class="section-title">
+  <div>
+   <div class="eyebrow">FINANCE</div>
+   <h2>🔄 Refund Center</h2>
+   <p>Refund requests and refund processing.</p>
+  </div>
+  <button class="action" onclick="loadRefunds()">🔄 Refresh</button>
+ </div>
+ <div class="data" id="refundLiveData">Loading refunds...</div>
+</section>
+
+<section class="panel" id="orders">
+ <div class="section-title">
+  <div>
+   <div class="eyebrow">MARKETPLACE</div>
+   <h2>📦 Order Management</h2>
+   <p>Customer marketplace orders.</p>
+  </div>
+  <button class="action" onclick="ownerLive('orders')">🔄 Refresh</button>
+ </div>
+ <div class="data" id="orderLiveData">Loading orders...</div>
+</section>
+
+<section class="panel" id="marketplace">
+ <div class="section-title">
+  <div>
+   <div class="eyebrow">SELLER MARKETPLACE</div>
+   <h2>🛍️ Marketplace Control</h2>
+   <p>Products, approval, seller and inventory control.</p>
+  </div>
+  <button class="action" onclick="ownerLive('products')">🔄 Refresh</button>
+ </div>
+ <div class="data" id="marketLiveData">Loading marketplace...</div>
+</section>
+
+<section class="panel" id="kyc">
+ <div class="section-title">
+  <div>
+   <div class="eyebrow">VERIFICATION</div>
+   <h2>🪪 KYC Center</h2>
+   <p>Pending and verified KYC documents.</p>
+  </div>
+  <button class="action" onclick="ownerLive('kyc')">🔄 Refresh</button>
+ </div>
+ <div class="data" id="kycLiveData">Loading KYC...</div>
+</section>
+
+<section class="panel" id="complaints">
+ <div class="section-title">
+  <div>
+   <div class="eyebrow">TRUST & SAFETY</div>
+   <h2>🚨 Complaint Center</h2>
+   <p>Customer complaints and resolution.</p>
+  </div>
+  <button class="action" onclick="ownerLive('complaints')">🔄 Refresh</button>
+ </div>
+ <div class="data" id="complaintLiveData">Loading complaints...</div>
+</section>
+
+<section class="panel" id="reviews">
+ <div class="section-title">
+  <div>
+   <div class="eyebrow">CUSTOMER FEEDBACK</div>
+   <h2>⭐ Review Center</h2>
+   <p>Review moderation and ratings.</p>
+  </div>
+  <button class="action" onclick="ownerLive('reviews')">🔄 Refresh</button>
+ </div>
+ <div class="data" id="reviewLiveData">Loading reviews...</div>
+</section>
+
+<section class="panel" id="support">
+ <div class="section-title">
+  <div>
+   <div class="eyebrow">CUSTOMER SUPPORT</div>
+   <h2>🎫 Support Center</h2>
+   <p>Support tickets and customer issues.</p>
+  </div>
+  <button class="action" onclick="ownerLive('support')">🔄 Refresh</button>
+ </div>
+ <div class="data" id="supportLiveData">Loading support tickets...</div>
+</section>
+
+<section class="panel" id="notifications">
+ <div class="section-title">
+  <div>
+   <div class="eyebrow">COMMUNICATION</div>
+   <h2>🔔 Notification Center</h2>
+   <p>Owner notifications and product approval requests.</p>
+  </div>
+  <button class="action" onclick="ownerLive('notifications')">🔄 Refresh</button>
+ </div>
+ <div class="data" id="notificationLiveData">Loading notifications...</div>
+</section>
+
+<section class="panel" id="security">
+ <div class="section-title">
+  <div>
+   <div class="eyebrow">PROTECTION</div>
+   <h2>🔐 Security Center</h2>
+   <p>Security events and suspicious activity.</p>
+  </div>
+  <button class="action" onclick="ownerLive('security')">🔄 Refresh</button>
+ </div>
+ <div class="data" id="securityLiveData">Loading security...</div>
+</section>
+
+<section class="panel" id="audit">
+ <div class="section-title">
+  <div>
+   <div class="eyebrow">ACCOUNTABILITY</div>
+   <h2>🧾 Audit Logs</h2>
+   <p>Complete Owner activity history.</p>
+  </div>
+  <button class="action" onclick="ownerLive('audit')">🔄 Refresh</button>
+ </div>
+ <div class="data" id="auditLiveData">Loading audit logs...</div>
+</section>
+
+<section class="panel" id="permissions">
+    <div class="section-title">
+        <div>
+            <div class="eyebrow">OWNER AUTHORITY</div>
+            <h2>🛡️ Permissions</h2>
+            <p>Control which platform features are enabled.</p>
+        </div>
+    </div>
+    <div class="data">Permission Center ready</div>
+</section>
+
+<script>
+function panel(id, btn) {
+    const panels = document.querySelectorAll(".panel");
+
+    panels.forEach(function(p) {
+        p.style.display = "none";
+        p.classList.remove("active-panel");
+    });
+
+    const target = document.getElementById(id);
+
+    if (!target) {
+        console.warn("Panel not found:", id);
+        return;
+    }
+
+    target.style.display = "block";
+    target.classList.add("active-panel");
+
+    document.querySelectorAll(".nav button").forEach(function(b) {
+        b.classList.remove("active");
+    });
+
+    if (btn) {
+        btn.classList.add("active");
+    }
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+    if (id === "users") {
+        if (typeof loadOwnerUsers === "function") {
+            loadOwnerUsers();
+        }
+    }
+
+    if (id === "technicians") {
+        ownerLive("technicians");
+        if (typeof loadTechnicians === "function") {
+            loadTechnicians();
+        }
+    }
+
+    if (id === "sellers") {
+        ownerLive("sellers");
+        if (typeof loadSellers === "function") {
+            loadSellers();
+        }
+    }
+
+    if (id === "bookings") {
+        ownerLive("bookings");
+        if (typeof loadBookings === "function") {
+            loadBookings();
+        }
+    }
+
+    if (id === "paymentLive") {
+        if (typeof loadPaymentCenter === "function") {
+            loadPaymentCenter();
+        }
+    }
+
+    if (id === "notifications") {
+        if (typeof loadNotificationCenter === "function") {
+            loadNotificationCenter();
+        }
+    }
+
+    if (id === "analytics") {
+        if (typeof loadAnalytics === "function") {
+            loadAnalytics();
+        }
+    }
+
+    if (OWNER_LIVE_ENDPOINTS && OWNER_LIVE_ENDPOINTS[id]) {
+        ownerLive(id);
+    }
+
+    if (id === "refunds") {
+        loadRefunds();
+    }
+}
+
+async function get(url){
+let r=await fetch(url),d=await r.json();
+if(!r.ok)throw Error(d.error||"Request failed");
+return d;
+}
+
+function render(data,id){
+let box=document.getElementById(id);
+
+if(!data?.length){
+box.innerHTML='<span class="small">No records found.</span>';
+return;
+}
+
+box.innerHTML=data.map(x=>{
+
+let actions="";
+
+if(id==="approvalData" && (x.role==="technician" || x.role==="seller") && x.status==="pending"){
+actions=`
+<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+<button class="action" onclick="approveUser(${x.id})">✓ APPROVE</button>
+<button class="action" style="background:linear-gradient(90deg,#ff5874,#ff315f)" onclick="rejectUser(${x.id})">✕ REJECT</button>
+</div>`;
+}
+
+return `
+<div class="row">
+${Object.entries(x).map(([k,v])=>
+`<div><b>${k}</b>: ${v??"-"}</div>`
+).join("")}
+${actions}
+</div>`;
+
+}).join("");
+}
+
+async function approveUser(id){
+
+if(!confirm("Approve this user?")) return;
+
+try{
+
+let r=await fetch("/owner/users/"+id+"/approve",{
+method:"POST",
+headers:{"Content-Type":"application/json"}
+});
+
+let d=await r.json();
+
+if(!r.ok) throw Error(d.error||"Approval failed");
+
+alert("✓ User approved successfully");
+
+loadApproval();
+
+}catch(e){
+
+alert(e.message);
+
+}
+}
+
+async function rejectUser(id){
+
+if(!confirm("Reject this user?")) return;
+
+try{
+
+let r=await fetch("/owner/users/"+id+"/reject",{
+method:"POST",
+headers:{"Content-Type":"application/json"}
+});
+
+let d=await r.json();
+
+if(!r.ok) throw Error(d.error||"Rejection failed");
+
+alert("✕ User rejected");
+
+loadApproval();
+
+}catch(e){
+
+alert(e.message);
+
+}
+}
+
+async function loadApproval(){
+
+try{
+
+let d=await get("/owner/pending-users");
+
+render(d.users,"approvalData");
+
+}catch(e){
+
+alert(e.message);
+
+}
+}
+
+
+
+async function loadAnalytics(){
+
+try{
+
+let d = await get("/owner/analytics/overview");
+
+document.getElementById("aRevenue").textContent =
+"₹"+Number(d.revenue||0).toLocaleString("en-IN");
+
+document.getElementById("aBookings").textContent =
+d.bookings || 0;
+
+document.getElementById("aCompleted").textContent =
+d.completed_bookings || 0;
+
+document.getElementById("aActive").textContent =
+d.active_bookings || 0;
+
+document.getElementById("aCustomers").textContent =
+d.customers || 0;
+
+document.getElementById("aTechnicians").textContent =
+d.technicians || 0;
+
+document.getElementById("aSellers").textContent =
+d.sellers || 0;
+
+document.getElementById("aRating").textContent =
+(d.average_rating || 0) + " / 5";
+
+let total = Number(d.bookings || 0);
+let completed = Number(d.completed_bookings || 0);
+
+let health = total > 0
+? Math.min(100, Math.round((completed / total) * 100))
+: 0;
+
+document.getElementById("healthBar").style.width =
+health + "%";
+
+document.getElementById("healthText").textContent =
+"Booking completion health: " + health + "%";
+
+let services = await get("/owner/analytics/services");
+
+let box = document.getElementById("serviceAnalytics");
+
+if(!services.services?.length){
+
+box.innerHTML =
+'<span class="small">No service analytics available yet.</span>';
+
+return;
+
+}
+
+box.innerHTML =
+"<h3>🛠️ Service Performance</h3>" +
+
+services.services.map(x=>`
+
+<div class="row">
+
+<div>
+<b>${x.name}</b>
+</div>
+
+<div class="small">
+Bookings: ${x.bookings}
+</div>
+
+</div>
+
+`).join("");
+
+}catch(e){
+
+console.error(e);
+
+}
+
+}
+
+async function loadPaymentCenter(){
+
+try{
+
+let summary=await get("/owner/payments/summary");
+
+document.getElementById("payRevenue").textContent=
+"₹"+Number(summary.total_revenue||0).toLocaleString("en-IN");
+
+document.getElementById("payCommission").textContent=
+"₹"+Number(summary.commission||0).toLocaleString("en-IN");
+
+document.getElementById("payPending").textContent=
+"₹"+Number(summary.pending||0).toLocaleString("en-IN");
+
+document.getElementById("payRefunds").textContent=
+"₹"+Number(summary.refunds||0).toLocaleString("en-IN");
+
+let data=await get("/owner/payments");
+
+let box=document.getElementById("paymentData");
+
+if(!data.payments?.length){
+
+box.innerHTML=
+'<span class="small">अभी कोई payment transaction मौजूद नहीं है।</span>';
+
+return;
+
+}
+
+box.innerHTML=data.payments.map(x=>`
+
+<div class="row">
+
+<div><b>Transaction:</b> ${x.transaction_id||"-"}</div>
+<div><b>Booking:</b> ${x.booking_id||"-"}</div>
+<div><b>Customer:</b> ${x.customer_name||"-"}</div>
+<div><b>Technician:</b> ${x.technician_name||"-"}</div>
+<div><b>Amount:</b> ₹${Number(x.amount||0).toLocaleString("en-IN")}</div>
+<div><b>Commission:</b> ₹${Number(x.commission||0).toLocaleString("en-IN")}</div>
+<div><b>Method:</b> ${x.payment_method||"-"}</div>
+<div><span class="badge">${x.status||"unknown"}</span></div>
+
+</div>
+
+`).join("");
+
+}catch(e){
+
+alert(e.message);
+
+}
+
+}
+
+async function pending(){try{let d=await get("/owner/pending-users");render(d.users,"approvalData")}catch(e){alert(e.message)}}
+async function sellers(){try{let d=await get("/owner/sellers");render(d.sellers,"approvalData")}catch(e){alert(e.message)}}
+async function technicians(){try{let d=await get("/owner/technicians");render(d.technicians,"operationData");render(d.technicians,"approvalData")}catch(e){alert(e.message)}}
+async function bookings(){try{let d=await get("/owner/bookings");render(d.bookings,"operationData")}catch(e){alert(e.message)}}
+
+
+async function loadSettings(){
+
+try{
+
+let d = await get("/owner/settings");
+
+let settings = {};
+
+(d.settings || []).forEach(x=>{
+settings[x.setting_key] = x.setting_value;
+});
+
+if(settings.commission_percentage !== undefined)
+document.getElementById("commissionInput").value =
+settings.commission_percentage;
+
+if(settings.currency)
+document.getElementById("currencyInput").value =
+settings.currency;
+
+if(settings.platform_name)
+document.getElementById("platformNameInput").value =
+settings.platform_name;
+
+document.getElementById("notificationsStatus").textContent =
+settings.notifications_enabled === "1" ? "🟢 Enabled" : "🔴 Disabled";
+
+document.getElementById("marketplaceStatus").textContent =
+settings.seller_marketplace_enabled === "1" ? "🟢 Enabled" : "🔴 Disabled";
+
+document.getElementById("bookingStatus").textContent =
+settings.booking_enabled === "1" ? "🟢 Enabled" : "🔴 Disabled";
+
+document.getElementById("reviewsStatus").textContent =
+settings.reviews_enabled === "1" ? "🟢 Enabled" : "🔴 Disabled";
+
+document.getElementById("maintenanceStatus").textContent =
+settings.maintenance_mode === "1" ? "🔴 Maintenance ON" : "🟢 Normal";
+
+document.getElementById("settingsData").innerHTML =
+'<span class="small">✓ Settings loaded from database.</span>';
+
+}catch(e){
+
+document.getElementById("settingsData").innerHTML =
+'<span class="small">Unable to load settings.</span>';
+
+}
+}
+
+
+async function saveCommission(){
+
+let value =
+document.getElementById("commissionInput").value;
+
+if(value === ""){
+
+alert("Commission percentage enter करें.");
+
+return;
+
+}
+
+try{
+
+await fetch("/owner/settings/commission",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+percentage:Number(value)
+})
+
+});
+
+alert("✓ Commission updated");
+
+loadSettings();
+
+}catch(e){
+
+alert("Commission update failed");
+
+}
+}
+
+
+async function toggleSetting(key){
+
+try{
+
+let d = await get("/owner/settings");
+
+let current =
+(d.settings || []).find(x=>x.setting_key===key);
+
+let next =
+current && current.setting_value==="1" ? "0" : "1";
+
+let r = await fetch("/owner/settings/update",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+key:key,
+value:next
+})
+
+});
+
+let result = await r.json();
+
+if(!r.ok)
+throw Error(result.error || "Update failed");
+
+loadSettings();
+
+}catch(e){
+
+alert(e.message);
+
+}
+}
+
+
+async function toggleMaintenance(){
+
+try{
+
+let d = await get("/owner/settings");
+
+let current =
+(d.settings || []).find(
+x=>x.setting_key==="maintenance_mode"
+);
+
+let enabled =
+current && current.setting_value==="1";
+
+let r = await fetch("/owner/settings/maintenance",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+enabled:!enabled
+})
+
+});
+
+let result = await r.json();
+
+if(!r.ok)
+throw Error(result.error || "Update failed");
+
+loadSettings();
+
+}catch(e){
+
+alert(e.message);
+
+}
+}
+
+
+async function saveCurrency(){
+
+let value =
+document.getElementById("currencyInput").value;
+
+try{
+
+let r = await fetch("/owner/settings/update",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+key:"currency",
+value:value
+})
+
+});
+
+let result = await r.json();
+
+if(!r.ok)
+throw Error(result.error || "Update failed");
+
+alert("✓ Currency updated");
+
+loadSettings();
+
+}catch(e){
+
+alert(e.message);
+
+}
+}
+
+
+async function savePlatformName(){
+
+let value =
+document.getElementById("platformNameInput").value.trim();
+
+if(!value){
+
+alert("Platform name enter करें.");
+
+return;
+
+}
+
+try{
+
+let r = await fetch("/owner/settings/update",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+key:"platform_name",
+value:value
+})
+
+});
+
+let result = await r.json();
+
+if(!r.ok)
+throw Error(result.error || "Update failed");
+
+alert("✓ Platform name updated");
+
+loadSettings();
+
+}catch(e){
+
+alert(e.message);
+
+}
+}
+
+async function stats(){
+try{
+let d=await get("/owner/stats");
+customers.textContent=d.customers;
+technicians.textContent=d.technicians;
+sellers.textContent=d.sellers;
+bookings.textContent=d.bookings;
+}catch(e){console.log(e)}
+}
+stats();
+
+async function loadOwnerUsers() {
+
+    const table = document.getElementById("ownerUsersTable");
+
+    if (!table) return;
+
+    const search = document.getElementById("umSearch")?.value || "";
+    const role = document.getElementById("umRole")?.value || "";
+    const status = document.getElementById("umStatus")?.value || "";
+
+    table.innerHTML = `
+        <tr>
+            <td colspan="7" class="loading-cell">
+                🔄 Loading users...
+            </td>
+        </tr>
+    `;
+
+    try {
+
+        const params = new URLSearchParams();
+
+        if (search) params.set("search", search);
+        if (role) params.set("role", role);
+        if (status) params.set("status", status);
+
+        const [usersResponse, summaryResponse] = await Promise.all([
+            fetch("/owner/users?" + params.toString()),
+            fetch("/owner/users/summary")
+        ]);
+
+        if (!usersResponse.ok || !summaryResponse.ok) {
+            throw new Error("Unable to load users");
+        }
+
+        const data = await usersResponse.json();
+        const summary = await summaryResponse.json();
+
+        document.getElementById("umTotal").textContent =
+            summary.total || 0;
+
+        document.getElementById("umCustomers").textContent =
+            summary.customers || 0;
+
+        document.getElementById("umTechnicians").textContent =
+            summary.technicians || 0;
+
+        document.getElementById("umSellers").textContent =
+            summary.sellers || 0;
+
+        document.getElementById("umPending").textContent =
+            summary.pending || 0;
+
+        document.getElementById("umBlocked").textContent =
+            summary.blocked || 0;
+
+        if (!data.users || data.users.length === 0) {
+            table.innerHTML = `
+                <tr>
+                    <td colspan="7" class="empty-cell">
+                        📭 No users found
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        table.innerHTML = data.users.map(user => {
+
+            const roleClass =
+                "role-" + escapeOwner(user.role);
+
+            const statusClass =
+                "status-" + escapeOwner(user.status);
+
+            let action = "";
+
+            if (user.role !== "owner") {
+
+                if (user.status === "blocked") {
+                    action = `
+                        <button
+                            class="user-action"
+                            onclick="changeOwnerUserStatus(
+                                ${user.id},
+                                'unblock'
+                            )">
+                            ✅ Unblock
+                        </button>
+                    `;
+                } else {
+                    action = `
+                        <button
+                            class="user-action block-action"
+                            onclick="changeOwnerUserStatus(
+                                ${user.id},
+                                'block'
+                            )">
+                            🚫 Block
+                        </button>
+                    `;
+                }
+
+            } else {
+                action = `<span class="status-badge status-approved">OWNER</span>`;
+            }
+
+            return `
+                <tr>
+
+                    <td>#${user.id}</td>
+
+                    <td>
+                        <div class="user-name">
+                            ${escapeOwner(user.name)}
+                        </div>
+
+                        <div class="user-sub">
+                            ${escapeOwner(
+                                user.business_name || ""
+                            )}
+                        </div>
+                    </td>
+
+                    <td>
+                        ${escapeOwner(user.phone)}
+                    </td>
+
+                    <td>
+                        <span class="role-badge ${roleClass}">
+                            ${escapeOwner(user.role)}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="status-badge ${statusClass}">
+                            ${escapeOwner(user.status)}
+                        </span>
+                    </td>
+
+                    <td>
+                        ${escapeOwner(user.city || "-")}
+                    </td>
+
+                    <td>
+                        <button
+                            class="user-action"
+                            onclick="viewOwnerUser(${user.id})">
+                            👁️ View
+                        </button>
+
+                        ${action}
+                    </td>
+
+                </tr>
+            `;
+
+        }).join("");
+
+    } catch (error) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="7" class="empty-cell">
+                    ❌ ${escapeOwner(error.message)}
+                </td>
+            </tr>
+        `;
+    }
+}
+
+
+async function changeOwnerUserStatus(userId, action) {
+
+    const confirmText =
+        action === "block"
+            ? "इस user को block करना है?"
+            : "इस user को unblock करना है?";
+
+    if (!confirm(confirmText)) return;
+
+    try {
+
+        const response = await fetch(
+            `/owner/users/${userId}/${action}`,
+            {
+                method: "POST"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Action failed");
+        }
+
+        await loadOwnerUsers();
+
+    } catch (error) {
+
+        const box =
+            document.getElementById("ownerUsersMessage");
+
+        box.className = "um-error";
+        box.textContent = "❌ " + error.message;
+
+        setTimeout(() => {
+            box.className = "";
+            box.textContent = "";
+        }, 4000);
+    }
+}
+
+
+async function viewOwnerUser(userId) {
+
+    try {
+
+        const response =
+            await fetch(`/owner/users/${userId}`);
+
+        const user = await response.json();
+
+        if (!response.ok) {
+            throw new Error(user.error || "User not found");
+        }
+
+        alert(
+            "USER DETAILS\\n\\n" +
+            "ID: " + user.id + "\\n" +
+            "Name: " + (user.name || "-") + "\\n" +
+            "Phone: " + (user.phone || "-") + "\\n" +
+            "Role: " + (user.role || "-") + "\\n" +
+            "Status: " + (user.status || "-") + "\\n" +
+            "City: " + (user.city || "-") + "\\n" +
+            "Pincode: " + (user.pincode || "-") + "\\n" +
+            "Skill: " + (user.skill || "-") + "\\n" +
+            "Experience: " + (user.experience || "-") + "\\n" +
+            "Business: " + (user.business_name || "-")
+        );
+
+    } catch (error) {
+
+        alert("❌ " + error.message);
+    }
+}
+
+
+function escapeOwner(value) {
+
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+
+async function loadMasterDashboard() {
+    try {
+        const response = await fetch("/owner/master/dashboard");
+
+        if (!response.ok) {
+            throw new Error("Dashboard API unavailable");
+        }
+
+        const data = await response.json();
+
+        const map = {
+            users: data.users,
+            technicians: data.technicians,
+            sellers: data.sellers,
+            bookings: data.bookings,
+            products: data.products,
+            orders: data.orders,
+            complaints: data.open_complaints,
+            notifications: data.notifications,
+            security: data.security_events,
+            reviews: data.reviews
+        };
+
+        Object.entries(map).forEach(([key, value]) => {
+            const el = document.getElementById("live-" + key);
+            if (el) {
+                el.textContent = value ?? 0;
+            }
+        });
+
+        const revenue = document.getElementById("live-revenue");
+        if (revenue) {
+            revenue.textContent =
+                "₹" + Number(data.revenue || 0).toLocaleString("en-IN");
+        }
+
+        const commission = document.getElementById("live-commission");
+        if (commission) {
+            commission.textContent =
+                "₹" + Number(data.commission || 0).toLocaleString("en-IN");
+        }
+
+        const status = document.getElementById("masterLiveStatus");
+
+        if (status) {
+            status.textContent = "● LIVE DATA";
+            status.style.color = "#00ffb0";
+        }
+
+    } catch (error) {
+        const status = document.getElementById("masterLiveStatus");
+
+        if (status) {
+            status.textContent = "● API OFFLINE";
+            status.style.color = "#ff5577";
+        }
+
+        console.error(error);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    loadMasterDashboard();
+
+    setInterval(loadMasterDashboard, 15000);
+});
+
+</script>
+
+
+<!-- OWNER LIVE DATA ENGINE -->
+<div id="ownerLiveDataEngine" style="display:none"></div>
+
+<script id="ownerLiveDataEngineScript">
+
+async function ownerFetch(endpoint) {
+    const response = await fetch(endpoint);
+
+    if (!response.ok) {
+        let message = "API Error";
+        try {
+            const data = await response.json();
+            message = data.error || message;
+        } catch (_) {}
+        throw new Error(message);
+    }
+
+    return await response.json();
+}
+
+
+function ownerEscape(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+function ownerTable(containerId, columns, rows) {
+
+    const box = document.getElementById(containerId);
+
+    if (!box) return;
+
+    if (!rows || rows.length === 0) {
+        box.innerHTML =
+            '<div class="empty-cell">📭 No data available</div>';
+        return;
+    }
+
+    let html = '<div class="users-table-wrap"><table class="users-table">';
+    html += "<thead><tr>";
+
+    columns.forEach(column => {
+        html += `<th>${ownerEscape(column.label)}</th>`;
+    });
+
+    html += "<th>Actions</th>";
+    html += "</tr></thead><tbody>";
+
+    rows.forEach(row => {
+
+        html += "<tr>";
+
+        columns.forEach(column => {
+
+            let value = row[column.key];
+
+            if (value === null || value === undefined || value === "") {
+                value = "-";
+            }
+
+            html += `<td>${ownerEscape(value)}</td>`;
+        });
+
+        html += "</tr>";
+    });
+
+    html += "</tbody></table></div>";
+
+    box.innerHTML = html;
+}
+
+
+async function loadOwnerLiveTables() {
+
+    const targets = [
+        {
+            endpoint: "/owner/master/users",
+            box: "usersLiveData",
+            columns: [
+                {key:"id", label:"ID"},
+                {key:"name", label:"Name"},
+                {key:"phone", label:"Phone"},
+                {key:"role", label:"Role"},
+                {key:"status", label:"Status"},
+                {key:"city", label:"City"}
+            ]
+        },
+        {
+            endpoint: "/owner/master/technicians",
+            box: "techniciansLiveData",
+            columns: [
+                {key:"id", label:"ID"},
+                {key:"name", label:"Technician"},
+                {key:"phone", label:"Phone"},
+                {key:"status", label:"Status"},
+                {key:"skill", label:"Skill"},
+                {key:"total_jobs", label:"Jobs"},
+                {key:"completed_jobs", label:"Completed"}
+            ]
+        },
+        {
+            endpoint: "/owner/master/sellers",
+            box: "sellersLiveData",
+            columns: [
+                {key:"id", label:"ID"},
+                {key:"name", label:"Seller"},
+                {key:"phone", label:"Phone"},
+                {key:"status", label:"Status"},
+                {key:"business_name", label:"Business"},
+                {key:"products", label:"Products"}
+            ]
+        },
+        {
+            endpoint: "/owner/master/bookings",
+            box: "bookingsLiveData",
+            columns: [
+                {key:"id", label:"ID"},
+                {key:"service_name", label:"Service"},
+                {key:"customer_name", label:"Customer"},
+                {key:"technician_name", label:"Technician"},
+                {key:"status", label:"Status"},
+                {key:"address", label:"Address"}
+            ]
+        },
+        {
+            endpoint: "/owner/master/orders",
+            box: "ordersLiveData",
+            columns: [
+                {key:"id", label:"ID"},
+                {key:"customer_name", label:"Customer"},
+                {key:"seller_name", label:"Seller"},
+                {key:"total_amount", label:"Amount"},
+                {key:"payment_status", label:"Payment"},
+                {key:"order_status", label:"Order"}
+            ]
+        },
+        {
+            endpoint: "/owner/master/products",
+            box: "productsLiveData",
+            columns: [
+                {key:"id", label:"ID"},
+                {key:"name", label:"Product"},
+                {key:"category", label:"Category"},
+                {key:"price", label:"Price"},
+                {key:"stock", label:"Stock"},
+                {key:"approval_status", label:"Approval"},
+                {key:"seller_name", label:"Seller"}
+            ]
+        },
+        {
+            endpoint: "/owner/master/kyc",
+            box: "kycLiveData",
+            columns: [
+                {key:"id", label:"ID"},
+                {key:"name", label:"User"},
+                {key:"role", label:"Role"},
+                {key:"document_type", label:"Document"},
+                {key:"status", label:"Status"},
+                {key:"rejection_reason", label:"Reason"}
+            ]
+        },
+        {
+            endpoint: "/owner/master/complaints",
+            box: "complaintsLiveData",
+            columns: [
+                {key:"id", label:"ID"},
+                {key:"user_name", label:"User"},
+                {key:"subject", label:"Subject"},
+                {key:"priority", label:"Priority"},
+                {key:"status", label:"Status"},
+                {key:"created_at", label:"Created"}
+            ]
+        },
+        {
+            endpoint: "/owner/master/reviews",
+            box: "reviewsLiveData",
+            columns: [
+                {key:"id", label:"ID"},
+                {key:"customer_name", label:"Customer"},
+                {key:"technician_name", label:"Technician"},
+                {key:"rating", label:"Rating"},
+                {key:"review", label:"Review"},
+                {key:"status", label:"Status"}
+            ]
+        },
+        {
+            endpoint: "/owner/master/support",
+            box: "supportLiveData",
+            columns: [
+                {key:"id", label:"ID"},
+                {key:"user_name", label:"User"},
+                {key:"subject", label:"Subject"},
+                {key:"priority", label:"Priority"},
+                {key:"status", label:"Status"}
+            ]
+        },
+        {
+            endpoint: "/owner/master/notifications",
+            box: "notificationsLiveData",
+            columns: [
+                {key:"id", label:"ID"},
+                {key:"user_name", label:"User"},
+                {key:"user_role", label:"Role"},
+                {key:"title", label:"Title"},
+                {key:"notification_type", label:"Type"},
+                {key:"created_at", label:"Created"}
+            ]
+        },
+        {
+            endpoint: "/owner/master/security",
+            box: "securityLiveData",
+            columns: [
+                {key:"id", label:"ID"},
+                {key:"event_type", label:"Event"},
+                {key:"severity", label:"Severity"},
+                {key:"ip_address", label:"IP"},
+                {key:"created_at", label:"Created"}
+            ]
+        },
+        {
+            endpoint: "/owner/master/audit",
+            box: "auditLiveData",
+            columns: [
+                {key:"id", label:"ID"},
+                {key:"user_name", label:"User"},
+                {key:"action", label:"Action"},
+                {key:"details", label:"Details"},
+                {key:"created_at", label:"Created"}
+            ]
+        }
+    ];
+
+    for (const target of targets) {
+
+        const box = document.getElementById(target.box);
+
+        if (!box) continue;
+
+        box.innerHTML =
+            '<div class="loading-cell">🔄 Loading...</div>';
+
+        try {
+
+            const data =
+                await ownerFetch(target.endpoint);
+
+            ownerTable(
+                target.box,
+                target.columns,
+                Array.isArray(data) ? data : []
+            );
+
+        } catch (error) {
+
+            box.innerHTML =
+                `<div class="empty-cell">
+                    ❌ ${ownerEscape(error.message)}
+                </div>`;
+        }
+    }
+}
+
+
+
+function ownerActionButtonsForTable(row, columns) {
+
+    const id = Number(row.id);
+
+    if (!id) {
+        return '<span class="small">-</span>';
+    }
+
+    const keys = columns.map(c => c.key);
+
+    // USERS
+    if (keys.includes("phone") && keys.includes("role")) {
+
+        if (row.role === "owner") {
+            return '<span class="status-badge status-approved">OWNER</span>';
+        }
+
+        let html = "";
+
+        if (row.status === "pending") {
+            html += `
+                <button
+                    class="owner-action-btn owner-action-green"
+                    onclick="ownerUserAction(${id},'approve')">
+                    ✅ Approve
+                </button>
+
+                <button
+                    class="owner-action-btn owner-action-red"
+                    onclick="ownerUserAction(${id},'reject')">
+                    ❌ Reject
+                </button>
+            `;
+        }
+
+        if (row.status === "blocked") {
+            html += `
+                <button
+                    class="owner-action-btn owner-action-green"
+                    onclick="ownerUserAction(${id},'unblock')">
+                    🔓 Unblock
+                </button>
+            `;
+        } else {
+            html += `
+                <button
+                    class="owner-action-btn owner-action-red"
+                    onclick="ownerUserAction(${id},'block')">
+                    🚫 Block
+                </button>
+            `;
+        }
+
+        return html;
+    }
+
+    // TECHNICIANS
+    if (keys.includes("total_jobs") &&
+        keys.includes("completed_jobs")) {
+
+        return `
+            <button
+                class="owner-action-btn owner-action-purple"
+                onclick="panel('technicians');ownerLive('technicians')">
+                🛠️ Manage
+            </button>
+        `;
+    }
+
+    // SELLERS
+    if (keys.includes("business_name") &&
+        keys.includes("products")) {
+
+        return `
+            <button
+                class="owner-action-btn owner-action-purple"
+                onclick="panel('sellers');ownerLive('sellers')">
+                🏪 Manage
+            </button>
+        `;
+    }
+
+    // PRODUCTS
+    if (keys.includes("approval_status") &&
+        keys.includes("seller_name")) {
+
+        if (row.approval_status === "pending") {
+
+            return `
+                <button
+                    class="owner-action-btn owner-action-green"
+                    onclick="ownerProductAction(${id},'approve')">
+                    ✅ Approve
+                </button>
+
+                <button
+                    class="owner-action-btn owner-action-red"
+                    onclick="ownerProductAction(${id},'reject')">
+                    ❌ Reject
+                </button>
+            `;
+        }
+
+        return `
+            <span class="status-badge status-approved">
+                ${ownerEscape(row.approval_status)}
+            </span>
+        `;
+    }
+
+    // KYC
+    if (keys.includes("document_type") &&
+        keys.includes("rejection_reason")) {
+
+        if (row.status === "pending") {
+
+            return `
+                <button
+                    class="owner-action-btn owner-action-green"
+                    onclick="ownerKycAction(${id},'verify')">
+                    ✅ Verify
+                </button>
+
+                <button
+                    class="owner-action-btn owner-action-red"
+                    onclick="ownerKycAction(${id},'reject')">
+                    ❌ Reject
+                </button>
+            `;
+        }
+
+        return `
+            <span class="status-badge">
+                ${ownerEscape(row.status)}
+            </span>
+        `;
+    }
+
+    // COMPLAINTS
+    if (keys.includes("subject") &&
+        keys.includes("priority") &&
+        keys.includes("created_at")) {
+
+        if (
+            row.status !== "resolved" &&
+            row.status !== "closed"
+        ) {
+
+            return `
+                <button
+                    class="owner-action-btn owner-action-green"
+                    onclick="ownerComplaintAction(${id},'resolve')">
+                    ✅ Resolve
+                </button>
+
+                <button
+                    class="owner-action-btn owner-action-red"
+                    onclick="ownerComplaintAction(${id},'close')">
+                    🔒 Close
+                </button>
+            `;
+        }
+
+        return `
+            <span class="status-badge status-approved">
+                ${ownerEscape(row.status)}
+            </span>
+        `;
+    }
+
+    // REVIEWS
+    if (keys.includes("rating") &&
+        keys.includes("review")) {
+
+        if (row.status !== "approved") {
+
+            return `
+                <button
+                    class="owner-action-btn owner-action-green"
+                    onclick="ownerReviewAction(${id},'approve')">
+                    ✅ Approve
+                </button>
+
+                <button
+                    class="owner-action-btn owner-action-red"
+                    onclick="ownerReviewAction(${id},'hide')">
+                    👁️ Hide
+                </button>
+            `;
+        }
+
+        return `
+            <button
+                class="owner-action-btn owner-action-red"
+                onclick="ownerReviewAction(${id},'hide')">
+                👁️ Hide
+            </button>
+        `;
+    }
+
+    // ORDERS
+    if (keys.includes("total_amount") &&
+        keys.includes("order_status")) {
+
+        return `
+            <select
+                class="owner-action-select"
+                onchange="ownerOrderStatus(${id},this.value)">
+                <option value="">Change Status</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="processing">Processing</option>
+                <option value="shipped">Shipped</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+        `;
+    }
+
+    return '<span class="small">No actions</span>';
+}
+
+
+function addLiveBox(panelId, boxId, title) {
+
+    const panel = document.getElementById(panelId);
+
+    if (!panel || document.getElementById(boxId)) return;
+
+    const box = document.createElement("div");
+
+    box.className = "owner-live-box";
+
+    box.innerHTML = `
+        <div class="owner-live-title">
+            <span>${ownerEscape(title)}</span>
+            <span class="live-small">● LIVE</span>
+        </div>
+        <div id="${ownerEscape(boxId)}">
+            <div class="loading-cell">Loading...</div>
+        </div>
+    `;
+
+    panel.appendChild(box);
+}
+
+
+function initializeOwnerLivePanels() {
+
+    addLiveBox(
+        "users",
+        "usersLiveData",
+        "👥 Live Users"
+    );
+
+    addLiveBox(
+        "technicians",
+        "techniciansLiveData",
+        "🛠️ Live Technicians"
+    );
+
+    addLiveBox(
+        "sellers",
+        "sellersLiveData",
+        "🏪 Live Sellers"
+    );
+
+    addLiveBox(
+        "bookings",
+        "bookingsLiveData",
+        "📅 Live Bookings"
+    );
+
+    addLiveBox(
+        "orders",
+        "ordersLiveData",
+        "📦 Live Orders"
+    );
+
+    addLiveBox(
+        "marketplace",
+        "productsLiveData",
+        "🛍️ Live Products"
+    );
+
+    addLiveBox(
+        "kyc",
+        "kycLiveData",
+        "🪪 Live KYC"
+    );
+
+    addLiveBox(
+        "complaints",
+        "complaintsLiveData",
+        "🚨 Live Complaints"
+    );
+
+    addLiveBox(
+        "reviews",
+        "reviewsLiveData",
+        "⭐ Live Reviews"
+    );
+
+    addLiveBox(
+        "support",
+        "supportLiveData",
+        "🎫 Live Support"
+    );
+
+    addLiveBox(
+        "notifications",
+        "notificationsLiveData",
+        "🔔 Live Notifications"
+    );
+
+    addLiveBox(
+        "security",
+        "securityLiveData",
+        "🔐 Live Security Events"
+    );
+
+    addLiveBox(
+        "audit",
+        "auditLiveData",
+        "🧾 Live Audit Logs"
+    );
+
+    loadOwnerLiveTables();
+}
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    initializeOwnerLivePanels
+);
+
+</script>
+
+
+<!-- OWNER ACTION BUTTON ENGINE -->
+
+<style>
+.owner-action-btn{
+    border:0;
+    border-radius:9px;
+    padding:7px 10px;
+    margin:2px;
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+    cursor:pointer;
+    background:rgba(0,229,255,.12);
+}
+
+.owner-action-btn:hover{
+    transform:translateY(-1px);
+    background:rgba(0,229,255,.25);
+}
+
+.owner-action-green{
+    background:rgba(0,255,170,.12);
+    color:#00ffb0;
+}
+
+.owner-action-red{
+    background:rgba(255,40,90,.12);
+    color:#ff6685;
+}
+
+.owner-action-gold{
+    background:rgba(255,193,7,.12);
+    color:#ffd45c;
+}
+
+.owner-action-purple{
+    background:rgba(124,60,255,.14);
+    color:#b98cff;
+}
+
+.owner-action-select{
+    padding:7px;
+    border-radius:8px;
+    background:#080d24;
+    color:white;
+    border:1px solid rgba(0,229,255,.2);
+}
+</style>
+
+<script id="OWNER ACTION BUTTON ENGINE">
+
+async function ownerAction(endpoint, method="POST", body=null){
+
+    try{
+
+        const options = {
+            method: method,
+            headers: {
+                "Content-Type":"application/json"
+            }
+        };
+
+        if(body){
+            options.body = JSON.stringify(body);
+        }
+
+        const response =
+            await fetch(endpoint, options);
+
+        const data =
+            await response.json();
+
+        if(!response.ok){
+            throw new Error(
+                data.error || "Action failed"
+            );
+        }
+
+        alert("✅ " + (
+            data.message || "Action successful"
+        ));
+
+        if(typeof loadOwnerLiveTables === "function"){
+            await loadOwnerLiveTables();
+        }
+
+        if(typeof loadOwnerUsers === "function"){
+            await loadOwnerUsers();
+        }
+
+    }catch(error){
+
+        alert("❌ " + error.message);
+    }
+}
+
+
+async function ownerUserAction(id, action){
+
+    const messages = {
+        approve:"इस user को approve करना है?",
+        reject:"इस user को reject करना है?",
+        block:"इस user को block करना है?",
+        unblock:"इस user को unblock करना है?"
+    };
+
+    if(!confirm(messages[action] || "Confirm action?")){
+        return;
+    }
+
+    await ownerAction(
+        `/owner/actions/user/${id}/${action}`
+    );
+}
+
+
+async function ownerProductAction(id, action){
+
+    if(!confirm(
+        action === "approve"
+        ? "इस product को approve करना है?"
+        : "इस product को reject करना है?"
+    )){
+        return;
+    }
+
+    await ownerAction(
+        `/owner/actions/product/${id}/${action}`
+    );
+}
+
+
+async function ownerKycAction(id, action){
+
+    if(!confirm(
+        action === "verify"
+        ? "KYC verify करना है?"
+        : "KYC reject करना है?"
+    )){
+        return;
+    }
+
+    await ownerAction(
+        `/owner/actions/kyc/${id}/${action}`
+    );
+}
+
+
+async function ownerComplaintAction(id, action){
+
+    if(!confirm(
+        action === "resolve"
+        ? "Complaint resolve करना है?"
+        : "Complaint close करना है?"
+    )){
+        return;
+    }
+
+    await ownerAction(
+        `/owner/actions/complaint/${id}/${action}`
+    );
+}
+
+
+async function ownerReviewAction(id, action){
+
+    if(!confirm(
+        action === "approve"
+        ? "Review approve करना है?"
+        : "Review hide करना है?"
+    )){
+        return;
+    }
+
+    await ownerAction(
+        `/owner/actions/review/${id}/${action}`
+    );
+}
+
+
+async function ownerOrderStatus(id, status){
+
+    if(!confirm(
+        "Order status को " +
+        status +
+        " करना है?"
+    )){
+        return;
+    }
+
+    await ownerAction(
+        `/owner/actions/order/${id}/status`,
+        "POST",
+        {
+            status:status
+        }
+    );
+}
+
+</script>
+
+
+<script>
+async function ownerVideoCall(technicianId, bookingId) {
+
+    if (!technicianId) {
+        alert("इस booking में technician assign नहीं है।");
+        return;
+    }
+
+    try {
+
+        const response = await fetch("/video/request", {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                technician_id: Number(technicianId),
+                booking_id: Number(bookingId)
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.error || "Video call request नहीं भेजी जा सकी।");
+            return;
+        }
+
+        alert("📞 Technician को video call request भेज दी गई।");
+
+        if (data.call_id) {
+            window.location.href =
+                "/video-room/" +
+                data.call_id +
+                "?role=caller";
+        }
+
+    } catch (error) {
+
+        alert("Network error: " + error.message);
+    }
+}
+</script>
+
+
+<script>
+/* ===== SAWARIYA VIDEO CALL - OWNER ===== */
+
+async function ownerVideoCall(technicianId, bookingId) {
+
+    if (!technicianId || !bookingId) {
+        alert("Technician/Booking information missing.");
+        return;
+    }
+
+    try {
+        const r = await fetch("/video/request", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                technician_id: Number(technicianId),
+                booking_id: Number(bookingId)
+            })
+        });
+
+        const data = await r.json();
+
+        if (!r.ok) {
+            alert(data.error || "Owner video call शुरू नहीं हो सकी।");
+            return;
+        }
+
+        if (data.call_id) {
+            window.location.href = "/video-room/" + data.call_id;
+        }
+
+    } catch (e) {
+        console.error(e);
+        alert("Video call connection error.");
+    }
+}
+
+
+/* Owner booking cards में button */
+function addOwnerVideoButtons() {
+
+    document.querySelectorAll(
+        '[data-booking-id][data-technician-id]'
+    ).forEach(card => {
+
+        if (card.querySelector(".owner-video-btn")) return;
+
+        const bookingId = card.dataset.bookingId;
+        const technicianId = card.dataset.technicianId;
+
+        if (!bookingId || !technicianId) return;
+
+        const btn = document.createElement("button");
+
+        btn.className = "owner-video-btn";
+        btn.innerHTML = "📹 Call Technician";
+
+        btn.style.cssText = `
+            margin:6px 0;
+            padding:10px 14px;
+            border:0;
+            border-radius:10px;
+            background:linear-gradient(135deg,#ec4899,#8b5cf6);
+            color:#fff;
+            font-weight:700;
+            cursor:pointer;
+            box-shadow:0 4px 15px rgba(236,72,153,.25);
+        `;
+
+        btn.onclick = () => {
+            ownerVideoCall(technicianId, bookingId);
+        };
+
+        card.appendChild(btn);
+    });
+}
+
+setInterval(addOwnerVideoButtons, 1000);
+</script>
+
+
+<!-- SAWARIYA MASTER CONTROL V2 -->
+<style>
+.sawariya-master-v2{
+    margin:18px 0;
+    padding:18px;
+    border-radius:22px;
+    background:linear-gradient(135deg,rgba(15,23,42,.96),rgba(49,20,80,.94));
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 10px 35px rgba(0,0,0,.25);
+}
+.sawariya-master-v2 h2{
+    margin:0 0 15px;
+}
+.sm-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+    gap:12px;
+}
+.sm-card{
+    padding:15px;
+    border-radius:16px;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.09);
+}
+.sm-card span{
+    display:block;
+    font-size:12px;
+    opacity:.7;
+}
+.sm-card strong{
+    display:block;
+    margin-top:6px;
+    font-size:25px;
+}
+.sm-actions{
+    display:flex;
+    gap:9px;
+    flex-wrap:wrap;
+    margin-top:15px;
+}
+.sm-actions button{
+    border:0;
+    border-radius:11px;
+    padding:10px 14px;
+    color:#fff;
+    font-weight:700;
+    cursor:pointer;
+    background:linear-gradient(135deg,#7c3aed,#ec4899);
+}
+.sm-status{
+    margin-top:12px;
+    font-size:13px;
+    opacity:.8;
+}
+</style>
+
+<section class="sawariya-master-v2">
+    <h2>👑 Master Control Center</h2>
+
+    <div class="sm-grid">
+
+        <div class="sm-card">
+            <span>👥 Users</span>
+            <strong id="smUsers">—</strong>
+        </div>
+
+        <div class="sm-card">
+            <span>🔧 Technicians</span>
+            <strong id="smTechnicians">—</strong>
+        </div>
+
+        <div class="sm-card">
+            <span>🏪 Sellers</span>
+            <strong id="smSellers">—</strong>
+        </div>
+
+        <div class="sm-card">
+            <span>📋 Bookings</span>
+            <strong id="smBookings">—</strong>
+        </div>
+
+        <div class="sm-card">
+            <span>🟢 Active Jobs</span>
+            <strong id="smActive">—</strong>
+        </div>
+
+        <div class="sm-card">
+            <span>⏳ Pending Users</span>
+            <strong id="smPending">—</strong>
+        </div>
+
+        <div class="sm-card">
+            <span>🚫 Blocked</span>
+            <strong id="smBlocked">—</strong>
+        </div>
+
+        <div class="sm-card">
+            <span>🛒 Orders</span>
+            <strong id="smOrders">—</strong>
+        </div>
+
+        <div class="sm-card">
+            <span>💳 Payments</span>
+            <strong id="smPayments">—</strong>
+        </div>
+
+        <div class="sm-card">
+            <span>💰 Commissions</span>
+            <strong id="smCommissions">—</strong>
+        </div>
+
+        <div class="sm-card">
+            <span>⚠️ Complaints</span>
+            <strong id="smComplaints">—</strong>
+        </div>
+
+        <div class="sm-card">
+            <span>🛡️ Security</span>
+            <strong id="smSecurity">—</strong>
+        </div>
+
+        <div class="sm-card">
+            <span>📝 Audit Logs</span>
+            <strong id="smAudit">—</strong>
+        </div>
+
+        <div class="sm-card">
+            <span>📹 Video Calls</span>
+            <strong id="smVideo">—</strong>
+        </div>
+
+    </div>
+
+    <div class="sm-actions">
+        <button onclick="smLoadDashboard()">🔄 Refresh</button>
+        <button onclick="smOpenUsers()">👥 Users</button>
+        <button onclick="smOpenBookings()">📋 Bookings</button>
+        <button onclick="smOpenSecurity()">🛡️ Security</button>
+        <button onclick="smOpenAudit()">📝 Audit</button>
+    </div>
+
+    <div class="sm-status" id="smStatus">
+        Connecting to Master Control...
+    </div>
+</section>
+
+<script>
+
+/* =========================================================
+   SAWARIYA OWNER FULL LIVE CONTROL ENGINE
+   ========================================================= */
+
+const OWNER_LIVE_ENDPOINTS = {
+    technicians: ["/owner/master/technicians","technicianLiveData"],
+    sellers: ["/owner/master/sellers","sellerLiveData"],
+    bookings: ["/owner/master/bookings","bookingLiveData"],
+    payments: ["/owner/master/payments","commissionLiveData"],
+    orders: ["/owner/master/orders","orderLiveData"],
+    products: ["/owner/master/products","marketLiveData"],
+    kyc: ["/owner/master/kyc","kycLiveData"],
+    complaints: ["/owner/master/complaints","complaintLiveData"],
+    reviews: ["/owner/master/reviews","reviewLiveData"],
+    support: ["/owner/master/support","supportLiveData"],
+    notifications: ["/owner/master/notifications","notificationLiveData"],
+    security: ["/owner/master/security","securityLiveData"],
+    audit: ["/owner/master/audit","auditLiveData"]
+};
+
+function ownerSafe(v){
+    return String(v ?? "-")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+}
+
+function ownerObjectRows(data){
+    if(Array.isArray(data)) return data;
+
+    if(!data || typeof data !== "object") return [];
+
+    for(const key of Object.keys(data)){
+        if(Array.isArray(data[key])) return data[key];
+    }
+
+    return [];
+}
+
+function ownerLiveTable(rows){
+    if(!rows.length){
+        return '<div class="small">No records found.</div>';
+    }
+
+    return `
+    <div style="overflow:auto">
+    <table style="width:100%;border-collapse:collapse;min-width:650px">
+    <thead>
+    <tr>
+    ${Object.keys(rows[0]).map(k =>
+        `<th style="padding:10px;text-align:left;border-bottom:1px solid rgba(255,255,255,.1);color:#8ff">${ownerSafe(k)}</th>`
+    ).join("")}
+    </tr>
+    </thead>
+    <tbody>
+    ${rows.map(row=>`
+      <tr>
+      ${Object.keys(rows[0]).map(k =>
+        `<td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.06)">
+          ${ownerSafe(row[k])}
+        </td>`
+      ).join("")}
+      </tr>
+    `).join("")}
+    </tbody>
+    </table>
+    </div>`;
+}
+
+async function ownerLive(type){
+    const config=OWNER_LIVE_ENDPOINTS[type];
+    if(!config) return;
+
+    const [endpoint,boxId]=config;
+    const box=document.getElementById(boxId);
+
+    if(!box) return;
+
+    box.innerHTML='<div class="small">⏳ Loading...</div>';
+
+    try{
+        const response=await fetch(endpoint,{credentials:"same-origin"});
+        const data=await response.json();
+
+        if(!response.ok){
+            throw new Error(data.error || "Request failed");
+        }
+
+        const rows=ownerObjectRows(data);
+        box.innerHTML=ownerLiveTable(rows);
+
+    }catch(e){
+        box.innerHTML=
+        `<div class="small" style="color:#ff6680">
+          ❌ ${ownerSafe(e.message)}
+        </div>`;
+    }
+}
+
+async function loadRefunds(){
+
+    const box=document.getElementById("refundLiveData");
+
+    if(!box) return;
+
+    box.innerHTML='<div class="small">⏳ Loading refunds...</div>';
+
+    try{
+
+        const response=await fetch("/owner/actions/refunds",{
+            credentials:"same-origin"
+        });
+
+        const data=await response.json();
+
+        if(!response.ok){
+            throw new Error(data.error || "Refund loading failed");
+        }
+
+        const rows=data.refunds || [];
+
+        if(!rows.length){
+            box.innerHTML='<div class="small">💰 No refund records found.</div>';
+            return;
+        }
+
+        box.innerHTML=rows.map(x=>`
+        <div class="row" style="margin-bottom:10px">
+
+          <div><b>Refund #</b> ${ownerSafe(x.id)}</div>
+          <div><b>Payment:</b> ${ownerSafe(x.payment_id)}</div>
+          <div><b>Booking:</b> ${ownerSafe(x.booking_id)}</div>
+          <div><b>Amount:</b> ₹${Number(x.amount||0).toLocaleString("en-IN")}</div>
+          <div><b>Reason:</b> ${ownerSafe(x.reason)}</div>
+          <div><b>Status:</b> ${ownerSafe(x.status)}</div>
+
+          ${
+            String(x.status).toLowerCase()==="pending"
+            ? `
+            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+
+              <button class="action"
+                onclick="ownerRefundAction(${Number(x.id)},'approve')">
+                ✅ Approve Refund
+              </button>
+
+              <button class="action"
+                onclick="ownerRefundAction(${Number(x.id)},'reject')">
+                ❌ Reject Refund
+              </button>
+
+            </div>`
+            : ""
+          }
+
+        </div>
+        `).join("");
+
+    }catch(e){
+        box.innerHTML=
+        `<div class="small" style="color:#ff6680">
+          ❌ ${ownerSafe(e.message)}
+        </div>`;
+    }
+}
+
+async function ownerRefundAction(id,action){
+
+    if(!confirm(
+        action==="approve"
+        ? "Refund approve karna hai?"
+        : "Refund reject karna hai?"
+    )) return;
+
+    try{
+
+        const response=await fetch(
+            `/owner/actions/refund/${id}/${action}`,
+            {
+                method:"POST",
+                headers:{"Content-Type":"application/json"},
+                credentials:"same-origin"
+            }
+        );
+
+        const data=await response.json();
+
+        if(!response.ok){
+            throw new Error(data.error || "Refund action failed");
+        }
+
+        alert(data.message || "Refund updated");
+        loadRefunds();
+
+    }catch(e){
+        alert(e.message);
+    }
+}
+
+function ownerRefreshActivePanel(){
+
+    const active=document.querySelector(".panel.active-panel");
+    if(!active) return;
+
+    const id=active.id;
+
+    if(OWNER_LIVE_ENDPOINTS[id]){
+        ownerLive(id);
+    }
+
+    if(id==="refunds"){
+        loadRefunds();
+    }
+}
+
+
+async function smGet(url){
+    const r = await fetch(url);
+    const data = await r.json();
+
+    if(!r.ok){
+        throw new Error(data.error || "Request failed");
+    }
+
+    return data;
+}
+
+function smSet(id,value){
+    const el=document.getElementById(id);
+    if(el) el.textContent =
+        value === undefined || value === null ? "0" : value;
+}
+
+async function smLoadDashboard(){
+
+    const status =
+        document.getElementById("smStatus");
+
+    try{
+
+        status.textContent =
+            "🔄 Loading Master Control...";
+
+        const d =
+            await smGet(
+                "/owner/master-v2/dashboard"
+            );
+
+        smSet("smUsers",d.users);
+        smSet("smTechnicians",d.technicians);
+        smSet("smSellers",d.sellers);
+        smSet("smBookings",d.bookings);
+        smSet("smActive",d.active_bookings);
+        smSet("smPending",d.pending_users);
+        smSet("smBlocked",d.blocked_users);
+        smSet("smOrders",d.orders);
+        smSet("smPayments",d.payments);
+        smSet("smCommissions",d.commissions);
+        smSet("smComplaints",d.complaints);
+        smSet("smSecurity",d.security_events);
+        smSet("smAudit",d.audit_logs);
+        smSet("smVideo",d.video_calls);
+
+        status.textContent =
+            "🟢 Master Control connected • Updated " +
+            new Date().toLocaleTimeString();
+
+    }catch(e){
+
+        console.error(e);
+
+        status.textContent =
+            "🔴 Master Control error: " + e.message;
+    }
+}
+
+async function smOpenUsers(){
+
+    try{
+
+        const d =
+            await smGet(
+                "/owner/master-v2/users"
+            );
+
+        const users =
+            d.users || [];
+
+        alert(
+            "Users: " + users.length +
+            "\n\nPending: " +
+            users.filter(
+                x => x.status === "pending"
+            ).length +
+            "\nApproved: " +
+            users.filter(
+                x => x.status === "approved"
+            ).length +
+            "\nBlocked: " +
+            users.filter(
+                x => x.status === "blocked"
+            ).length
+        );
+
+    }catch(e){
+        alert(e.message);
+    }
+}
+
+async function smOpenBookings(){
+
+    try{
+
+        const d =
+            await smGet(
+                "/owner/master-v2/bookings"
+            );
+
+        const bookings =
+            d.bookings || [];
+
+        alert(
+            "Total bookings: " +
+            bookings.length +
+            "\nActive: " +
+            bookings.filter(
+                x => [
+                    "pending",
+                    "assigned",
+                    "accepted",
+                    "in_progress"
+                ].includes(x.status)
+            ).length +
+            "\nCompleted: " +
+            bookings.filter(
+                x => x.status === "completed"
+            ).length
+        );
+
+    }catch(e){
+        alert(e.message);
+    }
+}
+
+async function smOpenSecurity(){
+
+    try{
+
+        const d =
+            await smGet(
+                "/owner/master-v2/security"
+            );
+
+        alert(
+            "Security events: " +
+            (d.events || []).length
+        );
+
+    }catch(e){
+        alert(e.message);
+    }
+}
+
+async function smOpenAudit(){
+
+    try{
+
+        const d =
+            await smGet(
+                "/owner/master-v2/audit"
+            );
+
+        alert(
+            "Audit logs loaded: " +
+            (d.logs || []).length
+        );
+
+    }catch(e){
+        alert(e.message);
+    }
+}
+
+smLoadDashboard();
+
+/* Live refresh every 15 seconds */
+setInterval(
+    smLoadDashboard,
+    15000
+);
+</script>
+
+</body>
+</html>

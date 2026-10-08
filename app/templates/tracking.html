@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Technician Tracking - Sawariya Seth Service Center</title>
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        header {
+            padding: 16px;
+            background: #111827;
+            color: white;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        #map {
+            height: 75vh;
+            width: 100%;
+        }
+
+        .status {
+            padding: 12px;
+            background: white;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>🔧 Technician Tracking</h2>
+</header>
+
+<div class="status" id="status">
+    Technician की location प्राप्त हो रही है...
+</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    const bookingId = 2;
+
+    let map;
+    let technicianMarker;
+
+    function createMap(lat, lng) {
+        map = L.map("map").setView([lat, lng], 15);
+
+        L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                maxZoom: 19,
+                attribution: "&copy; OpenStreetMap contributors"
+            }
+        ).addTo(map);
+
+        technicianMarker = L.marker([lat, lng])
+            .addTo(map)
+            .bindPopup("🔧 आपका Technician")
+            .openPopup();
+    }
+
+    async function updateLocation() {
+        try {
+            const response = await fetch(
+                `/bookings/${bookingId}/technician-location`
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                document.getElementById("status").textContent =
+                    data.error || "Location उपलब्ध नहीं है";
+                return;
+            }
+
+            const lat = data.latitude;
+            const lng = data.longitude;
+
+            document.getElementById("status").textContent =
+                `Technician: ${lat}, ${lng} • Updated: ${data.updated_at}`;
+
+            if (!map) {
+                createMap(lat, lng);
+            } else {
+                technicianMarker.setLatLng([lat, lng]);
+                map.panTo([lat, lng]);
+            }
+
+        } catch (error) {
+            document.getElementById("status").textContent =
+                "Location load नहीं हो सकी";
+        }
+    }
+
+    updateLocation();
+
+    setInterval(updateLocation, 5000);
+</script>
+
+</body>
+</html>

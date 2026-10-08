@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MYTHIC • Owner Core</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+ --bg:#05070b;
+ --panel:rgba(15,20,30,.78);
+ --line:rgba(255,210,80,.18);
+ --gold:#ffd45a;
+ --cyan:#42e8ff;
+ --text:#f7f8ff;
+ --muted:#8992a5;
+}
+body{
+ background:
+ radial-gradient(circle at 15% 10%,rgba(255,196,55,.12),transparent 28%),
+ radial-gradient(circle at 90% 20%,rgba(40,220,255,.10),transparent 25%),
+ linear-gradient(135deg,#030509,#080c14 55%,#030509);
+ color:var(--text);
+ font-family:Inter,Arial,sans-serif;
+ min-height:100vh;
+}
+body:before{
+ content:"";
+ position:fixed;
+ inset:0;
+ pointer-events:none;
+ background-image:
+ linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+ background-size:45px 45px;
+ mask-image:linear-gradient(to bottom,#000,transparent);
+}
+.top{
+ position:sticky;
+ top:0;
+ z-index:20;
+ backdrop-filter:blur(22px);
+ background:rgba(3,5,9,.78);
+ border-bottom:1px solid var(--line);
+ padding:15px 18px;
+}
+.topin{
+ max-width:1400px;
+ margin:auto;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:15px;
+}
+.logo{
+ font-size:20px;
+ font-weight:900;
+ letter-spacing:.8px;
+}
+.logo b{color:var(--gold)}
+.live{
+ display:flex;
+ align-items:center;
+ gap:8px;
+ color:#83ffad;
+ font-size:12px;
+}
+.dot{
+ width:8px;height:8px;border-radius:50%;
+ background:#49ff91;
+ box-shadow:0 0 15px #49ff91;
+}
+.layout{
+ max-width:1400px;
+ margin:auto;
+ padding:22px;
+ display:grid;
+ grid-template-columns:230px 1fr;
+ gap:20px;
+}
+.side{
+ position:sticky;
+ top:85px;
+ height:calc(100vh - 110px);
+ padding:15px;
+ border:1px solid var(--line);
+ border-radius:24px;
+ background:var(--panel);
+ backdrop-filter:blur(20px);
+}
+.side h3{
+ color:var(--gold);
+ margin:8px 10px 16px;
+ font-size:12px;
+ letter-spacing:2px;
+}
+.nav{
+ width:100%;
+ text-align:left;
+ padding:12px;
+ margin:4px 0;
+ border:1px solid transparent;
+ border-radius:12px;
+ background:transparent;
+ color:#b9c0cf;
+ cursor:pointer;
+}
+.nav:hover,.nav.active{
+ color:white;
+ background:rgba(255,212,90,.08);
+ border-color:var(--line);
+}
+.main{min-width:0}
+.hero{
+ padding:25px;
+ border:1px solid var(--line);
+ border-radius:28px;
+ background:
+ linear-gradient(135deg,rgba(255,212,90,.08),rgba(66,232,255,.04)),
+ var(--panel);
+ box-shadow:0 20px 70px rgba(0,0,0,.3);
+}
+.kicker{
+ color:var(--cyan);
+ font-size:11px;
+ letter-spacing:3px;
+ font-weight:800;
+}
+.hero h1{
+ margin:8px 0;
+ font-size:clamp(28px,5vw,48px);
+}
+.hero h1 span{color:var(--gold)}
+.hero p{color:var(--muted);max-width:700px}
+.grid{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:13px;
+ margin-top:16px;
+}
+.card{
+ padding:18px;
+ border-radius:20px;
+ border:1px solid var(--line);
+ background:rgba(12,16,24,.72);
+ transition:.2s;
+}
+.card:hover{
+ transform:translateY(-3px);
+ border-color:rgba(66,232,255,.35);
+}
+.icon{font-size:22px}
+.num{
+ margin-top:12px;
+ font-size:28px;
+ font-weight:900;
+ color:var(--gold);
+}
+.label{
+ color:var(--muted);
+ font-size:12px;
+ margin-top:4px;
+}
+.section{
+ margin-top:20px;
+}
+.sectionhead{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:12px;
+}
+.sectionhead h2{font-size:19px}
+.pill{
+ color:var(--cyan);
+ border:1px solid rgba(66,232,255,.25);
+ padding:6px 10px;
+ border-radius:30px;
+ font-size:11px;
+}
+.modules{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:13px;
+}
+.module{
+ min-height:120px;
+ cursor:pointer;
+}
+.module h3{margin-top:12px}
+.module p{
+ color:var(--muted);
+ font-size:12px;
+ margin-top:5px;
+ line-height:1.5;
+}
+.panel{
+ display:none;
+ margin-top:20px;
+ padding:20px;
+ border-radius:22px;
+ border:1px solid var(--line);
+ background:rgba(8,12,19,.9);
+}
+.panel.show{display:block}
+.toolbar{
+ display:flex;
+ gap:10px;
+ flex-wrap:wrap;
+ margin:12px 0;
+}
+button{
+ border:0;
+ cursor:pointer;
+ color:#08090c;
+ font-weight:800;
+ border-radius:11px;
+ padding:11px 14px;
+ background:var(--gold);
+}
+button.dark{
+ background:#151b25;
+ color:white;
+ border:1px solid #293141;
+}
+.data{
+ overflow:auto;
+ border:1px solid #202938;
+ border-radius:15px;
+ padding:14px;
+}
+.row{
+ padding:12px 0;
+ border-bottom:1px solid #202633;
+}
+.row:last-child{border:0}
+.row b{color:var(--gold)}
+.small{font-size:12px;color:var(--muted);margin-top:4px}
+.status{
+ display:inline-block;
+ margin-top:6px;
+ padding:5px 8px;
+ border-radius:20px;
+ background:rgba(66,232,255,.08);
+ color:var(--cyan);
+ font-size:10px;
+}
+@media(max-width:1000px){
+ .grid{grid-template-columns:repeat(2,1fr)}
+ .modules{grid-template-columns:repeat(2,1fr)}
+ .layout{grid-template-columns:1fr}
+ .side{
+  position:static;
+  height:auto;
+  display:flex;
+  overflow:auto;
+ }
+ .side h3{display:none}
+ .nav{min-width:max-content}
+}
+@media(max-width:600px){
+ .layout{padding:12px}
+ .grid,.modules{grid-template-columns:1fr}
+ .hero{padding:20px}
+ .topin{align-items:flex-start}
+}
+</style>
+</head>
+
+<body>
+
+<header class="top">
+<div class="topin">
+<div class="logo">⚡ SAWARIYA SETH <b>MYTHIC CORE</b></div>
+<div class="live"><span class="dot"></span>SYSTEM ONLINE</div>
+</div>
+</header>
+
+<div class="layout">
+
+<aside class="side">
+<h3>COMMAND</h3>
+<button class="nav active" onclick="showPanel('overview',this)">◈ Overview</button>
+<button class="nav" onclick="showPanel('approvals',this)">✓ Approvals</button>
+<button class="nav" onclick="showPanel('money',this)">₹ Money Center</button>
+<button class="nav" onclick="showPanel('operations',this)">⚡ Operations</button>
+<button class="nav" onclick="showPanel('market',this)">▣ Marketplace</button>
+<button class="nav" onclick="showPanel('trust',this)">🛡 Trust & Safety</button>
+<button class="nav" onclick="showPanel('security',this)">⌁ Security</button>
+<button class="nav" onclick="showPanel('settings',this)">⚙ App Control</button>
+</aside>
+
+<main class="main">
+
+<section class="hero">
+<div class="kicker">OWNER • LEVEL ∞ • ROOT CONTROL</div>
+<h1>Welcome, <span>{{ user["name"] }}</span></h1>
+<p>
+Your central command system for Sawariya Seth Service Center.
+Every major platform module is designed to be controlled from one place.
+</p>
+</section>
+
+<section class="grid">
+<div class="card"><div class="icon">👥</div><div class="num" id="customers">—</div><div class="label">CUSTOMERS</div></div>
+<div class="card"><div class="icon">🧑‍🔧</div><div class="num" id="technicians">—</div><div class="label">TECHNICIANS</div></div>
+<div class="card"><div class="icon">🏪</div><div class="num" id="sellers">—</div><div class="label">SELLERS</div></div>
+<div class="card"><div class="icon">📋</div><div class="num" id="bookings">—</div><div class="label">BOOKINGS</div></div>
+</section>
+
+<section class="section">
+<div class="sectionhead">
+<h2>MYTHIC MODULES</h2>
+<span class="pill">FUTURE READY</span>
+</div>
+
+<div class="modules">
+
+<div class="card module" onclick="showPanel('approvals')">
+<div class="icon">🛡️</div>
+<h3>Approval Center</h3>
+<p>Users, technicians, sellers, KYC and product approvals.</p>
+</div>
+
+<div class="card module" onclick="showPanel('money')">
+<div class="icon">💳</div>
+<h3>Money Center</h3>
+<p>Payments, commissions, refunds and settlements.</p>
+</div>
+
+<div class="card module" onclick="showPanel('operations')">
+<div class="icon">⚡</div>
+<h3>Service Operations</h3>
+<p>Bookings, assignments, jobs and technician network.</p>
+</div>
+
+<div class="card module" onclick="showPanel('market')">
+<div class="icon">🏪</div>
+<h3>Marketplace</h3>
+<p>Sellers, products, stock and orders.</p>
+</div>
+
+<div class="card module" onclick="showPanel('trust')">
+<div class="icon">🎫</div>
+<h3>Trust & Safety</h3>
+<p>Complaints, reviews and support tickets.</p>
+</div>
+
+<div class="card module" onclick="showPanel('security')">
+<div class="icon">🔐</div>
+<h3>Security Center</h3>
+<p>Security events, audit controls and system protection.</p>
+</div>
+
+</div>
+</section>
+
+<section class="panel show" id="overview">
+<h2>◈ Command Overview</h2>
+<div class="toolbar">
+<button onclick="loadStats()">Refresh Live Data</button>
+<button class="dark" onclick="loadBookings()">View Bookings</button>
+<button class="dark" onclick="loadPending()">View Approvals</button>
+</div>
+<div class="data" id="output">
+<div class="small">System ready. Choose a command.</div>
+</div>
+</section>
+
+<section class="panel" id="approvals">
+<h2>✓ Approval Center</h2>
+<p class="small">Owner-controlled approval workflow.</p>
+<div class="toolbar">
+<button onclick="loadPending()">Pending Users</button>
+<button class="dark" onclick="loadTechnicians()">Technicians</button>
+<button class="dark" onclick="loadSellers()">Sellers</button>
+</div>
+<div class="data" id="approvalData"></div>
+</section>
+
+<section class="panel" id="money">
+<h2>₹ Money Center</h2>
+<p class="small">Payment architecture ready for future payment gateway integration.</p>
+<div class="modules">
+<div class="card"><div class="icon">💳</div><h3>Payments</h3><p>Transactions & payment status.</p></div>
+<div class="card"><div class="icon">📈</div><h3>Commission</h3><p>Platform commission control.</p></div>
+<div class="card"><div class="icon">↩️</div><h3>Refunds</h3><p>Refund request management.</p></div>
+</div>
+</section>
+
+<section class="panel" id="operations">
+<h2>⚡ Service Operations</h2>
+<div class="toolbar">
+<button onclick="loadBookings()">All Bookings</button>
+<button class="dark" onclick="loadTechnicians()">Technician Network</button>
+</div>
+<div class="data" id="operationData"></div>
+</section>
+
+<section class="panel" id="market">
+<h2>▣ Marketplace</h2>
+<div class="modules">
+<div class="card"><div class="icon">🏪</div><h3>Sellers</h3><p>Seller approval and management.</p></div>
+<div class="card"><div class="icon">📦</div><h3>Products</h3><p>Product approval, pricing and stock.</p></div>
+<div class="card"><div class="icon">🛒</div><h3>Orders</h3><p>Order and delivery control.</p></div>
+</div>
+</section>
+
+<section class="panel" id="trust">
+<h2>🛡 Trust & Safety</h2>
+<div class="modules">
+<div class="card"><div class="icon">🎫</div><h3>Complaints</h3><p>Open, assign and resolve complaints.</p></div>
+<div class="card"><div class="icon">⭐</div><h3>Reviews</h3><p>Moderate customer reviews.</p></div>
+<div class="card"><div class="icon">💬</div><h3>Support</h3><p>Support ticket management.</p></div>
+</div>
+</section>
+
+<section class="panel" id="security">
+<h2>🔐 Security Center</h2>
+<div class="modules">
+<div class="card"><div class="icon">🚨</div><h3>Security Events</h3><p>Monitor suspicious activity.</p></div>
+<div class="card"><div class="icon">📜</div><h3>Audit Logs</h3><p>Track important owner actions.</p></div>
+<div class="card"><div class="icon">🔑</div><h3>Permissions</h3><p>Control administrative permissions.</p></div>
+</div>
+</section>
+
+<section class="panel" id="settings">
+<h2>⚙ App Control</h2>
+<div class="modules">
+<div class="card"><div class="icon">🎛️</div><h3>Platform Settings</h3><p>Core application configuration.</p></div>
+<div class="card"><div class="icon">🔔</div><h3>Notifications</h3><p>Control platform notifications.</p></div>
+<div class="card"><div class="icon">🧩</div><h3>Future Modules</h3><p>Expandable architecture for new features.</p></div>
+</div>
+</section>
+
+</main>
+</div>
+
+<script>
+
+function showPanel(id,btn=null){
+
+document.querySelectorAll(".panel").forEach(p=>p.classList.remove("show"));
+
+const panel=document.getElementById(id);
+
+if(panel) panel.classList.add("show");
+
+document.querySelectorAll(".nav").forEach(n=>n.classList.remove("active"));
+
+if(btn) btn.classList.add("active");
+
+}
+
+async function api(url){
+
+const r=await fetch(url);
+const d=await r.json();
+
+if(!r.ok) throw new Error(d.error || "Request failed");
+
+return d;
+
+}
+
+async function loadStats(){
+
+try{
+
+const d=await api("/owner/stats");
+
+document.getElementById("customers").textContent=d.customers;
+document.getElementById("technicians").textContent=d.technicians;
+document.getElementById("sellers").textContent=d.sellers;
+document.getElementById("bookings").textContent=d.bookings;
+
+}catch(e){
+
+console.error(e);
+
+}
+
+}
+
+function render(data,target){
+
+const box=document.getElementById(target);
+
+if(!data || !data.length){
+
+box.innerHTML='<div class="small">No records found.</div>';
+
+return;
+
+}
+
+box.innerHTML=data.map(x=>{
+
+return `<div class="row">${
+Object.entries(x).map(([k,v])=>
+`<div><b>${k}</b>: ${v ?? "-"}</div>`
+).join("")
+}</div>`;
+
+}).join("");
+
+}
+
+async function loadPending(){
+
+try{
+
+const d=await api("/owner/pending-users");
+
+render(d.users,"approvalData");
+
+}catch(e){
+
+alert(e.message);
+
+}
+
+}
+
+async function loadTechnicians(){
+
+try{
+
+const d=await api("/owner/technicians");
+
+render(d.technicians,"approvalData");
+
+}catch(e){
+
+alert(e.message);
+
+}
+
+}
+
+async function loadSellers(){
+
+try{
+
+const d=await api("/owner/sellers");
+
+render(d.sellers,"approvalData");
+
+}catch(e){
+
+alert(e.message);
+
+}
+
+}
+
+async function loadBookings(){
+
+try{
+
+const d=await api("/owner/bookings");
+
+render(d.bookings,"operationData");
+
+document.getElementById("output").innerHTML=
+'<div class="small">Bookings loaded in Service Operations.</div>';
+
+}catch(e){
+
+alert(e.message);
+
+}
+
+}
+
+loadStats();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Login | Sawariya Seth</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+    min-height:100vh;
+    background:#050505;
+    color:white;
+    font-family:Arial,sans-serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:460px;
+}
+
+.brand{
+    text-align:center;
+    margin-bottom:22px;
+}
+
+.logo{
+    width:62px;
+    height:62px;
+    margin:auto;
+    display:grid;
+    place-items:center;
+    border-radius:20px;
+    font-size:28px;
+    background:linear-gradient(135deg,#ff6500,#ffc04d);
+    box-shadow:0 0 40px rgba(255,120,0,.25);
+}
+
+.brand h1{
+    font-size:23px;
+    margin-top:12px;
+}
+
+.brand p{
+    color:#777;
+    font-size:10px;
+    letter-spacing:2px;
+    margin-top:4px;
+}
+
+.roles{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.role{
+    padding:15px 8px;
+    text-align:center;
+    border-radius:17px;
+    background:#101116;
+    border:1px solid rgba(255,255,255,.08);
+    cursor:pointer;
+    transition:.2s;
+}
+
+.role.active{
+    border-color:#ff8a20;
+    background:rgba(255,120,0,.12);
+}
+
+.role .icon{
+    display:block;
+    font-size:24px;
+    margin-bottom:6px;
+}
+
+.role strong{
+    display:block;
+    font-size:12px;
+}
+
+.role small{
+    color:#666;
+    font-size:9px;
+}
+
+.card{
+    padding:27px 23px;
+    border-radius:27px;
+    background:#111217;
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 30px 80px rgba(0,0,0,.45);
+}
+
+.portal{
+    text-align:center;
+    margin-bottom:23px;
+}
+
+.portalIcon{
+    font-size:31px;
+    margin-bottom:7px;
+}
+
+.portal h2{
+    font-size:21px;
+}
+
+.portal p{
+    color:#777;
+    font-size:11px;
+    margin-top:5px;
+}
+
+label{
+    display:block;
+    color:#bbb;
+    font-size:11px;
+    font-weight:bold;
+    margin:14px 0 7px;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border-radius:13px;
+    border:1px solid rgba(255,255,255,.09);
+    background:#08090d;
+    color:white;
+    outline:none;
+}
+
+input:focus{
+    border-color:#ff8a20;
+}
+
+.loginBtn{
+    width:100%;
+    padding:15px;
+    margin-top:22px;
+    border:0;
+    border-radius:14px;
+    background:linear-gradient(135deg,#ff6500,#ffb83d);
+    color:white;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.newAccount{
+    display:block;
+    text-align:center;
+    margin-top:19px;
+    padding-top:19px;
+    border-top:1px solid rgba(255,255,255,.07);
+    color:#ffad38;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.ownerNote{
+    display:none;
+    text-align:center;
+    margin-top:17px;
+    color:#777;
+    font-size:10px;
+}
+
+.message{
+    display:none;
+    margin-top:13px;
+    padding:10px;
+    border-radius:10px;
+    text-align:center;
+    color:#ff8d8d;
+    background:rgba(255,50,50,.08);
+    font-size:11px;
+}
+
+.back{
+    display:block;
+    text-align:center;
+    margin-top:18px;
+    color:#777;
+    font-size:11px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="brand">
+    <div class="logo">⚡</div>
+    <h1>SAWARIYA SETH</h1>
+    <p>SERVICE CENTER</p>
+</div>
+
+
+<div class="roles">
+
+    <div class="role active" data-role="customer">
+        <span class="icon">👤</span>
+        <strong>Customer</strong>
+        <small>Book Service</small>
+    </div>
+
+    <div class="role" data-role="technician">
+        <span class="icon">🔧</span>
+        <strong>Technician</strong>
+        <small>Manage Jobs</small>
+    </div>
+
+    <div class="role" data-role="seller">
+        <span class="icon">🛒</span>
+        <strong>Seller</strong>
+        <small>Manage Products</small>
+    </div>
+
+    <div class="role" data-role="owner">
+        <span class="icon">👑</span>
+        <strong>Owner</strong>
+        <small>Control Center</small>
+    </div>
+
+</div>
+
+
+<div class="card">
+
+<div class="portal">
+
+    <div class="portalIcon" id="portalIcon">👤</div>
+
+    <h2 id="portalTitle">
+        Customer Login
+    </h2>
+
+    <p id="portalText">
+        अपनी service booking के लिए login करें
+    </p>
+
+</div>
+
+
+<form id="loginForm">
+
+    <label id="idLabel">
+        Mobile Number / Customer ID
+    </label>
+
+    <input
+        id="phone"
+        type="text"
+        placeholder="Enter Mobile Number or ID"
+        required
+    >
+
+    <label>
+        Password
+    </label>
+
+    <input
+        id="password"
+        type="password"
+        placeholder="Enter Password"
+        required
+    >
+
+    <button class="loginBtn" type="submit">
+        LOGIN →
+    </button>
+
+</form>
+
+
+<div id="message" class="message"></div>
+
+
+<a
+    href="/register"
+    id="newAccount"
+    class="newAccount"
+>
+    ✨ New Account बनाएं
+</a>
+
+
+<div id="ownerNote" class="ownerNote">
+    👑 Owner account केवल authorized administration द्वारा बनाया जाएगा।
+</div>
+
+
+<a href="/" class="back">
+    ← Back to Home
+</a>
+
+</div>
+
+</div>
+
+
+<script>
+
+let selectedRole="customer";
+
+const roles=document.querySelectorAll(".role");
+
+const data={
+
+customer:{
+icon:"👤",
+title:"Customer Login",
+text:"अपनी service booking के लिए login करें",
+label:"Mobile Number / Customer ID",
+placeholder:"Enter Mobile Number or ID"
+},
+
+technician:{
+icon:"🔧",
+title:"Technician Portal",
+text:"अपने assigned jobs manage करें",
+label:"Technician ID / Mobile",
+placeholder:"Enter Technician ID"
+},
+
+seller:{
+icon:"🛒",
+title:"Seller Portal",
+text:"Products और orders manage करें",
+label:"Seller ID / Mobile",
+placeholder:"Enter Seller ID"
+},
+
+owner:{
+icon:"👑",
+title:"Owner Control Center",
+text:"पूरे Service Center को control करें",
+label:"Owner ID / Mobile",
+placeholder:"Enter Owner ID"
+}
+
+};
+
+const icon=document.getElementById("portalIcon");
+const title=document.getElementById("portalTitle");
+const text=document.getElementById("portalText");
+const label=document.getElementById("idLabel");
+const input=document.getElementById("phone");
+const newAccount=document.getElementById("newAccount");
+const ownerNote=document.getElementById("ownerNote");
+
+roles.forEach(item=>{
+
+item.addEventListener("click",()=>{
+
+roles.forEach(x=>x.classList.remove("active"));
+
+item.classList.add("active");
+
+selectedRole=item.dataset.role;
+
+const d=data[selectedRole];
+
+icon.textContent=d.icon;
+title.textContent=d.title;
+text.textContent=d.text;
+label.textContent=d.label;
+input.placeholder=d.placeholder;
+
+if(selectedRole==="owner"){
+    newAccount.style.display="none";
+    ownerNote.style.display="block";
+}else{
+    newAccount.style.display="block";
+    ownerNote.style.display="none";
+}
+
+});
+
+});
+
+
+document.getElementById("loginForm")
+.addEventListener("submit",async(e)=>{
+
+e.preventDefault();
+
+const message=document.getElementById("message");
+
+message.style.display="none";
+
+try{
+
+const response=await fetch("/auth/login",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+phone:input.value.trim(),
+
+password:
+document.getElementById("password").value
+
+})
+
+});
+
+const result=await response.json();
+
+if(!response.ok){
+
+message.textContent=result.error||"Login failed";
+
+message.style.display="block";
+
+return;
+
+}
+
+if(result.user.role!==selectedRole){
+
+message.textContent=
+"यह account इस portal के लिए नहीं है।";
+
+message.style.display="block";
+
+return;
+
+}
+
+/*
+अगले चरण में इन चारों के
+actual dashboards बनाए जाएंगे।
+*/
+
+if(selectedRole==="customer")
+window.location.href="/customer";
+
+else if(selectedRole==="technician")
+window.location.href="/technician";
+
+else if(selectedRole==="seller")
+window.location.href="/seller-dashboard";
+
+else if(selectedRole==="owner")
+window.location.href="/owner";
+
+}catch(error){
+
+message.textContent=
+"Server connection नहीं हो पाया।";
+
+message.style.display="block";
+
+}
+
+});
+
+</script>
+
+</body>
+</html>

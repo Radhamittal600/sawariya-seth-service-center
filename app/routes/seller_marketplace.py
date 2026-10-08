@@ -1,0 +1,373 @@
+import sqlite3
+from flask import Blueprint, request, jsonify, session
+from functools import wraps
+
+seller_marketplace_bp = Blueprint(
+    "seller_marketplace",
+    __name__,
+    url_prefix="/seller/marketplace"
+)
+
+DB = "sawariya.db"
+
+
+def db():
+    conn = sqlite3.connect(DB)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def seller_required(fn):
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        if session.get("role") != "seller":
+            return jsonify({"error": "Seller access required"}), 403
+
+        if not session.get("user_id"):
+            return jsonify({"error": "Login required"}), 401
+
+        return fn(*args, **kwargs)
+    return wrapper
+
+
+@seller_marketplace_bp.get("/products")
+@seller_required
+def my_products():
+    conn = db()
+
+    rows = conn.execute("""
+        SELECT id, seller_id, name, description, category,
+               price, stock, approval_status, active, created_at,
+               photo_url
+        FROM seller_products
+        WHERE seller_id=?
+        ORDER BY id DESC
+    """, (session["user_id"],)).fetchall()
+
+    conn.close()
+
+    return jsonify({
+        "products": [dict(x) for x in rows]
+    })
+
+
+@seller_marketplace_bp.post("/products")
+@seller_required
+def create_product():
+    data = request.get_json(silent=True) or {}
+
+    name = str(data.get("name", "")).strip()
+    description = str(data.get("description", "")).strip()
+    category = str(data.get("category", "")).strip()
+    price = data.get("price")
+    stock = data.get("stock")
+    photo_url = str(data.get("photo_url", "")).strip()
+
+    if not name:
+        return jsonify({"error": "Product name required"}), 400
+
+    try:
+        price = float(price)
+        stock = int(stock)
+    except (TypeError, ValueError):
+        return jsonify({"error": "Invalid price or stock"}), 400
+
+    if price <= 0:
+        return jsonify({"error": "Price must be greater than 0"}), 400
+
+    if stock < 0:
+        return jsonify({"error": "Stock cannot be negative"}), 400
+
+    conn = db()
+
+    seller = conn.execute("""
+        SELECT id, status
+        FROM users
+        WHERE id=? AND role='seller'
+    """, (session["user_id"],)).fetchone()
+
+    if not seller:
+        conn.close()
+        return jsonify({"error": "Seller not found"}), 404
+
+    if seller["status"] != "approved":
+        conn.close()
+        return jsonify({"error": "Seller is not approved"}), 403
+
+    cur = conn.execute("""
+        INSERT INTO seller_products
+        (seller_id, name, description, category, price, stock,
+         approval_status, active, photo_url, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, 'pending', 0, ?, datetime('now'))
+    """, (
+        session["user_id"],
+        name,
+        description,
+        category,
+        price,
+        stock,
+        photo_url
+    ))
+
+    product_id = cur.lastrowid
+
+    # Notify all approved owners
+    owners = conn.execute("""
+        SELECT id FROM users
+        WHERE role='owner' AND status='approved'
+    """).fetchall()
+
+    for owner in owners:
+        conn.execute("""
+            INSERT INTO notifications
+            (user_id, title, message, notification_type)
+            VALUES (?, ?, ?, ?)
+        """, (
+            owner["id"],
+            "🛍️ New Product Approval",
+            f"New product '{name}' submitted by seller ID {session['user_id']} for approval.",
+            "seller_product_approval"
+        ))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "message": "Product submitted for owner approval",
+        "product_id": product_id,
+        "approval_status": "pending"
+    }), 201
+
+
+@seller_marketplace_bp.put("/products/<int:product_id>")
+@seller_required
+def update_product(product_id):
+    data = request.get_json(silent=True) or {}
+
+    conn = db()
+
+    product = conn.execute("""
+        SELECT *
+        FROM seller_products
+        WHERE id=? AND seller_id=?
+    """, (product_id, session["user_id"])).fetchone()
+
+    if not product:
+        conn.close()
+        return jsonify({"error": "Product not found"}), 404
+
+    name = str(data.get("name", product["name"])).strip()
+    description = str(
+        data.get("description", product["description"] or "")
+    ).strip()
+    category = str(
+        data.get("category", product["category"] or "")
+    ).strip()
+
+    photo_url = str(
+        data.get("photo_url", product["photo_url"] if "photo_url" in product.keys() else "")
+    ).strip()
+
+    try:
+        price = float(data.get("price", product["price"]))
+        stock = int(data.get("stock", product["stock"]))
+    except (TypeError, ValueError):
+        conn.close()
+        return jsonify({"error": "Invalid price or stock"}), 400
+
+    if not name or price <= 0 or stock < 0:
+        conn.close()
+        return jsonify({"error": "Invalid product data"}), 400
+
+    conn.execute("""
+        UPDATE seller_products
+        SET name=?,
+            description=?,
+            category=?,
+            price=?,
+            stock=?,
+            approval_status='pending',
+            active=0
+        WHERE id=? AND seller_id=?
+    """, (
+        name,
+        description,
+        category,
+        price,
+        stock,
+        product_id,
+        session["user_id"]
+    ))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "message": "Product updated and sent for owner re-approval",
+        "product_id": product_id,
+        "approval_status": "pending"
+    })
+
+
+@seller_marketplace_bp.delete("/products/<int:product_id>")
+@seller_required
+def delete_product(product_id):
+    conn = db()
+
+    product = conn.execute("""
+        SELECT id
+        FROM seller_products
+        WHERE id=? AND seller_id=?
+    """, (product_id, session["user_id"])).fetchone()
+
+    if not product:
+        conn.close()
+        return jsonify({"error": "Product not found"}), 404
+
+    conn.execute("""
+        UPDATE seller_products
+        SET active=0
+        WHERE id=? AND seller_id=?
+    """, (product_id, session["user_id"]))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "message": "Product disabled",
+        "product_id": product_id
+    })
+
+
+@seller_marketplace_bp.get("/orders")
+@seller_required
+def seller_orders():
+    conn = db()
+
+    rows = conn.execute("""
+        SELECT
+            o.id,
+            o.customer_id,
+            o.seller_id,
+            o.total_amount,
+            o.payment_status,
+            o.order_status,
+            o.delivery_address,
+            o.created_at
+        FROM orders o
+        WHERE o.seller_id=?
+        ORDER BY o.id DESC
+    """, (session["user_id"],)).fetchall()
+
+    conn.close()
+
+    return jsonify({
+        "orders": [dict(x) for x in rows]
+    })
+
+
+@seller_marketplace_bp.get("/orders/<int:order_id>")
+@seller_required
+def seller_order(order_id):
+    conn = db()
+
+    order = conn.execute("""
+        SELECT *
+        FROM orders
+        WHERE id=? AND seller_id=?
+    """, (order_id, session["user_id"])).fetchone()
+
+    if not order:
+        conn.close()
+        return jsonify({"error": "Order not found"}), 404
+
+    items = conn.execute("""
+        SELECT
+            oi.id,
+            oi.order_id,
+            oi.product_id,
+            oi.quantity,
+            oi.price,
+            sp.name
+        FROM order_items oi
+        LEFT JOIN seller_products sp
+            ON sp.id=oi.product_id
+        WHERE oi.order_id=?
+        ORDER BY oi.id
+    """, (order_id,)).fetchall()
+
+    conn.close()
+
+    return jsonify({
+        "order": dict(order),
+        "items": [dict(x) for x in items]
+    })
+
+
+@seller_marketplace_bp.post("/orders/<int:order_id>/status")
+@seller_required
+def update_order_status(order_id):
+    data = request.get_json(silent=True) or {}
+    status = str(data.get("status", "")).strip().lower()
+
+    allowed = {
+        "confirmed",
+        "processing",
+        "shipped",
+        "delivered",
+        "cancelled"
+    }
+
+    if status not in allowed:
+        return jsonify({
+            "error": "Invalid order status",
+            "allowed": sorted(allowed)
+        }), 400
+
+    conn = db()
+
+    order = conn.execute("""
+        SELECT id, order_status
+        FROM orders
+        WHERE id=? AND seller_id=?
+    """, (order_id, session["user_id"])).fetchone()
+
+    if not order:
+        conn.close()
+        return jsonify({"error": "Order not found"}), 404
+
+    conn.execute("""
+        UPDATE orders
+        SET order_status=?
+        WHERE id=? AND seller_id=?
+    """, (status, order_id, session["user_id"]))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "message": "Order status updated",
+        "order_id": order_id,
+        "order_status": status
+    })
+
+
+@seller_marketplace_bp.get("/kyc")
+@seller_required
+def seller_kyc():
+    conn = db()
+
+    rows = conn.execute("""
+        SELECT id, user_id, document_type, document_number,
+               status, rejection_reason, verified_by,
+               verified_at, created_at
+        FROM kyc_documents
+        WHERE user_id=?
+        ORDER BY id DESC
+    """, (session["user_id"],)).fetchall()
+
+    conn.close()
+
+    return jsonify({
+        "kyc": [dict(x) for x in rows]
+    })

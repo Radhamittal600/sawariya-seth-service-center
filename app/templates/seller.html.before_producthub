@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sawariya Seth • Seller VIP</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --bg:#05060b;
+    --panel:rgba(15,18,30,.78);
+    --panel2:rgba(20,24,40,.92);
+    --border:rgba(255,255,255,.09);
+    --gold:#f6c453;
+    --gold2:#ff9f1c;
+    --cyan:#35e7ff;
+    --purple:#9b6cff;
+    --green:#38e58c;
+    --red:#ff5573;
+    --text:#f5f7ff;
+    --muted:#8992aa;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 10% 0%,rgba(155,108,255,.15),transparent 32%),
+        radial-gradient(circle at 90% 5%,rgba(53,231,255,.11),transparent 30%),
+        radial-gradient(circle at 50% 100%,rgba(246,196,83,.08),transparent 35%),
+        var(--bg);
+    color:var(--text);
+    font-family:Inter,Arial,sans-serif;
+    overflow-x:hidden;
+}
+
+body:before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+    background-size:45px 45px;
+    mask-image:linear-gradient(to bottom,#000,transparent);
+}
+
+button,input,textarea,select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    min-height:100vh;
+    display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    width:250px;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    padding:20px 14px;
+    background:rgba(5,7,14,.88);
+    border-right:1px solid var(--border);
+    backdrop-filter:blur(25px);
+    z-index:20;
+}
+
+.logo{
+    padding:10px;
+    display:flex;
+    align-items:center;
+    gap:11px;
+    margin-bottom:25px;
+}
+
+.logoIcon{
+    width:45px;
+    height:45px;
+    border-radius:15px;
+    display:grid;
+    place-items:center;
+    font-size:22px;
+    background:linear-gradient(135deg,#f6c453,#ff8d16);
+    color:#171000;
+    box-shadow:0 0 35px rgba(246,196,83,.25);
+}
+
+.logoText{
+    font-weight:900;
+    font-size:14px;
+}
+
+.logoText small{
+    display:block;
+    margin-top:3px;
+    color:var(--gold);
+    font-size:8px;
+    letter-spacing:2px;
+}
+
+.navTitle{
+    color:#59627a;
+    font-size:9px;
+    letter-spacing:2px;
+    margin:18px 11px 8px;
+}
+
+.navBtn{
+    width:100%;
+    padding:12px;
+    margin:3px 0;
+    border:1px solid transparent;
+    border-radius:13px;
+    background:transparent;
+    color:#aeb7cd;
+    text-align:left;
+    transition:.25s;
+}
+
+.navBtn:hover,
+.navBtn.active{
+    background:linear-gradient(90deg,rgba(246,196,83,.13),rgba(53,231,255,.05));
+    border-color:rgba(246,196,83,.18);
+    color:#fff;
+    transform:translateX(3px);
+}
+
+.navIcon{
+    display:inline-block;
+    width:26px;
+}
+
+.vipBadge{
+    margin:20px 5px 0;
+    padding:14px;
+    border-radius:17px;
+    border:1px solid rgba(246,196,83,.2);
+    background:linear-gradient(145deg,rgba(246,196,83,.1),rgba(155,108,255,.06));
+}
+
+.vipBadge b{
+    color:var(--gold);
+    font-size:12px;
+}
+
+.vipBadge p{
+    color:var(--muted);
+    font-size:9px;
+    line-height:1.6;
+    margin-top:5px;
+}
+
+/* MAIN */
+
+.main{
+    width:calc(100% - 250px);
+    margin-left:250px;
+    padding:22px;
+}
+
+.topbar{
+    min-height:65px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.welcome small{
+    color:var(--muted);
+    font-size:11px;
+}
+
+.welcome h1{
+    font-size:26px;
+    margin-top:4px;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.avatar{
+    width:43px;
+    height:43px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg,#9b6cff,#35e7ff);
+    color:#071018;
+    font-weight:900;
+}
+
+.online{
+    color:var(--green);
+    font-size:10px;
+}
+
+/* HERO */
+
+.hero{
+    position:relative;
+    overflow:hidden;
+    padding:30px;
+    border:1px solid rgba(246,196,83,.15);
+    border-radius:25px;
+    background:
+        linear-gradient(120deg,rgba(246,196,83,.08),rgba(155,108,255,.07),rgba(53,231,255,.04)),
+        var(--panel);
+    backdrop-filter:blur(25px);
+    box-shadow:0 25px 80px rgba(0,0,0,.25);
+}
+
+.hero:after{
+    content:"✦";
+    position:absolute;
+    right:35px;
+    top:15px;
+    font-size:130px;
+    color:rgba(246,196,83,.05);
+}
+
+.heroTag{
+    display:inline-flex;
+    padding:7px 11px;
+    border-radius:30px;
+    border:1px solid rgba(246,196,83,.2);
+    color:var(--gold);
+    font-size:9px;
+    letter-spacing:1.5px;
+}
+
+.hero h2{
+    margin-top:13px;
+    font-size:clamp(25px,4vw,42px);
+    max-width:700px;
+}
+
+.hero p{
+    margin-top:9px;
+    color:var(--muted);
+    font-size:12px;
+    max-width:650px;
+    line-height:1.7;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:13px;
+    margin:17px 0;
+}
+
+.stat{
+    padding:18px;
+    border-radius:19px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    backdrop-filter:blur(20px);
+    position:relative;
+    overflow:hidden;
+}
+
+.stat:after{
+    content:"";
+    position:absolute;
+    width:80px;
+    height:80px;
+    right:-30px;
+    bottom:-35px;
+    border-radius:50%;
+    background:rgba(53,231,255,.07);
+}
+
+.statIcon{
+    font-size:18px;
+}
+
+.statLabel{
+    color:var(--muted);
+    font-size:9px;
+    margin-top:10px;
+}
+
+.statValue{
+    font-size:26px;
+    font-weight:900;
+    margin-top:4px;
+}
+
+.gold{color:var(--gold)}
+.cyan{color:var(--cyan)}
+.green{color:var(--green)}
+.purple{color:var(--purple)}
+
+/* CONTENT */
+
+.grid{
+    display:grid;
+    grid-template-columns:1.4fr .8fr;
+    gap:16px;
+}
+
+.card{
+    padding:20px;
+    border:1px solid var(--border);
+    border-radius:21px;
+    background:var(--panel);
+    backdrop-filter:blur(22px);
+    margin-bottom:16px;
+}
+
+.cardHead{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:17px;
+}
+
+.cardHead h3{
+    font-size:16px;
+}
+
+.cardHead span{
+    color:var(--muted);
+    font-size:9px;
+}
+
+/* FORM */
+
+.formGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.field{
+    margin-bottom:9px;
+}
+
+.field.full{
+    grid-column:1/-1;
+}
+
+label{
+    display:block;
+    color:#8992aa;
+    font-size:9px;
+    margin-bottom:5px;
+}
+
+input,textarea,select{
+    width:100%;
+    color:#fff;
+    background:#080c16;
+    border:1px solid #252d43;
+    border-radius:12px;
+    padding:11px;
+    outline:none;
+}
+
+input:focus,textarea:focus,select:focus{
+    border-color:rgba(53,231,255,.55);
+    box-shadow:0 0 0 3px rgba(53,231,255,.06);
+}
+
+textarea{
+    min-height:85px;
+    resize:vertical;
+}
+
+.primary{
+    border:0;
+    padding:12px 17px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#f6c453,#ff9218);
+    color:#171000;
+    font-weight:900;
+}
+
+.secondary{
+    border:1px solid rgba(53,231,255,.2);
+    padding:11px 15px;
+    border-radius:12px;
+    background:rgba(53,231,255,.07);
+    color:var(--cyan);
+    font-weight:800;
+}
+
+/* PRODUCT */
+
+.list{
+    display:grid;
+    gap:9px;
+}
+
+.product{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:14px;
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:15px;
+    background:rgba(6,9,17,.55);
+}
+
+.productName{
+    font-weight:800;
+    font-size:13px;
+}
+
+.productMeta{
+    color:var(--muted);
+    font-size:9px;
+    margin-top:5px;
+}
+
+.productRight{
+    text-align:right;
+}
+
+.price{
+    color:var(--gold);
+    font-weight:900;
+}
+
+.badge{
+    display:inline-block;
+    margin-top:5px;
+    padding:5px 8px;
+    border-radius:20px;
+    font-size:8px;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    background:#252d43;
+    color:#bbc3d5;
+}
+
+.badge.pending{
+    background:rgba(246,196,83,.12);
+    color:var(--gold);
+}
+
+.badge.approved{
+    background:rgba(56,229,140,.1);
+    color:var(--green);
+}
+
+.badge.rejected{
+    background:rgba(255,85,115,.1);
+    color:var(--red);
+}
+
+/* ORDERS */
+
+.order{
+    padding:14px;
+    border-radius:15px;
+    background:rgba(6,9,17,.55);
+    border:1px solid rgba(255,255,255,.06);
+    margin-bottom:9px;
+}
+
+.orderTop{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+}
+
+.orderMeta{
+    color:var(--muted);
+    font-size:9px;
+    margin-top:7px;
+}
+
+.orderBtns{
+    margin-top:9px;
+}
+
+.smallBtn{
+    border:1px solid #303950;
+    background:#101626;
+    color:#cbd3e5;
+    padding:7px 9px;
+    border-radius:8px;
+    font-size:8px;
+}
+
+/* KYC */
+
+.kycBox{
+    text-align:center;
+    padding:25px 10px;
+}
+
+.kycIcon{
+    font-size:40px;
+    margin-bottom:10px;
+}
+
+.kycBox p{
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.6;
+}
+
+/* EMPTY */
+
+.empty{
+    padding:28px 10px;
+    text-align:center;
+    color:var(--muted);
+    font-size:11px;
+}
+
+/* TOAST */
+
+#toast{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    z-index:100;
+    max-width:330px;
+    padding:13px 16px;
+    border-radius:13px;
+    background:#101827;
+    border:1px solid rgba(53,231,255,.2);
+    box-shadow:0 15px 50px rgba(0,0,0,.4);
+    display:none;
+    font-size:11px;
+}
+
+/* MOBILE */
+
+.mobileNav{
+    display:none;
+}
+
+@media(max-width:900px){
+
+    .sidebar{
+        display:none;
+    }
+
+    .main{
+        width:100%;
+        margin-left:0;
+        padding:13px;
+        padding-bottom:85px;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .mobileNav{
+        display:flex;
+        position:fixed;
+        left:10px;
+        right:10px;
+        bottom:10px;
+        z-index:50;
+        padding:8px;
+        border:1px solid var(--border);
+        border-radius:18px;
+        background:rgba(7,9,16,.92);
+        backdrop-filter:blur(25px);
+        justify-content:space-around;
+    }
+
+    .mobileNav button{
+        background:none;
+        border:0;
+        color:#8892a9;
+        padding:8px;
+        font-size:10px;
+    }
+
+    .mobileNav button:first-child{
+        color:var(--gold);
+    }
+
+    .formGrid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .hero{
+        padding:22px;
+    }
+}
+
+@media(max-width:450px){
+
+    .topbar{
+        align-items:flex-start;
+    }
+
+    .welcome h1{
+        font-size:21px;
+    }
+
+    .profile .profileText{
+        display:none;
+    }
+
+    .stats{
+        gap:8px;
+    }
+
+    .stat{
+        padding:14px;
+    }
+
+    .statValue{
+        font-size:22px;
+    }
+
+    .product{
+        align-items:flex-start;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar">
+
+    <div class="logo">
+        <div class="logoIcon">♛</div>
+        <div class="logoText">
+            SAWARIYA SETH
+            <small>SELLER VIP CENTER</small>
+        </div>
+    </div>
+
+    <div class="navTitle">SELLER CONTROL</div>
+
+    <button class="navBtn active" onclick="scrollToBox('dashboard')">
+        <span class="navIcon">⌂</span> Dashboard
+    </button>
+
+    <button class="navBtn" onclick="scrollToBox('addProduct')">
+        <span class="navIcon">＋</span> Add Product
+    </button>
+
+    <button class="navBtn" onclick="scrollToBox('productBox')">
+        <span class="navIcon">▣</span> My Products
+    </button>
+
+    <button class="navBtn" onclick="scrollToBox('orderBox')">
+        <span class="navIcon">🛒</span> Orders
+    </button>
+
+    <button class="navBtn" onclick="scrollToBox('kycBox')">
+        <span class="navIcon">◈</span> KYC Center
+    </button>
+
+    <div class="vipBadge">
+        <b>✦ VIP SELLER</b>
+        <p>Your marketplace control center. Products go LIVE only after Owner approval.</p>
+    </div>
+
+</aside>
+
+<main class="main" id="dashboard">
+
+<header class="topbar">
+
+    <div class="welcome">
+        <small>WELCOME BACK, SELLER</small>
+        <h1>Seller Command Center</h1>
+    </div>
+
+    <div class="profile">
+        <div class="profileText">
+            <b>Seller Account</b><br>
+            <span class="online">● Online</span>
+        </div>
+        <div class="avatar">S</div>
+    </div>
+
+</header>
+
+<section class="hero">
+
+    <span class="heroTag">✦ PREMIUM MARKETPLACE</span>
+
+    <h2>Grow your business with Sawariya Seth.</h2>
+
+    <p>
+        Manage your products, stock, orders and KYC from one premium
+        seller command center.
+    </p>
+
+</section>
+
+<section class="stats">
+
+    <div class="stat">
+        <div class="statIcon">📦</div>
+        <div class="statLabel">TOTAL PRODUCTS</div>
+        <div class="statValue gold" id="productCount">0</div>
+    </div>
+
+    <div class="stat">
+        <div class="statIcon">✓</div>
+        <div class="statLabel">APPROVED</div>
+        <div class="statValue green" id="approvedCount">0</div>
+    </div>
+
+    <div class="stat">
+        <div class="statIcon">◷</div>
+        <div class="statLabel">PENDING</div>
+        <div class="statValue gold" id="pendingCount">0</div>
+    </div>
+
+    <div class="stat">
+        <div class="statIcon">🛒</div>
+        <div class="statLabel">ORDERS</div>
+        <div class="statValue cyan" id="orderCount">0</div>
+    </div>
+
+</section>
+
+<div class="grid">
+
+<div>
+
+<section class="card" id="addProduct">
+
+    <div class="cardHead">
+        <h3>＋ Add New Product</h3>
+        <span>OWNER APPROVAL REQUIRED</span>
+    </div>
+
+    <div class="formGrid">
+
+        <div class="field">
+            <label>PRODUCT NAME</label>
+            <input id="pName" placeholder="Example: RO Sediment Filter">
+        </div>
+
+        <div class="field">
+            <label>CATEGORY</label>
+            <input id="pCategory" placeholder="Example: RO Parts">
+        </div>
+
+        <div class="field">
+            <label>PRICE ₹</label>
+            <input id="pPrice" type="number" min="1" placeholder="199">
+        </div>
+
+        <div class="field">
+            <label>STOCK</label>
+            <input id="pStock" type="number" min="0" placeholder="20">
+        </div>
+
+        <div class="field full">
+            <label>DESCRIPTION</label>
+            <textarea id="pDescription"
+                placeholder="Describe your product..."></textarea>
+        </div>
+
+    </div>
+
+    <button class="primary" onclick="addProduct()">
+        ✦ Submit For Approval
+    </button>
+
+    <div id="productMessage"></div>
+
+</section>
+
+<section class="card" id="productBox">
+
+    <div class="cardHead">
+        <h3>▣ My Products</h3>
+        <button class="secondary" onclick="loadProducts()">↻ Refresh</button>
+    </div>
+
+    <div class="list" id="products">
+        <div class="empty">Loading products...</div>
+    </div>
+
+</section>
+
+</div>
+
+<div>
+
+<section class="card" id="orderBox">
+
+    <div class="cardHead">
+        <h3>🛒 Recent Orders</h3>
+        <span id="orderStatusText">LIVE</span>
+    </div>
+
+    <div id="orders">
+        <div class="empty">Loading orders...</div>
+    </div>
+
+</section>
+
+<section class="card" id="kycBox">
+
+    <div class="cardHead">
+        <h3>◈ KYC Center</h3>
+        <span>SECURITY</span>
+    </div>
+
+    <div class="kycBox" id="kyc">
+        <div class="kycIcon">🪪</div>
+        <p>Checking your KYC status...</p>
+    </div>
+
+</section>
+
+</div>
+
+</div>
+
+</main>
+
+</div>
+
+<nav class="mobileNav">
+
+    <button onclick="scrollToBox('dashboard')">⌂<br>Home</button>
+    <button onclick="scrollToBox('addProduct')">＋<br>Product</button>
+    <button onclick="scrollToBox('productBox')">▣<br>Products</button>
+    <button onclick="scrollToBox('orderBox')">🛒<br>Orders</button>
+    <button onclick="scrollToBox('kycBox')">◈<br>KYC</button>
+
+</nav>
+
+<div id="toast"></div>
+
+<script>
+
+const esc = value =>
+    String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+async function api(url, options={}){
+
+    const response = await fetch(url,{
+        credentials:"same-origin",
+        headers:{
+            "Content-Type":"application/json",
+            ...(options.headers || {})
+        },
+        ...options
+    });
+
+    let data={};
+
+    try{
+        data=await response.json();
+    }catch(e){}
+
+    if(!response.ok){
+        throw new Error(data.error || "Request failed");
+    }
+
+    return data;
+}
+
+function toast(message){
+
+    const box=document.getElementById("toast");
+
+    box.textContent=message;
+    box.style.display="block";
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer=setTimeout(()=>{
+        box.style.display="none";
+    },3000);
+}
+
+function scrollToBox(id){
+
+    document.getElementById(id)?.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+    });
+}
+
+async function loadProducts(){
+
+    try{
+
+        const data=await api("/seller/marketplace/products");
+        const list=data.products || [];
+
+        document.getElementById("productCount").textContent=list.length;
+
+        document.getElementById("approvedCount").textContent=
+            list.filter(x=>x.approval_status==="approved").length;
+
+        document.getElementById("pendingCount").textContent=
+            list.filter(x=>x.approval_status==="pending").length;
+
+        const box=document.getElementById("products");
+
+        if(!list.length){
+
+            box.innerHTML=
+                `<div class="empty">
+                    📦 No products yet.<br>
+                    Add your first product above.
+                </div>`;
+
+            return;
+        }
+
+        box.innerHTML=list.map(p=>`
+
+            <div class="product">
+
+                <div>
+                    <div class="productName">
+                        ${esc(p.name)}
+                    </div>
+
+                    <div class="productMeta">
+                        ${esc(p.category || "General")}
+                        • Stock ${esc(p.stock)}
+                    </div>
+                </div>
+
+                <div class="productRight">
+
+                    <div class="price">
+                        ₹${esc(p.price)}
+                    </div>
+
+                    <span class="badge ${esc(p.approval_status)}">
+                        ${esc(p.approval_status)}
+                    </span>
+
+                </div>
+
+            </div>
+
+        `).join("");
+
+    }catch(e){
+
+        document.getElementById("products").innerHTML=
+            `<div class="empty">❌ ${esc(e.message)}</div>`;
+
+    }
+}
+
+async function addProduct(){
+
+    const data={
+        name:document.getElementById("pName").value.trim(),
+        category:document.getElementById("pCategory").value.trim(),
+        description:document.getElementById("pDescription").value.trim(),
+        price:document.getElementById("pPrice").value,
+        stock:document.getElementById("pStock").value
+    };
+
+    if(!data.name || !data.price){
+
+        toast("Product name और price भरें");
+        return;
+    }
+
+    try{
+
+        const result=await api(
+            "/seller/marketplace/products",
+            {
+                method:"POST",
+                body:JSON.stringify(data)
+            }
+        );
+
+        toast("✓ Product approval के लिए भेज दिया गया");
+
+        document.getElementById("productMessage").innerHTML=
+            `<div class="badge pending">
+                ${esc(result.message)}
+            </div>`;
+
+        ["pName","pCategory","pDescription","pPrice","pStock"]
+        .forEach(id=>{
+            document.getElementById(id).value="";
+        });
+
+        loadProducts();
+
+    }catch(e){
+
+        toast("❌ "+e.message);
+
+    }
+}
+
+async function loadOrders(){
+
+    try{
+
+        const data=await api("/seller/marketplace/orders");
+        const list=data.orders || [];
+
+        document.getElementById("orderCount").textContent=list.length;
+
+        const box=document.getElementById("orders");
+
+        if(!list.length){
+
+            box.innerHTML=
+                `<div class="empty">
+                    🛒 No orders yet.
+                </div>`;
+
+            return;
+        }
+
+        box.innerHTML=list.map(o=>`
+
+            <div class="order">
+
+                <div class="orderTop">
+                    <b>#${esc(o.id)}</b>
+                    <strong class="gold">
+                        ₹${esc(o.total_amount)}
+                    </strong>
+                </div>
+
+                <div class="orderMeta">
+                    ${esc(o.order_status)}
+                    • Payment ${esc(o.payment_status)}
+                </div>
+
+                <div class="orderBtns">
+
+                    <button class="smallBtn"
+                        onclick="updateOrder(${Number(o.id)},'processing')">
+                        Processing
+                    </button>
+
+                    <button class="smallBtn"
+                        onclick="updateOrder(${Number(o.id)},'shipped')">
+                        Shipped
+                    </button>
+
+                    <button class="smallBtn"
+                        onclick="updateOrder(${Number(o.id)},'delivered')">
+                        Delivered
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("");
+
+    }catch(e){
+
+        document.getElementById("orders").innerHTML=
+            `<div class="empty">❌ ${esc(e.message)}</div>`;
+
+    }
+}
+
+async function updateOrder(id,status){
+
+    try{
+
+        await api(
+            `/seller/marketplace/orders/${id}/status`,
+            {
+                method:"POST",
+                body:JSON.stringify({status})
+            }
+        );
+
+        toast("✓ Order status updated");
+        loadOrders();
+
+    }catch(e){
+
+        toast("❌ "+e.message);
+
+    }
+}
+
+async function loadKyc(){
+
+    try{
+
+        const data=await api("/seller/marketplace/kyc");
+        const list=data.kyc || [];
+
+        const box=document.getElementById("kyc");
+
+        if(!list.length){
+
+            box.innerHTML=`
+                <div class="kycIcon">🪪</div>
+                <b>KYC Not Submitted</b>
+                <p>Submit your KYC documents to unlock seller features.</p>
+            `;
+
+            return;
+        }
+
+        const latest=list[0];
+
+        box.innerHTML=`
+
+            <div class="kycIcon">🪪</div>
+
+            <b>KYC STATUS</b>
+
+            <br>
+
+            <span class="badge ${esc(latest.status)}">
+                ${esc(latest.status)}
+            </span>
+
+            <p style="margin-top:10px">
+                ${esc(latest.document_type)}
+            </p>
+
+            ${
+                latest.rejection_reason
+                ? `<p>Reason: ${esc(latest.rejection_reason)}</p>`
+                : ""
+            }
+
+        `;
+
+    }catch(e){
+
+        document.getElementById("kyc").innerHTML=
+            `<div class="empty">❌ ${esc(e.message)}</div>`;
+
+    }
+}
+
+async function refresh(){
+
+    await Promise.all([
+        loadProducts(),
+        loadOrders(),
+        loadKyc()
+    ]);
+
+}
+
+refresh();
+
+setInterval(refresh,15000);
+
+</script>
+
+</body>
+</html>

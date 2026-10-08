@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sawariya Seth Service Center</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#050505;
+    color:#fff;
+    font-family:Arial,Helvetica,sans-serif;
+    overflow-x:hidden;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+/* ===== ROYAL BACKGROUND ===== */
+
+body:before{
+    content:"";
+    position:fixed;
+    width:500px;
+    height:500px;
+    border-radius:50%;
+    background:rgba(255,140,20,.12);
+    filter:blur(130px);
+    top:-200px;
+    right:-180px;
+    z-index:-2;
+}
+
+body:after{
+    content:"";
+    position:fixed;
+    width:450px;
+    height:450px;
+    border-radius:50%;
+    background:rgba(255,190,60,.07);
+    filter:blur(130px);
+    bottom:-200px;
+    left:-180px;
+    z-index:-2;
+}
+
+/* ===== HEADER ===== */
+
+header{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:1000;
+    padding:12px 15px;
+}
+
+.nav{
+    max-width:1150px;
+    margin:auto;
+    height:64px;
+    padding:0 16px;
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:20px;
+    background:rgba(10,10,10,.72);
+    backdrop-filter:blur(20px);
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.logo{
+    width:42px;
+    height:42px;
+    border-radius:14px;
+
+    display:grid;
+    place-items:center;
+
+    font-size:22px;
+
+    background:
+        linear-gradient(135deg,#ff7a00,#ffd05a);
+
+    box-shadow:
+        0 0 30px rgba(255,150,30,.3);
+}
+
+.brandText{
+    font-weight:900;
+    font-size:14px;
+    letter-spacing:.5px;
+}
+
+.brandText small{
+    display:block;
+    color:#888;
+    font-size:8px;
+    letter-spacing:2px;
+    margin-top:3px;
+}
+
+.login{
+    padding:11px 18px;
+    border-radius:13px;
+    background:#fff;
+    color:#111;
+    font-size:12px;
+    font-weight:900;
+}
+
+/* ===== HERO ===== */
+
+.hero{
+    min-height:780px;
+    max-width:1150px;
+    margin:auto;
+
+    padding:145px 20px 80px;
+
+    display:flex;
+    align-items:center;
+
+    position:relative;
+}
+
+.heroContent{
+    position:relative;
+    z-index:5;
+    max-width:720px;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    padding:9px 15px;
+
+    border-radius:50px;
+
+    border:1px solid rgba(255,255,255,.12);
+
+    background:rgba(255,255,255,.04);
+
+    color:#c8c8c8;
+
+    font-size:11px;
+
+    margin-bottom:23px;
+}
+
+.badge span{
+    color:#ffad32;
+}
+
+.hero h1{
+    font-size:clamp(48px,9vw,90px);
+    line-height:.92;
+
+    letter-spacing:-5px;
+
+    margin-bottom:25px;
+}
+
+.hero h1 span{
+    color:#ff8a16;
+}
+
+.hero p{
+    max-width:600px;
+
+    color:#9298a4;
+
+    font-size:15px;
+
+    line-height:1.8;
+}
+
+.buttons{
+    display:flex;
+    gap:12px;
+
+    flex-wrap:wrap;
+
+    margin-top:30px;
+}
+
+.book{
+    padding:16px 23px;
+
+    border-radius:15px;
+
+    background:
+        linear-gradient(135deg,#ff6700,#ffc04d);
+
+    font-weight:900;
+
+    box-shadow:
+        0 15px 40px rgba(255,110,0,.25);
+}
+
+.servicesBtn{
+    padding:16px 22px;
+
+    border-radius:15px;
+
+    border:1px solid rgba(255,255,255,.12);
+
+    background:rgba(255,255,255,.04);
+
+    color:#ddd;
+
+    font-weight:700;
+}
+
+/* ===== MYTHIC CIRCLE ===== */
+
+.mythic{
+    position:absolute;
+
+    right:30px;
+    top:190px;
+
+    width:390px;
+    height:390px;
+
+    border-radius:50%;
+
+    border:1px solid rgba(255,170,50,.25);
+
+    box-shadow:
+        0 0 80px rgba(255,130,20,.08),
+        inset 0 0 70px rgba(255,130,20,.06);
+}
+
+.mythic:before{
+    content:"";
+
+    position:absolute;
+
+    inset:45px;
+
+    border-radius:50%;
+
+    border:1px dashed rgba(255,255,255,.12);
+
+    animation:spin 25s linear infinite;
+}
+
+.mythic:after{
+    content:"✦";
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    font-size:90px;
+
+    color:#ffad32;
+
+    text-shadow:
+        0 0 40px rgba(255,150,30,.7);
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* ===== STATS ===== */
+
+.stats{
+    max-width:1050px;
+    margin:auto;
+
+    padding:0 20px 70px;
+
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+
+    gap:15px;
+}
+
+.stat{
+    padding:24px;
+
+    border-radius:20px;
+
+    background:#101010;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    text-align:center;
+}
+
+.stat b{
+    display:block;
+
+    font-size:25px;
+
+    color:#ff9b2f;
+
+    margin-bottom:6px;
+}
+
+.stat span{
+    color:#777;
+
+    font-size:11px;
+}
+
+/* ===== SECTION ===== */
+
+.section{
+    max-width:1100px;
+
+    margin:auto;
+
+    padding:80px 20px;
+}
+
+.label{
+    color:#ff9b2f;
+
+    font-size:10px;
+
+    font-weight:900;
+
+    letter-spacing:3px;
+
+    margin-bottom:10px;
+}
+
+.heading{
+    font-size:clamp(30px,6vw,50px);
+
+    letter-spacing:-2px;
+
+    margin-bottom:10px;
+}
+
+.sub{
+    color:#777f8c;
+
+    font-size:13px;
+
+    margin-bottom:32px;
+}
+
+/* ===== SERVICE CARDS ===== */
+
+.services{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:14px;
+}
+
+.service{
+    min-height:200px;
+
+    padding:23px;
+
+    border-radius:23px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #151515,
+            #0b0b0b
+        );
+
+    border:1px solid rgba(255,255,255,.07);
+
+    transition:.3s;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.service:hover{
+    transform:translateY(-8px);
+
+    border-color:
+        rgba(255,140,20,.4);
+
+    box-shadow:
+        0 25px 50px rgba(0,0,0,.4);
+}
+
+.icon{
+    width:52px;
+    height:52px;
+
+    border-radius:16px;
+
+    display:grid;
+    place-items:center;
+
+    font-size:24px;
+
+    background:
+        rgba(255,130,20,.1);
+
+    border:
+        1px solid rgba(255,140,20,.15);
+
+    margin-bottom:22px;
+}
+
+.service h3{
+    font-size:16px;
+
+    margin-bottom:8px;
+}
+
+.service p{
+    color:#727984;
+
+    font-size:11px;
+
+    line-height:1.7;
+}
+
+/* ===== HOW IT WORKS ===== */
+
+.steps{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:15px;
+}
+
+.step{
+    padding:28px;
+
+    border-radius:23px;
+
+    background:#111;
+
+    border:
+        1px solid rgba(255,255,255,.07);
+}
+
+.number{
+    color:#ff8c20;
+
+    font-size:12px;
+
+    font-weight:900;
+
+    margin-bottom:20px;
+}
+
+.step h3{
+    margin-bottom:9px;
+}
+
+.step p{
+    color:#777;
+
+    font-size:12px;
+
+    line-height:1.7;
+}
+
+/* ===== OWNER ===== */
+
+.owner{
+    max-width:850px;
+
+    margin:40px auto 80px;
+
+    padding:45px 25px;
+
+    text-align:center;
+
+    border-radius:32px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #17130d,
+            #090909
+        );
+
+    border:
+        1px solid rgba(255,180,60,.2);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.4);
+}
+
+.ownerLabel{
+    color:#ffad32;
+
+    font-size:10px;
+
+    font-weight:900;
+
+    letter-spacing:3px;
+
+    margin-bottom:25px;
+}
+
+.ownerPhoto{
+    width:170px;
+    height:170px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    object-position:center;
+
+    border:
+        3px solid #ffae38;
+
+    padding:4px;
+
+    background:#111;
+
+    box-shadow:
+        0 0 45px rgba(255,150,30,.25);
+
+    margin-bottom:20px;
+}
+
+.owner h2{
+    font-size:30px;
+
+    margin-bottom:7px;
+}
+
+.owner p{
+    color:#888;
+
+    font-size:13px;
+
+    line-height:1.7;
+}
+
+.owner .crown{
+    font-size:25px;
+
+    color:#ffb43b;
+
+    margin-bottom:10px;
+}
+
+/* ===== CTA ===== */
+
+.cta{
+    max-width:1100px;
+
+    margin:20px auto 80px;
+
+    padding:65px 25px;
+
+    border-radius:32px;
+
+    text-align:center;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(255,255,255,.2),
+            transparent 38%
+        ),
+        linear-gradient(
+            135deg,
+            #d95700,
+            #ff9e25
+        );
+
+    box-shadow:
+        0 30px 80px rgba(255,100,0,.13);
+}
+
+.cta h2{
+    font-size:clamp(30px,6vw,50px);
+
+    margin-bottom:10px;
+}
+
+.cta p{
+    color:#ffe4c9;
+
+    font-size:13px;
+
+    margin-bottom:25px;
+}
+
+.cta a{
+    display:inline-block;
+
+    padding:15px 25px;
+
+    border-radius:13px;
+
+    background:white;
+
+    color:#111;
+
+    font-weight:900;
+}
+
+/* ===== FOOTER ===== */
+
+footer{
+    padding:45px 20px;
+
+    text-align:center;
+
+    border-top:
+        1px solid rgba(255,255,255,.06);
+
+    color:#606773;
+
+    font-size:10px;
+}
+
+footer strong{
+    color:white;
+
+    font-size:15px;
+}
+
+/* ===== MOBILE ===== */
+
+@media(max-width:850px){
+
+    .hero{
+        min-height:auto;
+
+        padding-top:135px;
+    }
+
+    .mythic{
+        opacity:.25;
+
+        right:-170px;
+
+        top:230px;
+
+        width:330px;
+        height:330px;
+    }
+
+    .services{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .steps{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:550px){
+
+    .hero{
+        padding:
+            120px 17px 55px;
+    }
+
+    .hero h1{
+        font-size:52px;
+
+        letter-spacing:-3px;
+    }
+
+    .hero p{
+        font-size:13px;
+    }
+
+    .mythic{
+        right:-190px;
+
+        top:260px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+
+        padding:
+            0 15px 40px;
+    }
+
+    .section{
+        padding:
+            55px 15px;
+    }
+
+    .services{
+        grid-template-columns:
+            repeat(2,1fr);
+
+        gap:9px;
+    }
+
+    .service{
+        min-height:180px;
+
+        padding:17px;
+    }
+
+    .icon{
+        width:45px;
+        height:45px;
+
+        font-size:20px;
+
+        margin-bottom:17px;
+    }
+
+    .owner{
+        margin:
+            10px 15px 60px;
+
+        padding:40px 20px;
+    }
+
+    .ownerPhoto{
+        width:145px;
+        height:145px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+<div class="nav">
+
+    <div class="brand">
+
+        <div class="logo">
+            ⚡
+        </div>
+
+        <div class="brandText">
+            SAWARIYA SETH
+            <small>SERVICE CENTER</small>
+        </div>
+
+    </div>
+
+    <a href="/login" class="login">
+        Login →
+    </a>
+
+</div>
+
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+<div class="heroContent">
+
+    <div class="badge">
+        <span>✦</span>
+        THE NEXT GENERATION SERVICE PLATFORM
+    </div>
+
+    <h1>
+        Your Home.<br>
+        Your Service.<br>
+        <span>One Place.</span>
+    </h1>
+
+    <p>
+        RO, AC, Fridge, Washing Machine,
+        Cooler, Electrician और Plumber —
+        आपकी रोजमर्रा की service जरूरतों के लिए
+        Sawariya Seth Service Center.
+    </p>
+
+    <div class="buttons">
+
+        <a href="/login" class="book">
+            ⚡ Book a Service
+        </a>
+
+        <a href="#services" class="servicesBtn">
+            Explore Services ↓
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="mythic"></div>
+
+</section>
+
+
+<!-- STATS -->
+
+<div class="stats">
+
+    <div class="stat">
+        <b>7+</b>
+        <span>Professional Services</span>
+    </div>
+
+    <div class="stat">
+        <b>⚡ FAST</b>
+        <span>Easy Service Booking</span>
+    </div>
+
+    <div class="stat">
+        <b>📍 LIVE</b>
+        <span>Technician Tracking</span>
+    </div>
+
+</div>
+
+
+<!-- SERVICES -->
+
+<section class="section" id="services">
+
+    <div class="label">
+        THE SERVICE GUILD
+    </div>
+
+    <h2 class="heading">
+        हर काम के लिए<br>
+        एक Expert.
+    </h2>
+
+    <p class="sub">
+        अपनी जरूरत के अनुसार service चुनें।
+    </p>
+
+
+    <div class="services">
+
+        <div class="service">
+            <div class="icon">💧</div>
+            <h3>RO Repairing</h3>
+            <p>
+                RO Repair • Filter • Membrane • Maintenance
+            </p>
+        </div>
+
+        <div class="service">
+            <div class="icon">❄️</div>
+            <h3>AC Repairing</h3>
+            <p>
+                AC Service • Repair • Checking
+            </p>
+        </div>
+
+        <div class="service">
+            <div class="icon">🧊</div>
+            <h3>Fridge Repair</h3>
+            <p>
+                Fridge Checking • Repair • Service
+            </p>
+        </div>
+
+        <div class="service">
+            <div class="icon">🫧</div>
+            <h3>Washing Machine</h3>
+            <p>
+                Repair • Service • Maintenance
+            </p>
+        </div>
+
+        <div class="service">
+            <div class="icon">🌬️</div>
+            <h3>Cooler Repair</h3>
+            <p>
+                Cooler Repair • Service
+            </p>
+        </div>
+
+        <div class="service">
+            <div class="icon">⚡</div>
+            <h3>Electrician</h3>
+            <p>
+                Home Electrical Services
+            </p>
+        </div>
+
+        <div class="service">
+            <div class="icon">🔧</div>
+            <h3>Plumber</h3>
+            <p>
+                Plumbing • Pipe • Water Service
+            </p>
+        </div>
+
+        <div class="service">
+            <div class="icon">✦</div>
+            <h3>More Services</h3>
+            <p>
+                और professional services जल्द।
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- HOW IT WORKS -->
+
+<section class="section">
+
+    <div class="label">
+        SIMPLE PROCESS
+    </div>
+
+    <h2 class="heading">
+        सिर्फ 3 Steps.
+    </h2>
+
+    <p class="sub">
+        Service booking को आसान और fast रखा गया है।
+    </p>
+
+
+    <div class="steps">
+
+        <div class="step">
+
+            <div class="number">
+                01 / CHOOSE
+            </div>
+
+            <h3>
+                Service चुनें
+            </h3>
+
+            <p>
+                अपनी जरूरत के अनुसार
+                service select करें।
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="number">
+                02 / BOOK
+            </div>
+
+            <h3>
+                Booking करें
+            </h3>
+
+            <p>
+                Address और जरूरी details
+                देकर booking request भेजें।
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="number">
+                03 / TRACK
+            </div>
+
+            <h3>
+                Technician Track करें
+            </h3>
+
+            <p>
+                Technician की progress और
+                location को track करें।
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- OWNER -->
+
+<section class="owner">
+
+    <div class="ownerLabel">
+        FOUNDER & OWNER
+    </div>
+
+    <div class="crown">
+        ♛
+    </div>
+
+    <h2>
+        Chetan Mittal
+    </h2>
+
+    <p>
+        Founder & Owner<br>
+        Sawariya Seth Service Center
+    </p>
+
+</section>
+
+
+<!-- CTA -->
+
+<div class="cta">
+
+    <h2>
+        आपका काम,
+        हमारी जिम्मेदारी.
+    </h2>
+
+    <p>
+        आज ही अपनी service booking शुरू करें।
+    </p>
+
+    <a href="/login">
+        Start Booking →
+    </a>
+
+</div>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <strong>
+        ⚡ SAWARIYA SETH SERVICE CENTER
+    </strong>
+
+    <br><br>
+
+    आपकी Service • हमारी जिम्मेदारी
+
+    <br><br>
+
+    © 2026 Sawariya Seth Service Center
+
+</footer>
+
+</body>
+</html>

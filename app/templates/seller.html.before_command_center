@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Seller Product Hub | Sawariya Seth</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+    background:#05060a;
+    color:#fff;
+    font-family:Arial,sans-serif;
+}
+a{text-decoration:none;color:inherit}
+.wrap{max-width:1200px;margin:auto;padding:20px}
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+}
+.brand{
+    font-size:22px;
+    font-weight:900;
+}
+.brand span{color:#ffb52e}
+.badge{
+    padding:8px 13px;
+    border-radius:30px;
+    background:#151827;
+    border:1px solid #2d334b;
+    color:#aaa;
+    font-size:12px;
+}
+.grid{
+    display:grid;
+    grid-template-columns:220px 1fr;
+    gap:18px;
+}
+.side,.card{
+    background:#0d1018;
+    border:1px solid #202536;
+    border-radius:20px;
+    padding:18px;
+}
+.side{
+    height:max-content;
+    position:sticky;
+    top:15px;
+}
+.side button{
+    width:100%;
+    border:0;
+    background:transparent;
+    color:#aaa;
+    padding:13px;
+    text-align:left;
+    border-radius:12px;
+    margin-bottom:6px;
+    cursor:pointer;
+}
+.side button:hover,.side button.active{
+    background:#191d2b;
+    color:#fff;
+}
+.hero{
+    padding:25px;
+    border-radius:22px;
+    background:linear-gradient(135deg,#151a2b,#0d1018);
+    border:1px solid #2a3045;
+    margin-bottom:18px;
+}
+.hero h1{font-size:32px;margin-bottom:8px}
+.hero p{color:#858da0;font-size:13px}
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin:18px 0;
+}
+.stat{
+    padding:18px;
+    border-radius:17px;
+    background:#0d1018;
+    border:1px solid #202536;
+}
+.stat b{
+    display:block;
+    font-size:25px;
+    margin-bottom:5px;
+    color:#ffbd45;
+}
+.stat span{color:#777;font-size:11px}
+.section{display:none}
+.section.active{display:block}
+.card{margin-bottom:18px}
+.card h2{font-size:19px;margin-bottom:15px}
+.formgrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+input,textarea,select{
+    width:100%;
+    background:#080a10;
+    color:#fff;
+    border:1px solid #2a3040;
+    border-radius:12px;
+    padding:13px;
+    outline:none;
+}
+textarea{min-height:100px;resize:vertical}
+.full{grid-column:1/-1}
+label{
+    display:block;
+    color:#8991a3;
+    font-size:11px;
+    margin-bottom:6px;
+}
+.btn{
+    border:0;
+    border-radius:12px;
+    padding:12px 16px;
+    cursor:pointer;
+    font-weight:800;
+}
+.primary{
+    background:linear-gradient(135deg,#ff8a00,#ffd05a);
+    color:#111;
+}
+.secondary{
+    background:#191e2c;
+    color:#fff;
+    border:1px solid #30374d;
+}
+.danger{background:#401a22;color:#ff9da8}
+.products{
+    display:grid;
+    gap:12px;
+}
+.product{
+    display:grid;
+    grid-template-columns:90px 1fr auto;
+    gap:15px;
+    align-items:center;
+    padding:14px;
+    background:#090c13;
+    border:1px solid #202536;
+    border-radius:16px;
+}
+.photo{
+    width:90px;
+    height:90px;
+    border-radius:14px;
+    background:#171b26;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    color:#666;
+}
+.photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+.pname{font-weight:900;font-size:16px}
+.meta{
+    color:#7e8799;
+    font-size:12px;
+    line-height:1.8;
+}
+.status{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:900;
+    margin-top:5px;
+}
+.pending{background:#3d3012;color:#ffd45a}
+.approved{background:#123b29;color:#69ffb0}
+.rejected{background:#411b24;color:#ff8f9d}
+.actions{
+    display:flex;
+    gap:7px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+}
+.empty{
+    text-align:center;
+    color:#777;
+    padding:35px;
+}
+.msg{
+    margin-top:10px;
+    color:#ffca63;
+    font-size:12px;
+}
+@media(max-width:800px){
+    .grid{grid-template-columns:1fr}
+    .side{position:static}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .formgrid{grid-template-columns:1fr}
+    .full{grid-column:auto}
+}
+@media(max-width:550px){
+    .product{grid-template-columns:70px 1fr}
+    .photo{width:70px;height:70px}
+    .actions{grid-column:1/-1;justify-content:flex-start}
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<div class="top">
+    <div class="brand">SAWARIYA <span>SELLER HUB</span></div>
+    <div class="badge">SELLER CONTROL CENTER</div>
+</div>
+
+<div class="grid">
+
+<aside class="side">
+    <button class="active" onclick="showSection('dashboard',this)">⌂ Dashboard</button>
+    <button onclick="showSection('add',this)">＋ Add Product</button>
+    <button onclick="showSection('products',this)">▣ My Products</button>
+    <button onclick="showSection('orders',this)">🛒 Orders</button>
+    <button onclick="showSection('kyc',this)">◈ KYC Center</button>
+    <button onclick="location.href='/auth/login'">⇥ Logout</button>
+</aside>
+
+<main>
+
+<section id="dashboard" class="section active">
+<div class="hero">
+    <h1>Product Hub</h1>
+    <p>Manage products, approval, stock, orders and seller marketplace activity.</p>
+</div>
+
+<div class="stats">
+    <div class="stat"><b id="total">0</b><span>TOTAL PRODUCTS</span></div>
+    <div class="stat"><b id="pending">0</b><span>PENDING</span></div>
+    <div class="stat"><b id="approved">0</b><span>APPROVED</span></div>
+    <div class="stat"><b id="rejected">0</b><span>REJECTED</span></div>
+</div>
+
+<div class="card">
+    <h2>⚡ Quick Actions</h2>
+    <button class="btn primary" onclick="showSection('add')">＋ Add Product</button>
+    <button class="btn secondary" onclick="showSection('products');loadProducts()">↻ Refresh Products</button>
+</div>
+</section>
+
+<section id="add" class="section">
+<div class="card">
+<h2>＋ Add New Product</h2>
+
+<div class="formgrid">
+
+<div>
+<label>PRODUCT NAME</label>
+<input id="name" placeholder="Example: RO Membrane">
+</div>
+
+<div>
+<label>CATEGORY</label>
+<select id="category">
+<option value="">Select Category</option>
+<option>RO Parts</option>
+<option>AC Parts</option>
+<option>Fridge Parts</option>
+<option>Washing Machine Parts</option>
+<option>Cooler Parts</option>
+<option>Electrical</option>
+<option>Plumbing</option>
+<option>Other</option>
+</select>
+</div>
+
+<div>
+<label>PRICE ₹</label>
+<input id="price" type="number" min="1" placeholder="499">
+</div>
+
+<div>
+<label>STOCK</label>
+<input id="stock" type="number" min="0" placeholder="10">
+</div>
+
+<div class="full">
+<label>PRODUCT PHOTO URL</label>
+<input id="photo" placeholder="https://example.com/product.jpg">
+</div>
+
+<div class="full">
+<label>DESCRIPTION</label>
+<textarea id="description" placeholder="Product details..."></textarea>
+</div>
+
+<div class="full">
+<button class="btn primary" onclick="addProduct()">SUBMIT FOR OWNER APPROVAL</button>
+<div id="addMsg" class="msg"></div>
+</div>
+
+</div>
+</div>
+</section>
+
+<section id="products" class="section">
+<div class="card">
+<div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+<h2>▣ My Products</h2>
+<button class="btn secondary" onclick="loadProducts()">↻ Refresh</button>
+</div>
+<div id="productsList" class="products">
+<div class="empty">Loading...</div>
+</div>
+</div>
+</section>
+
+<section id="orders" class="section">
+<div class="card">
+<h2>🛒 Orders</h2>
+<div id="ordersList" class="empty">Loading orders...</div>
+</div>
+</section>
+
+<section id="kyc" class="section">
+<div class="card">
+<h2>◈ KYC Center</h2>
+<div id="kycList" class="empty">Loading KYC...</div>
+</div>
+</section>
+
+</main>
+</div>
+</div>
+
+<script>
+async function api(url,options={}){
+    const r=await fetch(url,{
+        credentials:"same-origin",
+        ...options,
+        headers:{
+            "Content-Type":"application/json",
+            ...(options.headers||{})
+        }
+    });
+
+    let data={};
+    try{data=await r.json()}catch(e){}
+
+    if(!r.ok) throw new Error(data.error||("Request failed: "+r.status));
+    return data;
+}
+
+function showSection(id,btn){
+    document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+
+    document.querySelectorAll(".side button").forEach(x=>x.classList.remove("active"));
+    if(btn) btn.classList.add("active");
+
+    if(id==="products") loadProducts();
+    if(id==="orders") loadOrders();
+    if(id==="kyc") loadKyc();
+}
+
+async function loadProducts(){
+    const box=document.getElementById("productsList");
+
+    try{
+        const data=await api("/seller/marketplace/products");
+        const list=data.products||[];
+
+        document.getElementById("total").textContent=list.length;
+        document.getElementById("pending").textContent=
+            list.filter(x=>x.approval_status==="pending").length;
+        document.getElementById("approved").textContent=
+            list.filter(x=>x.approval_status==="approved").length;
+        document.getElementById("rejected").textContent=
+            list.filter(x=>x.approval_status==="rejected").length;
+
+        if(!list.length){
+            box.innerHTML='<div class="empty">📦 No products yet.</div>';
+            return;
+        }
+
+        box.innerHTML=list.map(p=>`
+        <div class="product">
+
+            <div class="photo">
+                ${
+                    p.photo_url
+                    ? `<img src="${escapeHtml(p.photo_url)}" onerror="this.style.display='none'">`
+                    : "📦"
+                }
+            </div>
+
+            <div>
+                <div class="pname">${escapeHtml(p.name)}</div>
+
+                <div class="meta">
+                    Category: ${escapeHtml(p.category||"Other")}<br>
+                    Price: ₹${Number(p.price||0).toFixed(2)}<br>
+                    Stock: ${p.stock}<br>
+                    ${escapeHtml(p.description||"")}
+                </div>
+
+                <span class="status ${p.approval_status}">
+                    ${(p.approval_status||"pending").toUpperCase()}
+                </span>
+            </div>
+
+            <div class="actions">
+                <button class="btn secondary"
+                    onclick="editProduct(${p.id},${JSON.stringify(p.name)},${Number(p.price)},${Number(p.stock)})">
+                    Edit
+                </button>
+
+                <button class="btn danger"
+                    onclick="deleteProduct(${p.id})">
+                    Delete
+                </button>
+            </div>
+
+        </div>
+        `).join("");
+
+    }catch(e){
+        box.innerHTML=`<div class="empty">❌ ${escapeHtml(e.message)}</div>`;
+    }
+}
+
+async function addProduct(){
+
+    const payload={
+        name:document.getElementById("name").value.trim(),
+        description:document.getElementById("description").value.trim(),
+        category:document.getElementById("category").value,
+        price:document.getElementById("price").value,
+        stock:document.getElementById("stock").value,
+        photo_url:document.getElementById("photo").value.trim()
+    };
+
+    const msg=document.getElementById("addMsg");
+
+    if(!payload.name||!payload.price){
+        msg.textContent="Product name और price भरें.";
+        return;
+    }
+
+    try{
+        const data=await api("/seller/marketplace/products",{
+            method:"POST",
+            body:JSON.stringify(payload)
+        });
+
+        msg.textContent="✅ Product Owner approval के लिए भेज दिया गया.";
+
+        document.getElementById("name").value="";
+        document.getElementById("description").value="";
+        document.getElementById("category").value="";
+        document.getElementById("price").value="";
+        document.getElementById("stock").value="";
+        document.getElementById("photo").value="";
+
+        loadProducts();
+
+    }catch(e){
+        msg.textContent="❌ "+e.message;
+    }
+}
+
+async function deleteProduct(id){
+    if(!confirm("Product disable करना है?")) return;
+
+    try{
+        await api("/seller/marketplace/products/"+id,{
+            method:"DELETE"
+        });
+
+        loadProducts();
+    }catch(e){
+        alert(e.message);
+    }
+}
+
+async function editProduct(id,name,price,stock){
+
+    const newName=prompt("Product name:",name);
+    if(newName===null)return;
+
+    const newPrice=prompt("Price:",price);
+    if(newPrice===null)return;
+
+    const newStock=prompt("Stock:",stock);
+    if(newStock===null)return;
+
+    try{
+        await api("/seller/marketplace/products/"+id,{
+            method:"PUT",
+            body:JSON.stringify({
+                name:newName,
+                price:newPrice,
+                stock:newStock
+            })
+        });
+
+        alert("Product updated and sent for owner re-approval.");
+        loadProducts();
+
+    }catch(e){
+        alert(e.message);
+    }
+}
+
+async function loadOrders(){
+    const box=document.getElementById("ordersList");
+
+    try{
+        const data=await api("/seller/marketplace/orders");
+        const list=data.orders||[];
+
+        if(!list.length){
+            box.innerHTML="🛒 No orders yet.";
+            return;
+        }
+
+        box.innerHTML=list.map(o=>`
+            <div class="card">
+                <b>Order #${o.id}</b>
+                <div class="meta">
+                    Total: ₹${o.total_amount||0}<br>
+                    Payment: ${escapeHtml(o.payment_status||"pending")}<br>
+                    Status: ${escapeHtml(o.order_status||"pending")}<br>
+                    Address: ${escapeHtml(o.delivery_address||"")}
+                </div>
+            </div>
+        `).join("");
+
+    }catch(e){
+        box.textContent="❌ "+e.message;
+    }
+}
+
+async function loadKyc(){
+    const box=document.getElementById("kycList");
+
+    try{
+        const data=await api("/seller/marketplace/kyc");
+        box.innerHTML=`
+            <div class="meta">
+                KYC status: ${escapeHtml(JSON.stringify(data))}
+            </div>
+        `;
+    }catch(e){
+        box.textContent="❌ "+e.message;
+    }
+}
+
+function escapeHtml(v){
+    return String(v??"")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+loadProducts();
+</script>
+
+</body>
+</html>

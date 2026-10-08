@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>New Account | Sawariya Seth</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+    min-height:100vh;
+    background:#050505;
+    color:#fff;
+    font-family:Arial,sans-serif;
+    padding:25px 15px;
+}
+
+.container{
+    max-width:520px;
+    margin:auto;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.logo{
+    width:60px;
+    height:60px;
+    margin:auto;
+    display:grid;
+    place-items:center;
+    border-radius:19px;
+    font-size:27px;
+    background:linear-gradient(135deg,#ff6500,#ffc04d);
+    box-shadow:0 0 40px rgba(255,120,0,.25);
+}
+
+.header h1{
+    font-size:25px;
+    margin-top:13px;
+}
+
+.header p{
+    color:#777;
+    font-size:11px;
+    margin-top:6px;
+}
+
+.roles{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:9px;
+    margin-bottom:15px;
+}
+
+.role{
+    padding:15px 7px;
+    text-align:center;
+    border-radius:16px;
+    background:#101116;
+    border:1px solid rgba(255,255,255,.08);
+    cursor:pointer;
+}
+
+.role.active{
+    border-color:#ff8a20;
+    background:rgba(255,120,0,.12);
+}
+
+.role span{
+    display:block;
+    font-size:23px;
+    margin-bottom:6px;
+}
+
+.role strong{
+    font-size:11px;
+}
+
+.card{
+    padding:25px 21px;
+    border-radius:27px;
+    background:#111217;
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.title{
+    text-align:center;
+    margin-bottom:22px;
+}
+
+.title h2{
+    font-size:20px;
+}
+
+.title p{
+    color:#777;
+    font-size:11px;
+    margin-top:6px;
+}
+
+label{
+    display:block;
+    color:#bbb;
+    font-size:11px;
+    font-weight:bold;
+    margin:13px 0 7px;
+}
+
+input,select,textarea{
+    width:100%;
+    padding:13px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.09);
+    background:#08090d;
+    color:white;
+    outline:none;
+    font-size:13px;
+}
+
+textarea{
+    min-height:80px;
+    resize:vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    border-color:#ff8a20;
+}
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.section{
+    margin-top:22px;
+    padding-top:18px;
+    border-top:1px solid rgba(255,255,255,.07);
+}
+
+.sectionTitle{
+    color:#ffab38;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:1px;
+    margin-bottom:5px;
+}
+
+.sectionText{
+    color:#666;
+    font-size:9px;
+    margin-bottom:10px;
+}
+
+.submit{
+    width:100%;
+    margin-top:24px;
+    padding:15px;
+    border:0;
+    border-radius:14px;
+    background:linear-gradient(135deg,#ff6500,#ffb83d);
+    color:white;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.note{
+    margin-top:13px;
+    padding:11px;
+    border-radius:10px;
+    background:rgba(255,160,40,.06);
+    color:#9a8a72;
+    font-size:10px;
+    line-height:1.5;
+}
+
+.message{
+    display:none;
+    margin-top:13px;
+    padding:11px;
+    border-radius:10px;
+    text-align:center;
+    font-size:11px;
+}
+
+.back{
+    display:block;
+    text-align:center;
+    margin-top:18px;
+    color:#777;
+    font-size:11px;
+}
+
+@media(max-width:430px){
+    .row{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+    <div class="logo">⚡</div>
+
+    <h1>New Account</h1>
+
+    <p>SAWARIYA SETH SERVICE CENTER</p>
+
+</div>
+
+
+<div class="roles">
+
+    <div class="role active" data-role="customer">
+        <span>👤</span>
+        <strong>Customer</strong>
+    </div>
+
+    <div class="role" data-role="technician">
+        <span>🔧</span>
+        <strong>Technician</strong>
+    </div>
+
+    <div class="role" data-role="seller">
+        <span>🛒</span>
+        <strong>Seller</strong>
+    </div>
+
+</div>
+
+
+<div class="card">
+
+<div class="title">
+
+    <h2 id="formTitle">
+        Customer Registration
+    </h2>
+
+    <p id="formSubtitle">
+        Service booking के लिए account बनाएं
+    </p>
+
+</div>
+
+
+<form id="registerForm">
+
+    <!-- COMMON -->
+
+    <label>पूरा नाम</label>
+
+    <input
+        id="name"
+        type="text"
+        placeholder="अपना पूरा नाम"
+        required
+    >
+
+
+    <label>Mobile Number</label>
+
+    <input
+        id="phone"
+        type="tel"
+        inputmode="numeric"
+        maxlength="10"
+        placeholder="10 digit mobile number"
+        required
+    >
+
+
+    <label>Password</label>
+
+    <input
+        id="password"
+        type="password"
+        placeholder="कम से कम 8 characters"
+        required
+    >
+
+
+    <label>पूरा पता</label>
+
+    <textarea
+        id="address"
+        placeholder="House / Street / Area"
+        required
+    ></textarea>
+
+
+    <div class="row">
+
+        <div>
+            <label>City</label>
+            <input
+                id="city"
+                type="text"
+                placeholder="City"
+                required
+            >
+        </div>
+
+        <div>
+            <label>PIN Code</label>
+            <input
+                id="pincode"
+                type="text"
+                inputmode="numeric"
+                maxlength="6"
+                placeholder="PIN"
+                required
+            >
+        </div>
+
+    </div>
+
+
+    <!-- TECHNICIAN -->
+
+    <div
+        id="technicianFields"
+        class="section"
+        style="display:none"
+    >
+
+        <div class="sectionTitle">
+            🔧 TECHNICIAN DETAILS
+        </div>
+
+        <div class="sectionText">
+            Technician verification के लिए जानकारी
+        </div>
+
+
+        <label>Service Skill</label>
+
+        <select id="skill">
+
+            <option value="">
+                Select Service
+            </option>
+
+            <option>RO Repairing</option>
+            <option>AC Repairing</option>
+            <option>Fridge Repairing</option>
+            <option>Washing Machine Repairing</option>
+            <option>Cooler Repairing</option>
+            <option>Electrician</option>
+            <option>Plumber</option>
+
+        </select>
+
+
+        <label>Experience</label>
+
+        <input
+            id="experience"
+            type="text"
+            placeholder="Example: 3 Years"
+        >
+
+    </div>
+
+
+    <!-- SELLER -->
+
+    <div
+        id="sellerFields"
+        class="section"
+        style="display:none"
+    >
+
+        <div class="sectionTitle">
+            🛒 SELLER / BUSINESS DETAILS
+        </div>
+
+        <div class="sectionText">
+            Seller verification और business details
+        </div>
+
+
+        <label>Business / Shop Name</label>
+
+        <input
+            id="business"
+            type="text"
+            placeholder="Business Name"
+        >
+
+
+        <label>GSTIN</label>
+
+        <input
+            id="gst"
+            type="text"
+            placeholder="GSTIN (यदि लागू हो)"
+        >
+
+
+        <label>PAN Number</label>
+
+        <input
+            id="pan"
+            type="text"
+            placeholder="PAN Number"
+        >
+
+
+        <label>Product Category</label>
+
+        <input
+            id="category"
+            type="text"
+            placeholder="Example: RO Parts"
+        >
+
+    </div>
+
+
+    <div class="note">
+
+        🔐 Technician और Seller account
+        registration के बाद Owner verification/
+        approval के लिए जाएंगे।
+
+    </div>
+
+
+    <button class="submit" type="submit">
+        CREATE ACCOUNT →
+    </button>
+
+</form>
+
+
+<div id="message" class="message"></div>
+
+
+<a href="/login" class="back">
+    ← Already have an account? Login
+</a>
+
+</div>
+
+</div>
+
+
+<script>
+
+let selectedRole="customer";
+
+const roles=document.querySelectorAll(".role");
+
+const technicianFields=
+document.getElementById("technicianFields");
+
+const sellerFields=
+document.getElementById("sellerFields");
+
+const formTitle=
+document.getElementById("formTitle");
+
+const formSubtitle=
+document.getElementById("formSubtitle");
+
+
+roles.forEach(role=>{
+
+role.addEventListener("click",()=>{
+
+roles.forEach(x=>
+    x.classList.remove("active")
+);
+
+role.classList.add("active");
+
+selectedRole=
+role.dataset.role;
+
+
+technicianFields.style.display=
+selectedRole==="technician"
+? "block":"none";
+
+sellerFields.style.display=
+selectedRole==="seller"
+? "block":"none";
+
+
+if(selectedRole==="customer"){
+
+formTitle.textContent=
+"Customer Registration";
+
+formSubtitle.textContent=
+"Service booking के लिए account बनाएं";
+
+}
+
+else if(selectedRole==="technician"){
+
+formTitle.textContent=
+"Technician Registration";
+
+formSubtitle.textContent=
+"Technician verification के लिए register करें";
+
+}
+
+else{
+
+formTitle.textContent=
+"Seller Registration";
+
+formSubtitle.textContent=
+"अपने business के लिए seller account बनाएं";
+
+}
+
+});
+
+});
+
+
+document.getElementById("registerForm")
+.addEventListener("submit",async(e)=>{
+
+e.preventDefault();
+
+const message=
+document.getElementById("message");
+
+message.style.display="none";
+
+
+const payload={
+
+name:
+document.getElementById("name").value.trim(),
+
+phone:
+document.getElementById("phone").value.trim(),
+
+password:
+document.getElementById("password").value,
+
+role:selectedRole,
+
+address:
+document.getElementById("address").value.trim(),
+
+city:
+document.getElementById("city").value.trim(),
+
+pincode:
+document.getElementById("pincode").value.trim()
+
+};
+
+
+if(selectedRole==="technician"){
+
+payload.skill=
+document.getElementById("skill").value;
+
+payload.experience=
+document.getElementById("experience").value.trim();
+
+}
+
+
+if(selectedRole==="seller"){
+
+payload.business=
+document.getElementById("business").value.trim();
+
+payload.gst=
+document.getElementById("gst").value.trim();
+
+payload.pan=
+document.getElementById("pan").value.trim();
+
+payload.category=
+document.getElementById("category").value.trim();
+
+}
+
+
+try{
+
+const response=
+await fetch("/auth/register",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify(payload)
+
+});
+
+
+const result=
+await response.json();
+
+
+if(!response.ok){
+
+message.textContent=
+result.error ||
+"Registration failed";
+
+message.style.display="block";
+
+return;
+
+}
+
+
+message.style.display="block";
+
+message.style.color="#6ee7a0";
+
+message.style.background=
+"rgba(50,220,130,.08)";
+
+message.textContent=
+result.status==="pending"
+?
+"Account बन गया है। Owner approval के बाद login कर पाएंगे।"
+:
+"Account successfully created!";
+
+
+setTimeout(()=>{
+
+window.location.href="/login";
+
+},1800);
+
+
+}catch(error){
+
+message.textContent=
+"Server connection नहीं हो पाया।";
+
+message.style.display="block";
+
+}
+
+});
+
+</script>
+
+</body>
+</html>

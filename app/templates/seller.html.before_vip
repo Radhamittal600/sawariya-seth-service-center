@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sawariya Seller Center</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#070b18;
+    color:#fff;
+}
+.header{
+    padding:18px;
+    background:linear-gradient(135deg,#161032,#071d35);
+    border-bottom:1px solid #27365d;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+.brand{
+    font-size:22px;
+    font-weight:800;
+}
+.sub{
+    color:#9aa9c9;
+    font-size:12px;
+    margin-top:4px;
+}
+.container{
+    padding:16px;
+    max-width:1100px;
+    margin:auto;
+}
+.stats{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+.card{
+    background:rgba(18,25,49,.9);
+    border:1px solid #29365c;
+    border-radius:18px;
+    padding:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+.stat-title{
+    color:#8fa0c5;
+    font-size:12px;
+}
+.stat{
+    font-size:28px;
+    font-weight:800;
+    margin-top:7px;
+}
+h2{
+    font-size:18px;
+    margin:25px 0 12px;
+}
+button{
+    border:0;
+    border-radius:12px;
+    padding:11px 15px;
+    font-weight:700;
+    cursor:pointer;
+    margin:4px;
+}
+.primary{
+    background:#00d9ff;
+    color:#04101a;
+}
+.purple{
+    background:#8b5cf6;
+    color:white;
+}
+.red{
+    background:#ef4444;
+    color:white;
+}
+.green{
+    background:#22c55e;
+    color:#04100a;
+}
+input,select,textarea{
+    width:100%;
+    padding:12px;
+    margin:6px 0;
+    border-radius:10px;
+    border:1px solid #35456f;
+    background:#0b1225;
+    color:white;
+}
+.product,.order{
+    margin-top:10px;
+    padding:14px;
+    border-radius:14px;
+    background:#0d152b;
+    border:1px solid #27365d;
+}
+.badge{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:11px;
+    background:#27365d;
+}
+.pending{background:#8a6415}
+.approved{background:#17663c}
+.rejected{background:#722b38}
+.hidden{display:none}
+.message{
+    margin-top:10px;
+    padding:10px;
+    border-radius:10px;
+    background:#111c38;
+}
+@media(min-width:700px){
+    .stats{grid-template-columns:repeat(4,1fr)}
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="brand">🛍️ Sawariya Seller Center</div>
+    <div class="sub">Seller Marketplace • Products • Orders • KYC</div>
+</header>
+
+<main class="container">
+
+<section class="stats">
+    <div class="card">
+        <div class="stat-title">MY PRODUCTS</div>
+        <div class="stat" id="productCount">0</div>
+    </div>
+
+    <div class="card">
+        <div class="stat-title">APPROVED</div>
+        <div class="stat" id="approvedCount">0</div>
+    </div>
+
+    <div class="card">
+        <div class="stat-title">PENDING</div>
+        <div class="stat" id="pendingCount">0</div>
+    </div>
+
+    <div class="card">
+        <div class="stat-title">ORDERS</div>
+        <div class="stat" id="orderCount">0</div>
+    </div>
+</section>
+
+<section class="card">
+    <h2>➕ Add Product</h2>
+
+    <input id="pName" placeholder="Product name">
+    <input id="pCategory" placeholder="Category">
+    <textarea id="pDescription" placeholder="Description"></textarea>
+    <input id="pPrice" type="number" min="1" placeholder="Price ₹">
+    <input id="pStock" type="number" min="0" placeholder="Stock">
+
+    <button class="primary" onclick="addProduct()">Submit Product</button>
+
+    <div id="productMessage"></div>
+</section>
+
+<h2>📦 My Products</h2>
+<section id="products"></section>
+
+<h2>🛒 Orders</h2>
+<section id="orders"></section>
+
+<h2>🪪 KYC</h2>
+<section class="card" id="kyc">
+    Loading KYC...
+</section>
+
+</main>
+
+<script>
+
+const esc = value =>
+    String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+async function api(url, options={}){
+
+    const response = await fetch(url,{
+        credentials:"same-origin",
+        headers:{
+            "Content-Type":"application/json",
+            ...(options.headers || {})
+        },
+        ...options
+    });
+
+    let data={};
+
+    try{
+        data=await response.json();
+    }catch(e){}
+
+    if(!response.ok){
+        throw new Error(data.error || "Request failed");
+    }
+
+    return data;
+}
+
+async function loadProducts(){
+
+    try{
+
+        const data=await api("/seller/marketplace/products");
+
+        const list=data.products || [];
+
+        document.getElementById("productCount").textContent=list.length;
+
+        document.getElementById("approvedCount").textContent=
+            list.filter(x=>x.approval_status==="approved").length;
+
+        document.getElementById("pendingCount").textContent=
+            list.filter(x=>x.approval_status==="pending").length;
+
+        const box=document.getElementById("products");
+
+        if(!list.length){
+            box.innerHTML='<div class="card">No products yet.</div>';
+            return;
+        }
+
+        box.innerHTML=list.map(p=>`
+
+            <div class="product">
+
+                <b>${esc(p.name)}</b>
+
+                <div class="sub">
+                    ${esc(p.category || "General")}
+                </div>
+
+                <p>${esc(p.description || "")}</p>
+
+                <b>₹${esc(p.price)}</b>
+                &nbsp; Stock: ${esc(p.stock)}
+
+                <br><br>
+
+                <span class="badge ${esc(p.approval_status)}">
+                    ${esc(p.approval_status)}
+                </span>
+
+                ${
+                    p.active
+                    ? '<span class="badge approved">LIVE</span>'
+                    : '<span class="badge">INACTIVE</span>'
+                }
+
+            </div>
+
+        `).join("");
+
+    }catch(e){
+
+        document.getElementById("products").innerHTML=
+            `<div class="card">${esc(e.message)}</div>`;
+
+    }
+}
+
+async function addProduct(){
+
+    const data={
+        name:document.getElementById("pName").value.trim(),
+        category:document.getElementById("pCategory").value.trim(),
+        description:document.getElementById("pDescription").value.trim(),
+        price:document.getElementById("pPrice").value,
+        stock:document.getElementById("pStock").value
+    };
+
+    try{
+
+        const result=await api(
+            "/seller/marketplace/products",
+            {
+                method:"POST",
+                body:JSON.stringify(data)
+            }
+        );
+
+        document.getElementById("productMessage").innerHTML=
+            `<div class="message">✅ ${esc(result.message)}</div>`;
+
+        document.getElementById("pName").value="";
+        document.getElementById("pCategory").value="";
+        document.getElementById("pDescription").value="";
+        document.getElementById("pPrice").value="";
+        document.getElementById("pStock").value="";
+
+        loadProducts();
+
+    }catch(e){
+
+        document.getElementById("productMessage").innerHTML=
+            `<div class="message">❌ ${esc(e.message)}</div>`;
+
+    }
+}
+
+async function loadOrders(){
+
+    try{
+
+        const data=await api("/seller/marketplace/orders");
+
+        const list=data.orders || [];
+
+        document.getElementById("orderCount").textContent=list.length;
+
+        const box=document.getElementById("orders");
+
+        if(!list.length){
+            box.innerHTML='<div class="card">No orders yet.</div>';
+            return;
+        }
+
+        box.innerHTML=list.map(o=>`
+
+            <div class="order">
+
+                <b>Order #${esc(o.id)}</b>
+
+                <p>
+                    Total: <b>₹${esc(o.total_amount)}</b>
+                </p>
+
+                <span class="badge">
+                    ${esc(o.order_status)}
+                </span>
+
+                <span class="badge">
+                    Payment: ${esc(o.payment_status)}
+                </span>
+
+                <br>
+
+                <button class="green"
+                    onclick="updateOrder(${Number(o.id)},'processing')">
+                    Processing
+                </button>
+
+                <button class="purple"
+                    onclick="updateOrder(${Number(o.id)},'shipped')">
+                    Shipped
+                </button>
+
+                <button class="primary"
+                    onclick="updateOrder(${Number(o.id)},'delivered')">
+                    Delivered
+                </button>
+
+            </div>
+
+        `).join("");
+
+    }catch(e){
+
+        document.getElementById("orders").innerHTML=
+            `<div class="card">${esc(e.message)}</div>`;
+
+    }
+}
+
+async function updateOrder(id,status){
+
+    try{
+
+        await api(
+            `/seller/marketplace/orders/${id}/status`,
+            {
+                method:"POST",
+                body:JSON.stringify({status})
+            }
+        );
+
+        loadOrders();
+
+    }catch(e){
+
+        alert(e.message);
+
+    }
+}
+
+async function loadKyc(){
+
+    try{
+
+        const data=await api("/seller/marketplace/kyc");
+
+        const list=data.kyc || [];
+
+        if(!list.length){
+
+            document.getElementById("kyc").innerHTML=
+                "🪪 KYC document अभी submit नहीं हुआ है.";
+
+            return;
+        }
+
+        const latest=list[0];
+
+        document.getElementById("kyc").innerHTML=`
+
+            <b>KYC Status</b>
+
+            <p>
+                <span class="badge ${esc(latest.status)}">
+                    ${esc(latest.status)}
+                </span>
+            </p>
+
+            <div class="sub">
+                Document: ${esc(latest.document_type)}
+            </div>
+
+            ${
+                latest.rejection_reason
+                ? `<p>Reason: ${esc(latest.rejection_reason)}</p>`
+                : ""
+            }
+
+        `;
+
+    }catch(e){
+
+        document.getElementById("kyc").innerHTML=
+            `❌ ${esc(e.message)}`;
+
+    }
+}
+
+async function refresh(){
+
+    await Promise.all([
+        loadProducts(),
+        loadOrders(),
+        loadKyc()
+    ]);
+
+}
+
+refresh();
+
+setInterval(refresh,15000);
+
+</script>
+
+</body>
+</html>
