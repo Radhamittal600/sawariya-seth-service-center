@@ -1,5 +1,5 @@
 from app.routes.owner_master_v2 import owner_master_v2_bp
-from flask import Flask
+from flask import Flask, request
 from app.database.db import init_db
 
 
@@ -21,8 +21,22 @@ def create_app():
     app.config["VERSION"] = "1.0.0"
 
     app.config["SECRET_KEY"] = __import__("os").environ.get("SECRET_KEY", "dev-only-change-me")
+    app.config["SESSION_COOKIE_SECURE"] = True
+    app.config["SESSION_COOKIE_HTTPONLY"] = True
+    app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
     init_db()
+
+    @app.after_request
+    def add_security_headers(response):
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "SAMEORIGIN"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+        if request.is_secure:
+            response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        return response
+
 
     from app.routes.main import main_bp
     app.register_blueprint(main_bp)
