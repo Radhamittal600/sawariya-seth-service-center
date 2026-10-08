@@ -20,7 +20,7 @@ def create_app():
     app.config["APP_NAME"] = "Sawariya Seth Service Center"
     app.config["VERSION"] = "1.0.0"
 
-    app.config["SECRET_KEY"] = "change-this-later"
+    app.config["SECRET_KEY"] = __import__("os").environ.get("SECRET_KEY", "dev-only-change-me")
 
     init_db()
 
