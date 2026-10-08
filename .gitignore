@@ -10,3 +10,9 @@ customer-cookies.txt
 technician-cookies.txt
 seller-cookies.txt
 server.log
+
+# Local recovery backups
+*.before_postgres
+*.before_security_headers
+*.before_session_security
+*.before_rate_limit
