@@ -385,36 +385,50 @@ def technicians():
         return owner_denied()
 
     conn = db()
+    try:
+        user_cols = {
+            row["name"] for row in
+            conn.execute("PRAGMA table_info(users)").fetchall()
+        }
 
-    rows = conn.execute("""
-        SELECT
-            u.id,
-            u.name,
-            u.phone,
-            u.status,
-            u.skill,
-            u.experience,
-            COUNT(b.id) AS total_jobs,
-            SUM(
-                CASE
-                    WHEN b.status='completed' THEN 1
-                    ELSE 0
-                END
-            ) AS completed_jobs
-        FROM users u
-        LEFT JOIN bookings b
-            ON b.technician_id=u.id
-        WHERE u.role='technician'
-        GROUP BY u.id
-        ORDER BY u.id DESC
-    """).fetchall()
+        optional = {
+            "skill": "u.skill" if "skill" in user_cols else "'' AS skill",
+            "experience": "u.experience" if "experience" in user_cols else "'' AS experience",
+        }
 
-    conn.close()
+        has_bookings = table_exists(conn, "bookings")
+        if has_bookings:
+            job_fields = """
+                COUNT(b.id) AS total_jobs,
+                COALESCE(SUM(
+                    CASE WHEN b.status='completed' THEN 1 ELSE 0 END
+                ), 0) AS completed_jobs
+            """
+            join = "LEFT JOIN bookings b ON b.technician_id=u.id"
+        else:
+            job_fields = "0 AS total_jobs, 0 AS completed_jobs"
+            join = ""
 
-    return jsonify({
-        "ok": True,
-        "technicians": json_rows(rows)
-    })
+        rows = conn.execute(f"""
+            SELECT u.id, u.name, u.phone, u.status,
+                   {optional['skill']},
+                   {optional['experience']},
+                   {job_fields}
+            FROM users u
+            {join}
+            WHERE u.role='technician'
+            GROUP BY u.id
+            ORDER BY u.id DESC
+        """).fetchall()
+
+        return jsonify({"ok": True, "technicians": json_rows(rows)})
+    except Exception:
+        import logging
+        logging.exception("Owner technicians API failed")
+        return jsonify({"ok": False, "error": "Technician data temporarily unavailable"}), 500
+    finally:
+        conn.close()
+
 
 
 # =========================================================
@@ -427,30 +441,48 @@ def sellers():
         return owner_denied()
 
     conn = db()
+    try:
+        user_cols = {
+            row["name"] for row in
+            conn.execute("PRAGMA table_info(users)").fetchall()
+        }
 
-    rows = conn.execute("""
-        SELECT
-            u.id,
-            u.name,
-            u.phone,
-            u.status,
-            u.business_name,
-            u.gstin,
-            COUNT(sp.id) AS products
-        FROM users u
-        LEFT JOIN seller_products sp
-            ON sp.seller_id=u.id
-        WHERE u.role='seller'
-        GROUP BY u.id
-        ORDER BY u.id DESC
-    """).fetchall()
+        business_name = "u.business_name" if "business_name" in user_cols else "'' AS business_name"
+        gstin = "u.gstin" if "gstin" in user_cols else "'' AS gstin"
 
-    conn.close()
+        if table_exists(conn, "seller_products"):
+            product_join = """
+                LEFT JOIN seller_products sp ON sp.seller_id=u.id
+            """
+            product_count = "COUNT(DISTINCT sp.id)"
+        elif table_exists(conn, "products"):
+            product_join = """
+                LEFT JOIN products sp ON sp.seller_id=u.id
+            """
+            product_count = "COUNT(DISTINCT sp.id)"
+        else:
+            product_join = ""
+            product_count = "0"
 
-    return jsonify({
-        "ok": True,
-        "sellers": json_rows(rows)
-    })
+        rows = conn.execute(f"""
+            SELECT u.id, u.name, u.phone, u.status,
+                   {business_name}, {gstin},
+                   {product_count} AS products
+            FROM users u
+            {product_join}
+            WHERE u.role='seller'
+            GROUP BY u.id
+            ORDER BY u.id DESC
+        """).fetchall()
+
+        return jsonify({"ok": True, "sellers": json_rows(rows)})
+    except Exception:
+        import logging
+        logging.exception("Owner sellers API failed")
+        return jsonify({"ok": False, "error": "Seller data temporarily unavailable"}), 500
+    finally:
+        conn.close()
+
 
 
 # =========================================================
