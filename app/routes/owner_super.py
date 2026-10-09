@@ -1,3 +1,4 @@
+from app.auth import hash_password
 from flask import current_app, Blueprint, request, jsonify, session
 import sqlite3
 from pathlib import Path
@@ -405,6 +406,90 @@ def change_role(user_id):
 # =========================================================
 # TECHNICIANS
 # =========================================================
+
+
+
+# =========================================================
+# SUPER OWNER — CREATE ACCOUNT
+# =========================================================
+
+@owner_super_bp.post("/api/users/create")
+def create_account():
+    if not owner_only():
+        return owner_denied()
+
+    data = request.get_json(silent=True) or {}
+    name = str(data.get("name", "")).strip()
+    phone = str(data.get("phone", "")).strip()
+    password = str(data.get("password", ""))
+    role = str(data.get("role", "")).strip().lower()
+
+    if not name or not phone or not password:
+        return jsonify({"ok": False, "error": "Name, phone and password are required"}), 400
+    if role not in {"owner", "customer", "technician", "seller"}:
+        return jsonify({"ok": False, "error": "Invalid role"}), 400
+    if not phone.isdigit() or len(phone) != 10:
+        return jsonify({"ok": False, "error": "Phone must be 10 digits"}), 400
+    if len(password) < 8:
+        return jsonify({"ok": False, "error": "Password must be at least 8 characters"}), 400
+
+    conn = db()
+    try:
+        cols = {
+            row["name"]
+            for row in conn.execute("PRAGMA table_info(users)").fetchall()
+        }
+        required = {"id", "name", "phone", "password_hash", "role", "status"}
+        if not required.issubset(cols):
+            return jsonify({
+                "ok": False,
+                "error": "Database users table is missing required columns"
+            }), 500
+
+        if conn.execute("SELECT 1 FROM users WHERE phone=?", (phone,)).fetchone():
+            return jsonify({"ok": False, "error": "Phone number already registered"}), 409
+
+        values = {
+            "name": name,
+            "phone": phone,
+            "password_hash": hash_password(password),
+            "role": role,
+            "status": "approved" if role in {"owner", "customer"} else "pending",
+            "address": str(data.get("address", "")).strip(),
+            "city": str(data.get("city", "")).strip(),
+            "pincode": str(data.get("pincode", "")).strip(),
+            "skill": str(data.get("skill", "")).strip(),
+            "experience": str(data.get("experience", "")).strip(),
+            "business_name": str(data.get("business_name", "")).strip(),
+            "gstin": str(data.get("gstin", "")).strip().upper(),
+            "pan": str(data.get("pan", "")).strip().upper(),
+            "product_category": str(data.get("product_category", "")).strip()
+        }
+
+        # Insert only columns that actually exist in this database.
+        insert_values = {k: v for k, v in values.items() if k in cols}
+        names = list(insert_values)
+        sql = (
+            "INSERT INTO users (" + ", ".join('"' + n + '"' for n in names) +
+            ") VALUES (" + ", ".join("?" for _ in names) + ")"
+        )
+        cur = conn.execute(sql, [insert_values[n] for n in names])
+        conn.commit()
+
+        return jsonify({
+            "ok": True,
+            "message": "Account created",
+            "user_id": cur.lastrowid,
+            "role": role,
+            "status": values["status"]
+        }), 201
+    except Exception:
+        conn.rollback()
+        current_app.logger.exception("Super Owner create-account API failed")
+        return jsonify({"ok": False, "error": "Account creation failed; check server logs"}), 500
+    finally:
+        conn.close()
+
 
 @owner_super_bp.get("/api/technicians")
 def technicians():

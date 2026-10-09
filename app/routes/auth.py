@@ -8,6 +8,9 @@ auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 @auth_bp.post("/register")
 def register():
+    # OWNER_ONLY_REGISTRATION_LOCK
+    return jsonify({"error": "Account creation is available only through the Owner Panel."}), 403
+
     data = request.get_json(silent=True) or {}
 
     name = str(data.get("name", "")).strip()

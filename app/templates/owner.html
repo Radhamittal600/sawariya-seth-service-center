@@ -6901,5 +6901,77 @@ setTimeout(
 
 <!-- /SAWARIYA_OWNER_A_TO_Z_MASTER_UI -->
 
+
+<!-- SS_OWNER_CREATE_ACCOUNT_UI -->
+<script>
+(function () {
+  if (document.getElementById("ssOwnerCreateAccount")) return;
+
+  const wrap = document.createElement("section");
+  wrap.id = "ssOwnerCreateAccount";
+  wrap.style.cssText =
+    "margin:18px;padding:18px;border:1px solid #888;border-radius:12px;" +
+    "background:var(--card-bg,#fff);color:var(--text-color,#222);";
+  wrap.innerHTML = `
+    <h2>👑 Super Owner — Create Account</h2>
+    <p>Create customer, technician, seller or another owner account.</p>
+    <form id="ssOwnerCreateForm">
+      <label>Name<br><input name="name" required maxlength="100"></label><br><br>
+      <label>10-digit phone<br><input name="phone" inputmode="numeric" pattern="[0-9]{10}" required></label><br><br>
+      <label>Temporary password (minimum 8 characters)<br>
+        <input name="password" type="password" minlength="8" required autocomplete="new-password">
+      </label><br><br>
+      <label>Role<br>
+        <select name="role" required>
+          <option value="customer">Customer</option>
+          <option value="technician">Technician</option>
+          <option value="seller">Seller</option>
+          <option value="owner">Owner</option>
+        </select>
+      </label><br><br>
+      <label>Address (optional)<br><input name="address"></label><br><br>
+      <label>City (optional)<br><input name="city"></label><br><br>
+      <label>PIN code (optional)<br><input name="pincode" inputmode="numeric"></label><br><br>
+      <label>Technician skill (optional)<br><input name="skill"></label><br><br>
+      <label>Experience (optional)<br><input name="experience"></label><br><br>
+      <label>Business name (optional)<br><input name="business_name"></label><br><br>
+      <label>GSTIN (optional)<br><input name="gstin"></label><br><br>
+      <label>PAN (optional)<br><input name="pan"></label><br><br>
+      <label>Product category (optional)<br><input name="product_category"></label><br><br>
+      <button type="submit">Create Account</button>
+      <p id="ssOwnerCreateResult" role="status"></p>
+    </form>`;
+  document.body.appendChild(wrap);
+
+  document.getElementById("ssOwnerCreateForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const result = document.getElementById("ssOwnerCreateResult");
+    const payload = Object.fromEntries(new FormData(form).entries());
+    result.textContent = "Creating account…";
+
+    try {
+      const response = await fetch("/owner/super/api/users/create", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        result.textContent = data.error || ("Request failed: HTTP " + response.status);
+        return;
+      }
+      result.textContent =
+        "Created successfully. User ID: " + data.user_id +
+        " | Role: " + data.role + " | Status: " + data.status;
+      form.reset();
+    } catch (err) {
+      result.textContent = "Request failed. Check connection and server logs.";
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
