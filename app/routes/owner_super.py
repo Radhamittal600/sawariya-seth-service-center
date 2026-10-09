@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, session
+from flask import current_app, Blueprint, request, jsonify, session
 import sqlite3
 from pathlib import Path
 from datetime import datetime
@@ -214,23 +214,50 @@ def users():
         return owner_denied()
 
     conn = db()
+    try:
+        available = {
+            row["name"]
+            for row in conn.execute("PRAGMA table_info(users)").fetchall()
+        }
 
-    rows = conn.execute("""
-        SELECT id,name,phone,role,status,
-               address,city,pincode,skill,experience,
-               business_name,gstin,pan,product_category,
-               profile_photo,created_at
-        FROM users
-        ORDER BY id DESC
-        LIMIT 500
-    """).fetchall()
+        wanted = [
+            "id", "name", "phone", "role", "status",
+            "address", "city", "pincode", "skill", "experience",
+            "business_name", "gstin", "pan", "product_category",
+            "profile_photo", "created_at"
+        ]
 
-    conn.close()
+        required = {"id", "name", "phone", "role", "status"}
+        missing_required = required - available
+        if missing_required:
+            return jsonify({
+                "ok": False,
+                "error": "Required users columns are missing",
+                "missing_columns": sorted(missing_required)
+            }), 500
 
-    return jsonify({
-        "ok": True,
-        "users": json_rows(rows)
-    })
+        columns = [
+            f'"{col}"' if col in available else f'NULL AS "{col}"'
+            for col in wanted
+        ]
+
+        rows = conn.execute(
+            "SELECT " + ", ".join(columns) +
+            " FROM users ORDER BY id DESC LIMIT 500"
+        ).fetchall()
+
+        return jsonify({
+            "ok": True,
+            "users": json_rows(rows)
+        })
+    except Exception:
+        current_app.logger.exception("Super Owner users API failed")
+        return jsonify({
+            "ok": False,
+            "error": "Unable to load users. Check server logs."
+        }), 500
+    finally:
+        conn.close()
 
 
 @owner_super_bp.post("/user/<int:user_id>/<action>")
