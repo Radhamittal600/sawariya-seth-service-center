@@ -413,23 +413,24 @@ def technicians():
 
     conn = db()
     try:
-        user_cols = {
-            row["name"] for row in
-            conn.execute("PRAGMA table_info(users)").fetchall()
-        }
+        cols = {r["name"] for r in conn.execute("PRAGMA table_info(users)")}
+        if not {"id", "name", "phone", "role", "status"}.issubset(cols):
+            return jsonify({"ok": False, "error": "Required user columns missing"}), 500
 
-        optional = {
-            "skill": "u.skill" if "skill" in user_cols else "'' AS skill",
-            "experience": "u.experience" if "experience" in user_cols else "'' AS experience",
-        }
+        skill = 'u.skill' if "skill" in cols else "'' AS skill"
+        experience = 'u.experience' if "experience" in cols else "'' AS experience"
 
         has_bookings = table_exists(conn, "bookings")
-        if has_bookings:
+        booking_cols = (
+            {r["name"] for r in conn.execute("PRAGMA table_info(bookings)")}
+            if has_bookings else set()
+        )
+
+        if {"id", "technician_id", "status"}.issubset(booking_cols):
             job_fields = """
                 COUNT(b.id) AS total_jobs,
-                COALESCE(SUM(
-                    CASE WHEN b.status='completed' THEN 1 ELSE 0 END
-                ), 0) AS completed_jobs
+                COALESCE(SUM(CASE WHEN b.status='completed' THEN 1 ELSE 0 END),0)
+                AS completed_jobs
             """
             join = "LEFT JOIN bookings b ON b.technician_id=u.id"
         else:
@@ -437,26 +438,19 @@ def technicians():
             join = ""
 
         rows = conn.execute(f"""
-            SELECT u.id, u.name, u.phone, u.status,
-                   {optional['skill']},
-                   {optional['experience']},
-                   {job_fields}
-            FROM users u
-            {join}
+            SELECT u.id,u.name,u.phone,u.status,
+                   {skill},{experience},{job_fields}
+            FROM users u {join}
             WHERE u.role='technician'
             GROUP BY u.id
             ORDER BY u.id DESC
         """).fetchall()
-
         return jsonify({"ok": True, "technicians": json_rows(rows)})
     except Exception:
-        import logging
-        logging.exception("Owner technicians API failed")
-        return jsonify({"ok": False, "error": "Technician data temporarily unavailable"}), 500
+        current_app.logger.exception("Owner technicians API failed")
+        return jsonify({"ok": False, "error": "Technicians temporarily unavailable"}), 500
     finally:
         conn.close()
-
-
 
 # =========================================================
 # SELLERS
@@ -469,48 +463,45 @@ def sellers():
 
     conn = db()
     try:
-        user_cols = {
-            row["name"] for row in
-            conn.execute("PRAGMA table_info(users)").fetchall()
-        }
+        cols = {r["name"] for r in conn.execute("PRAGMA table_info(users)")}
+        if not {"id", "name", "phone", "role", "status"}.issubset(cols):
+            return jsonify({"ok": False, "error": "Required user columns missing"}), 500
 
-        business_name = "u.business_name" if "business_name" in user_cols else "'' AS business_name"
-        gstin = "u.gstin" if "gstin" in user_cols else "'' AS gstin"
+        business = 'u.business_name' if "business_name" in cols else "'' AS business_name"
+        gstin = 'u.gstin' if "gstin" in cols else "'' AS gstin"
 
-        if table_exists(conn, "seller_products"):
-            product_join = """
-                LEFT JOIN seller_products sp ON sp.seller_id=u.id
-            """
-            product_count = "COUNT(DISTINCT sp.id)"
-        elif table_exists(conn, "products"):
-            product_join = """
-                LEFT JOIN products sp ON sp.seller_id=u.id
-            """
-            product_count = "COUNT(DISTINCT sp.id)"
+        product_table = None
+        for candidate in ("seller_products", "products"):
+            if table_exists(conn, candidate):
+                tcols = {
+                    r["name"] for r in
+                    conn.execute(f'PRAGMA table_info("{candidate}")')
+                }
+                if {"id", "seller_id"}.issubset(tcols):
+                    product_table = candidate
+                    break
+
+        if product_table:
+            join = f'LEFT JOIN "{product_table}" sp ON sp.seller_id=u.id'
+            count_sql = "COUNT(DISTINCT sp.id)"
         else:
-            product_join = ""
-            product_count = "0"
+            join = ""
+            count_sql = "0"
 
         rows = conn.execute(f"""
-            SELECT u.id, u.name, u.phone, u.status,
-                   {business_name}, {gstin},
-                   {product_count} AS products
-            FROM users u
-            {product_join}
+            SELECT u.id,u.name,u.phone,u.status,
+                   {business},{gstin},{count_sql} AS products
+            FROM users u {join}
             WHERE u.role='seller'
             GROUP BY u.id
             ORDER BY u.id DESC
         """).fetchall()
-
         return jsonify({"ok": True, "sellers": json_rows(rows)})
     except Exception:
-        import logging
-        logging.exception("Owner sellers API failed")
-        return jsonify({"ok": False, "error": "Seller data temporarily unavailable"}), 500
+        current_app.logger.exception("Owner sellers API failed")
+        return jsonify({"ok": False, "error": "Sellers temporarily unavailable"}), 500
     finally:
         conn.close()
-
-
 
 # =========================================================
 # PRODUCTS
