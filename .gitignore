@@ -16,3 +16,21 @@ server.log
 *.before_security_headers
 *.before_session_security
 *.before_rate_limit
+
+# Never commit local databases, credentials, backups, or migration archives
+*.db
+*.db-*
+.env
+.env.*
+!.env.example
+*.tar.gz
+*.backup
+*.repair-backup
+*.before-owner-reset
+*.before_complete_routes
+app-backup-*
+postgres_migration_review.tar.gz
+owner-cookies.txt
+customer-cookies.txt
+technician-cookies.txt
+seller-cookies.txt
